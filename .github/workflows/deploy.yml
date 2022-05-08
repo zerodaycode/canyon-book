@@ -18,7 +18,6 @@ jobs:
         echo `pwd`/mdbook >> $GITHUB_PATH
     - name: Deploy GitHub Pages
       run: |
-        cd canyon-book
         mdbook build
         git worktree add gh-pages gh-pages
         git config user.name "Zero Day Code"
