@@ -1,6 +1,12 @@
 # Summary
 
-- [Introduction](./introduction.md)
+[Introduction](./introduction.md)
+
 - [Phylosophy of design](./canyon_design.md)
 
 - [Getting Started](./getting_started/getting_started.md)
+    - [Initial setup](./getting_started/initial_setup.md)
+    - [The secrets file](./getting_started/the_secrets_file.md)
+    - [The database config](./getting_started/configuring_the_database.md)
+
+- [A real world example](./real_world_example.md)
