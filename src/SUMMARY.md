@@ -9,4 +9,7 @@
     - [The secrets file](./getting_started/the_secrets_file.md)
     - [The database config](./getting_started/configuring_the_database.md)
 
+- [CRUD and Mapping operations](./crud_mapping/intro.md)
+    - [Initial setup](./crud_mapping/select.md)
+
 - [A real world example](./real_world_example.md)
