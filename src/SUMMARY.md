@@ -13,5 +13,6 @@
     - [Select](./crud_mapping/select.md)
     - [Insert](./crud_mapping/insert.md)
     - [Update](./crud_mapping/update.md)
+    - [Delete](./crud_mapping/delete.md)
 
 - [A real world example](./real_world_example.md)
