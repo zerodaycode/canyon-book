@@ -15,4 +15,6 @@
     - [Update](./crud_mapping/update.md)
     - [Delete](./crud_mapping/delete.md)
 
+- [Production ready operations](./result_operations.md)
+
 - [A real world example](./real_world_example.md)
