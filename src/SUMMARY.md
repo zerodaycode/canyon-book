@@ -21,4 +21,6 @@
 
 - [The QueryBuilder](./querybuilder.md)
 
+- [The final boss](./the_final_boss.md)
+
 - [A real world example](./real_world_example.md)
