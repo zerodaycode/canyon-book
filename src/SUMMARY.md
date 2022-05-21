@@ -17,4 +17,6 @@
 
 - [Production ready operations](./result_operations.md)
 
+- [Canyon Entity](./result_operations.md)
+
 - [A real world example](./real_world_example.md)
