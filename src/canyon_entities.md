@@ -151,7 +151,7 @@ pub enum LeagueFieldValue {
 impl FieldIdentifierValue for LeagueFieldValue {}
 ```
 
-It's just a powerful way of write filters for your `SQL`.
+It's just a powerful way of write filters for the `SQL` queries.
 
 Imagine that we have a function that accepts a type `T: FieldValueIdentifier` to
 make a `SQL where clause` filter.
@@ -161,7 +161,7 @@ It's signature will looks something similar to this:
 `async fn find_by_id<F: FieldValueIdentifier>(fv: F, comp: Comp) -> Option<T>;`
 
 *NOTE: The `Comp` enum type it's not relevant now, but it's the way that Canyon offers*
-*to procedurally generate comparation operations in the queries.*
+*to procedurally generate comparation operators for the queries.*
 
 Inside the function definition, we will write the logic to find by id a unique record inside
 some database table. The function could be called like:
