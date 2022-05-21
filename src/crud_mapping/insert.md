@@ -26,7 +26,7 @@ pub struct League {
 Let's create a `League` instance:
 
 ```
-let lec: League = League {
+let mut lec: League = League {
     id: Default::default(),
     ext_id: 134524353253,
     slug: "LEC".to_string(),
@@ -40,6 +40,23 @@ Now, we will write the following `Rust` code, considering our example type:
 `lec.insert().await;`
 
 *BOOM!* And that record it's now inserted on the database!
+
+But notate one thing. Our `lec` instance now it's a `mut` one. Why?
+
+You already know that in `Canyon` it's mandatory to have an `id` field (i32, or i64)
+for every entity. That `id` represents the `PRIMARY KEY` for that table, being a
+unique identifier for every record. It makes no sense not having in our code. It's
+the most unique field in the persistence layer, an entities are the closest ones in
+your program to the database, so we decided to always have it in our entities.
+
+Also, a lot of things that `Canyon` automatically does for you requires to know
+that `PRIMARY KEY`. At it w'd be really really ugly to have to do one more
+to the database to find the id of a record... without having the unique field
+that it's unique!
+
+But, the key thing on the `insert` method it's that `Canyon` automatically will update
+your `self.id` field with the new generated id after the insert! So, the next time that
+you will access the `id` field to retrieve it's value, there will be the real one!
 
 The `insert method` it's really convenient and nice when you have to write data to your database.
 
@@ -59,10 +76,10 @@ for `PostreSQL` or similar for another database engines that will be supported n
 in the future.
 
 
-### The instanciation default value
+### The id field default value
 
 One *not to ugly* workaround when you use the syntax above to create a new instance for `League`,
-it's to use de `Default::default` Rust trait, which will generate a default value based on the
+it's to use de `Default` Rust trait, which will generate a default value based on the
 type of the field where it's declared.
 
 We can, for sure, use directly an `i32` in this case, but the reallity is that `Canyon` will
