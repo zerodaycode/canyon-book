@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The QueryBuilder - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="canyon_design.html"><strong aria-hidden="true">1.</strong> Phylosophy of design</a></li><li class="chapter-item expanded "><a href="getting_started/getting_started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/initial_setup.html"><strong aria-hidden="true">2.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="getting_started/the_secrets_file.html"><strong aria-hidden="true">2.2.</strong> The secrets file</a></li><li class="chapter-item expanded "><a href="getting_started/configuring_the_database.html"><strong aria-hidden="true">2.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li></ol></li><li class="chapter-item expanded "><a href="result_operations.html"><strong aria-hidden="true">4.</strong> Production ready operations</a></li><li class="chapter-item expanded "><a href="canyon_entities.html"><strong aria-hidden="true">5.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="querybuilder.html" class="active"><strong aria-hidden="true">6.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="the_final_boss.html"><strong aria-hidden="true">7.</strong> The final boss</a></li><li class="chapter-item expanded "><a href="relations/relations.html"><strong aria-hidden="true">8.</strong> Relations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="relations/foreign_keys.html"><strong aria-hidden="true">8.1.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="real_world_example.html"><strong aria-hidden="true">9.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-querybuilder"><a class="header" href="#the-querybuilder">The QueryBuilder</a></h1>
+<p><code>Canyon</code> has a powerful querybuilder.</p>
+<p>Until now, queries are executed by mapping fields and the data of the fields
+for every type or instance of that type.</p>
+<p>But <code>SQL</code> offers a lot of more power to analyze and manipulate the data stored in its tables.
+We are concretly talking now about the <code>SQL Clauses</code> that acts like filters.</p>
+<p><code>Canyon</code> provides support for make the queries over your entities more flexible. They're also
+defined in the <code>CanyonCrud</code> macro. Currently, we are supporting the following ones:</p>
+<ul>
+<li><code>WHERE</code></li>
+<li><code>AND</code></li>
+<li><code>IN</code></li>
+<li><code>ORDER BY</code></li>
+<li><code>SET</code></li>
+</ul>
+<p>The latest one it's a special one clause. It's the <code>SET</code> SQL clause used in the <code>UPDATE</code>
+statements to define what columns will be updated. It only works with the update methods.
+Using it in another one will make your code panic, so be careful with the wrong usage.</p>
+<h2 id="how-does-it-works"><a class="header" href="#how-does-it-works">How does it works?</a></h2>
+<p>Every associated function or method provided through the macro implementations
+that returns a <code>QueryBuilder</code> type can be used as a builder pattern to construct
+the query that Canyon will use to retrive data from the database. Those associated
+functions or methods contains a <code>_query</code> in its identifier, which basically it's 
+telling your: <em>Hey, I will give you a QueryBuilder when you call me</em></p>
+<p>To start to meet it, let's review its type signature:</p>
+<pre><code>pub struct QueryBuilder&lt;'a, T: Debug + CrudOperations&lt;T&gt; + Transaction&lt;T&gt; + RowMapper&lt;T&gt;&gt; { /* fields */ }
+</code></pre>
+<p><em>Reviewing the signature of the QueryBuilder<T> type</em></p>
+<p>As it's name suggests, the <code>QueryBuilder</code> it's just an implementation of the <em>Builder</em>
+dessign pattern, and here in <code>Canyon</code> it's used to build a <code>Query</code> type, which it's the final
+responsable to execute the generated <code>SQL</code> after the use of our builder.</p>
+<p>The <code>QueryBuilder</code> works by first, generate the base <code>SQL</code> as the rest of the <code>CRUD</code> operations
+presented in the past chapters. But, instead of executing the query, it lets you to chain
+methods over a <code>QueryBuilder</code> instance that, for every method call, generates more <code>SQL</code> content 
+for your query, depending what method you call.</p>
+<h2 id="available-methods-to-work-with-the-builder"><a class="header" href="#available-methods-to-work-with-the-builder">Available methods to work with the builder</a></h2>
+<p>You can <em>chain</em> call over your <code>QueryBuilder</code> to build a more complex query when you need it.
+Every method will return <code>Self</code> to make you able to aggregate and modify your query according
+to your needs. By returning <code>Self</code>, we make access to the same instance of the <code>QueryBuilder</code>,
+modifying it's internal state until it's consumed.</p>
+<p>To start to see what the <code>QueryBuilder</code> it's capable to do, let's review
+the available methods (related to the SQL clauses) with it's signatures are:</p>
+<ul>
+<li><code>WHERE</code>    -&gt; <code>pub fn where_clause&lt;Z: FieldValueIdentifier&gt;(mut self, r#where: Z, comp: Comp) -&gt; Self</code></li>
+<li><code>AND</code>      -&gt; <code>pub fn and_clause&lt;Z: FieldValueIdentifier&gt;(mut self, r#and: Z, comp: Comp) -&gt; Self</code></li>
+<li><code>IN</code>       -&gt; <code>pub fn r#in(mut self, in_values: &amp;'a[Box&lt;dyn InClauseValues&gt;]) -&gt; Self</code></li>
+<li><code>ORDER BY</code> -&gt; <code>pub fn order_by&lt;Z: FieldIdentifier&gt;(mut self, order_by: Z, desc: bool) -&gt; Self</code></li>
+</ul>
+<p><em>NOTE: If you miss the 'LIKE' clause, don't worry. It will be released soon.</em></p>
+<p>That's will make you and idea on what the chained methods do over the instance. It really
+just appends more <code>SQL</code> code to the base one, to filter the results that you potencially
+could desire because some business requeriment.</p>
+<h1 id="the-comp-enum-type"><a class="header" href="#the-comp-enum-type">The Comp enum type</a></h1>
+<p>The <code>QueryBuilder</code> usually works receiving in some methods a comparation operator. 
+In <code>Canyon</code> it's created from the <code>Comp</code> enum type, which it's received by parameter
+by the methods that required them, and allows you to generate comparation operators
+in a procedural way.</p>
+<p>This is the available ones:</p>
+<pre><code>pub enum Comp {
+    Eq,  =&gt; &quot;=&quot;   // Equals to
+    Neq, =&gt; &lt;&gt;&quot;   // Not equals to 
+    Gt,  =&gt; &quot;&gt;&quot;   // Greather than
+    Gte, =&gt; &quot;&gt;=&quot;  // Greater or equals than
+    Lt,  =&gt; &quot;&lt;&quot;   // Less than
+    Lte, =&gt; &quot;&lt;=&quot;  // Less or equals than
+}
+</code></pre>
+<h1 id="better-by-example"><a class="header" href="#better-by-example">Better by example</a></h1>
+<p>We know that it could be confusing how the <code>QueryBuilder</code> works, essentially if you not
+fight too often with <code>Builders</code>, but, wait... probably you will use it a lot!</p>
+<p>Let's put an use case, working with our beloved <code>League</code> type: We want to recover
+all the <code>league</code> table records which <code>id</code> are less than 20 and it's <code>slug</code> it is
+equals to <code>LCK</code>.</p>
+<pre><code>let leagues: Option&lt;Vec&lt;League&gt;&gt; = League::find_all_query()
+        .where_clause(
+            LeagueFieldValue::id(20),    // This will create a filter -&gt; `WHERE league.id &lt; 20`
+            Comp::Lt                     // where the `&lt;` symbol it's generated by Canyon when sees this variant
+        ).and(
+            LeagueFieldValue::slug(&quot;LCK&quot;.to_string()),
+            Comp::Eq
+        ).query()
+        .await
+        .ok();                           // No error handling here. Consumes the result and converts a Result&lt;T&gt; to an Option&lt;T&gt;
+
+println!(&quot;League elements QUERYBUILDER: {:?}&quot;, &amp;leagues);
+</code></pre>
+<p>The rest of methods that you may desire to chain are trivial. You can chain as many as you need, but
+obviously, try to use those one who makes sense for your queries.</p>
+<h2 id="the-consumer-concept"><a class="header" href="#the-consumer-concept">The 'consumer' concept</a></h2>
+<p>Execute the query it's really simple as demostrated above. Just <code>.query()</code> when you're satisfied
+with the <code>SQL</code> that will be generated. Then <code>.await</code> it and you're done. Use the <code>Result</code> returned
+to avoid the compiler warn you about to not handle the posible error after execute the query.</p>
+<p><em>NOTE: We're here okeying the result. You may desire to provide a better handle implementation</em>
+<em>but, for the tutorial purposes, is enought.</em></p>
+<p>Every builder object built with the <code>Builder</code> pattern must provide a consumer or not (other implementations
+are outside the scope of this tutorial), but in <code>Canyon</code>, when you want to execute the generated <code>SQL</code>, 
+you only need to call the consumer of the builder. The <code>.query()</code> method.</p>
+<p>The consumer here basically just consumes <code>self</code> and executes the query, returning you a 
+<code>Result&lt;Vec&lt;T&gt;, Error&gt;</code> with the results obtained from the database for your type <code>T</code>.</p>
+<h2 id="where-to-find-_query-methods"><a class="header" href="#where-to-find-_query-methods">Where to find _query methods?</a></h2>
+<p>To summarize, <code>Canyon</code> currently has implementations for the following CRUD operations:</p>
+<ul>
+<li>Find by id </li>
+<li>Multiple insert</li>
+<li>Update multiple columns</li>
+<li>Delete</li>
+</ul>
+<p>Every one of this are implemented as an associated functions. It does not makes sense, because
+you can perform data modifications over various instances at a time, or you want to delete from
+the database data that you know that exists, but don't want to generate instances for make a 
+<code>.delete()</code> method call on every one, being potentially inneficient if a lot of data has to
+be deleted (because it w'd be one query per method call), and same for the <em>multi</em> operations.</p>
+<p>This way, we're decoupling the data from the <code>Canyon</code> entities, giving the developer more power
+in case if need it, and reducing the posible overheat of working with mapped to entities components
+only.</p>
+<p>In the <code>multi insert</code> and the <code>update multiple columns</code>, we're working with entity instances but just to be 
+passed as arguments.
+The operations will be performed in only one query no matter how data you want to insert or update, so our
+function arquitechture it's based on calls to the type <code>T</code> via associated functions.</p>
+<p>So, the unique overheat here it's the database server efficiency working in this way, not
+an implementation detail in your code.</p>
+<h2 id="multi-insert-and-update-multiple-columns"><a class="header" href="#multi-insert-and-update-multiple-columns">Multi insert and update multiple columns</a></h2>
+<p>Just for having a notion of what's going on with those two options that <code>Canyon</code> offers you,
+let's see an example of every one to let your clear how to write yourselves.</p>
+<p>The purpose of the <code>multi insert</code> it's to allow you to insert multiple entities in just
+one query, avoiding you to make a method call for every one or writting a loop for it.</p>
+<pre><code>    let new_league = League {
+        id: Default::default(),
+        ext_id: 392489032,
+        slug: &quot;League10&quot;.to_owned(),
+        name: &quot;League10also&quot;.to_owned(),
+        region: &quot;Turkey&quot;.to_owned(),
+        image_url: &quot;https://www.sdklafjsd.com&quot;.to_owned()
+    };
+    let new_league2 = League {
+        id: Default::default(),
+        ext_id: 392489032,
+        slug: &quot;League11&quot;.to_owned(),
+        name: &quot;League11also&quot;.to_owned(),
+        region: &quot;LDASKJF&quot;.to_owned(),
+        image_url: &quot;https://www.sdklafjsd.com&quot;.to_owned()
+    };
+    let new_league3 = League {
+        id: Default::default(),
+        ext_id: 9687392489032,
+        slug: &quot;League3&quot;.to_owned(),
+        name: &quot;3League&quot;.to_owned(),
+        region: &quot;EU&quot;.to_owned(),
+        image_url: &quot;https://www.lag.com&quot;.to_owned()
+    };
+
+    League::insert_multi(
+        &amp;[new_league, new_league2, new_league3]
+    ).await
+    .ok();
+</code></pre>
+<p><em>Multi insert into the 'league' table example</em></p>
+<p>The <code>update multiple columns</code> it's a real <code>QueryBuilder</code> operation.
+It just simply works by setting the values of the provided columns (via FieldIdentifier item)
+to the values provided in the special <code>SET</code> clause.</p>
+<p><code>SET</code> clause arguments are a little bit tricky. It will accept a reference to an
+array of tuples, being every tuple compound of a <code>FieldIdentifier</code> item and <code>ToString</code> item.</p>
+<p>Any thing that implements <code>FieldIdentifier</code> at the <code>.0</code> position, and anything that implements
+<code>ToString</code> at the <code>.1</code> position of the tuple passed in.</p>
+<p><em>NOTE: You can pass any value that implements ToSql + Sync, so you can pass an i32, a bool...</em>
+<em>Canyon will automatically convert what he needs to make the query works as expected.</em></p>
+<pre><code>    League::update_query()
+        .set_clause(
+            &amp;[
+                (LeagueField::ext_id, 394039),
+                (LeagueField::image_url, &quot;https://random_updated_url.up&quot;)
+            ]
+        ).where_clause(
+            LeagueFieldValue::id(3), Comp::Gt
+        ).query()
+        .await
+        .ok();
+</code></pre>
+<p><em>Updating multiple columns with Canyon at the same time</em></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="canyon_entities.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="the_final_boss.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="canyon_entities.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="the_final_boss.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

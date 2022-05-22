@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The database config - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../canyon_design.html"><strong aria-hidden="true">1.</strong> Phylosophy of design</a></li><li class="chapter-item expanded "><a href="../getting_started/getting_started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting_started/initial_setup.html"><strong aria-hidden="true">2.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="../getting_started/the_secrets_file.html"><strong aria-hidden="true">2.2.</strong> The secrets file</a></li><li class="chapter-item expanded "><a href="../getting_started/configuring_the_database.html" class="active"><strong aria-hidden="true">2.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="../crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="../crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="../crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="../crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="../crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li></ol></li><li class="chapter-item expanded "><a href="../result_operations.html"><strong aria-hidden="true">4.</strong> Production ready operations</a></li><li class="chapter-item expanded "><a href="../canyon_entities.html"><strong aria-hidden="true">5.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="../querybuilder.html"><strong aria-hidden="true">6.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="../the_final_boss.html"><strong aria-hidden="true">7.</strong> The final boss</a></li><li class="chapter-item expanded "><a href="../relations/relations.html"><strong aria-hidden="true">8.</strong> Relations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../relations/foreign_keys.html"><strong aria-hidden="true">8.1.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="../real_world_example.html"><strong aria-hidden="true">9.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-database-configuration"><a class="header" href="#the-database-configuration">The database configuration</a></h1>
+<p>Before we can jump to write code as crazy devs, we need to tell the database about our intentions.</p>
+<p>The database needs users, permissions, roles, databases, schemas, tables, columns... woof! 
+Too much crazy things.</p>
+<p>But, sticking with past chapter, we will guide you (if you don't know) on how to set up the 
+database to start to work with.</p>
+<h2 id="creating-a-database-an-a-user"><a class="header" href="#creating-a-database-an-a-user">Creating a database an a user</a></h2>
+<p>When you install for the first time a new database backend, during the installation always requires
+you to create an <em>admin</em> user to manage the database. This let's you to have a <code>super-user</code> to work
+with the database, but, for obviously reasons, isn't recommended to use the <em>admin</em> user for almost
+nothing (at least, talking in production).</p>
+<p><code>Note: if you only want to test code or tools to work in development stage, it's fine to go ahead an use that </code>admin<code> to quickly set up an environment where you can work.</code></p>
+<p>But, being consistent and trying to stick always with the best possible practices, we are going to create a new user with it's password, and a new database to work with the examples <em>in this book</em>.</p>
+<p>So, open a command prompt, or your favourite GUI database manager application. Let's determine a few
+constraints, for simplycity and for clarifiying this guide, we will use the next <code>credentials</code> and 
+<code>database</code> to work with.</p>
+<pre><code>username = canyon_user
+password = canyon_pass
+db_name = triforce
+</code></pre>
+<p><code>NOTE: Why </code>triforce<code>? You will find all the details following [this link](https://zerodaycode.github.io/canyon-book/real_world_example.html)</code></p>
+<p>Type secuentially the following commands on your command prompt or database manager:</p>
+<h3 id="the-commands"><a class="header" href="#the-commands">The commands</a></h3>
+<pre><code>DROP database IF EXISTS triforce;
+
+DROP USER IF EXISTS canyon_user;
+
+CREATE ROLE canyon_user WITH LOGIN SUPERUSER PASSWORD 'canyon_pass';
+
+CREATE DATABASE triforce WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'es_ES.UTF-8';
+
+ALTER DATABASE triforce OWNER TO canyon_user;
+</code></pre>
+<p>And voilá! You have configured your database server to be able to work with a new user <code>canyon-user</code>
+that it's not the <code>admin</code> user, having it's own permissions and roles. </p>
+<h2 id="creating-some-data-to-work-with"><a class="header" href="#creating-some-data-to-work-with">Creating some data to work with</a></h2>
+<p>We need to have some tables inside our new <code>triforce</code> database to store information. Usually, the database tables are called <code>entities</code>, which will become a powerful concept in <code>Canyon</code>. </p>
+<p>An <code>entity</code> usually represents a <em>real world</em> object, like a Car, a Country or a User. Those entities can have multiple relations (or not) between them, and that's the reason because the <code>SQL</code> language it's colloquially knows as a <code>relational database language</code>.</p>
+<p><code>NOTE: More advanced </code>Canyon<code>features that will be presented later are able to create tables and columns for you, directly from</code>Rust<code> structs, but we are growing from the more basic concepts to the more advanced ones</code></p>
+<p>So, let's gonna create a couple of tables to have something to work.</p>
+<p>As usual, type the following commands in your command prompt or in your database manager:</p>
+<h3 id="postgresql---syntax-example"><a class="header" href="#postgresql---syntax-example">PostgreSQL - syntax example</a></h3>
+<pre><code>\c triforce
+
+CREATE TABLE public.league (
+	id					INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	ext_id				BIGINT NOT NULL,
+	slug				TEXT NOT NULL,
+	name				TEXT NOT NULL,
+	region				TEXT NOT NULL,
+	image_url			TEXT NOT NULL
+);
+CREATE TABLE public.tournament (
+	id					INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	ext_id				BIGINT NOT NULL,
+	slug				TEXT NOT NULL,
+	start_date			DATE NOT NULL,
+	end_date			DATE NOT NULL,
+	league				INTEGER REFERENCES league(id)
+);
+
+CREATE TABLE public.player (
+    id					INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    ext_id				BIGINT NOT NULL,
+    first_name			TEXT NOT NULL,
+    last_name			TEXT NOT NULL,
+    summoner_name		TEXT NOT NULL,
+    image_url			TEXT,
+    role				TEXT NOT NULL
+);
+
+CREATE TABLE public.team (
+    id					INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    ext_id				BIGINT NOT NULL,
+    slug				TEXT NOT NULL,
+    name				TEXT NOT NULL,
+    code				TEXT NOT NULL,
+    image_url			TEXT NOT NULL,
+    alt_image_url		TEXT,
+    bg_image_url		TEXT,
+    home_league		    INTEGER REFERENCES league(id)
+);
+
+CREATE TABLE public.team_player (
+    id					INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    team_id			    INTEGER REFERENCES team(id) ON DELETE CASCADE,
+    player_id			INTEGER REFERENCES player(id) ON DELETE CASCADE
+);
+
+ALTER TABLE public.league OWNER TO triforce;
+ALTER TABLE public.tournament OWNER TO triforce;
+ALTER TABLE public.player OWNER TO triforce;
+ALTER TABLE public.team OWNER TO triforce;
+ALTER TABLE public.team_player OWNER TO triforce;
+</code></pre>
+<p>were we just basically created some <em>tables</em> that represents some entities and it's relations
+between them, with it's columns, to store concrete data in there. </p>
+<p>Finally, we asked to assign our <code>canyon_user</code> as the owner of the tables, in order to have
+all the necessary permissions to work with the tables.</p>
+<h2 id="in-recap"><a class="header" href="#in-recap">In recap</a></h2>
+<p>In this chapter, we setted up a <code>Rust</code> project to work with <code>Canyon</code>. We installed and configured
+a database engine to work with, created an user and a database with some tables to start having fun
+querying them with <code>Canyon</code>.</p>
+<p>In the next chapter, we will write the first lines of <code>Rust</code> code to work with the already configured database, 
+presenting the most basic operations but yet powerful available with <code>Canyon</code>, the classical <code>CRUD</code> operations.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../getting_started/the_secrets_file.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../crud_mapping/intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../getting_started/the_secrets_file.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../crud_mapping/intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

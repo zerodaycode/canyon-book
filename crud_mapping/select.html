@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Select - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../canyon_design.html"><strong aria-hidden="true">1.</strong> Phylosophy of design</a></li><li class="chapter-item expanded "><a href="../getting_started/getting_started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting_started/initial_setup.html"><strong aria-hidden="true">2.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="../getting_started/the_secrets_file.html"><strong aria-hidden="true">2.2.</strong> The secrets file</a></li><li class="chapter-item expanded "><a href="../getting_started/configuring_the_database.html"><strong aria-hidden="true">2.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="../crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="../crud_mapping/select.html" class="active"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="../crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="../crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="../crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li></ol></li><li class="chapter-item expanded "><a href="../result_operations.html"><strong aria-hidden="true">4.</strong> Production ready operations</a></li><li class="chapter-item expanded "><a href="../canyon_entities.html"><strong aria-hidden="true">5.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="../querybuilder.html"><strong aria-hidden="true">6.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="../the_final_boss.html"><strong aria-hidden="true">7.</strong> The final boss</a></li><li class="chapter-item expanded "><a href="../relations/relations.html"><strong aria-hidden="true">8.</strong> Relations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../relations/foreign_keys.html"><strong aria-hidden="true">8.1.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="../real_world_example.html"><strong aria-hidden="true">9.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="select-operations"><a class="header" href="#select-operations">SELECT operations</a></h1>
+<p>The most basic usage that everyones understand when querying a database, it's a read operation.</p>
+<p>By <em>&quot;read operation&quot;</em> we mean to ask the database for a specific set of data stored in some (or multiple)
+tables.</p>
+<p>What the database returns is some data type of type <code>Row</code>, that it's the internal implementation
+of the libraries that, in the end, are handling the connection with the database at a lower level.</p>
+<pre><code>NOTE: That Row type is just a generic name for a type that contains a database row with the data.
+Every client library will have it's own type with a different identifier, but notice how isn't a
+relevant data. The important thing here it's the concept of Row
+</code></pre>
+<p>Usually, that comes in the form of a collection (a <code>Vec&lt;Row&gt;</code>), or just like a <code>Row</code>. It will depends
+on the specific query, but that's not the relevant part.
+What <code>Canyon</code> will do it's to translate that lower-level data into your <code>Rust</code> type, 
+so, in the end, you will have some <code>T</code> or <code>Vec&lt;T&gt;</code>(where T it's your defined type, just by being
+correctly annotated. Macros will do all the job for you.</p>
+<p>Did you remember the created type that will serve us for the examples from the past chapter?</p>
+<pre><code>#[derive(Debug, Clone, CanyonCrud, CanyonMapper)]
+pub struct League {
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+
+</code></pre>
+<p>Let's review what <em>SELECT</em> operations are automatically available now, focusing
+on those who are well know in the <code>CRUD</code> world.</p>
+<h1 id="find-all"><a class="header" href="#find-all">Find all</a></h1>
+<p>This is the most widely-used query of all times! Please, database, give me all the data that you have
+for a concrete table, including all the columns!</p>
+<p>In <code>Canyon</code>, this is implemented as an associated function for your type <code>T</code>.</p>
+<p>The <code>type::find_all()</code> associated function can be translated to a SQL <code>SELECT * FROM {table_name}</code>,
+so we will end having a <code>Vec&lt;T&gt;</code> being every <code>T</code> inside the vector, an instance of your type with
+the data of one database row inside it!</p>
+<p>We will write the following <code>Rust</code> code, considering our example type:</p>
+<p><code>let leagues: Vec&lt;League&gt; = League::find_all().await;</code></p>
+<p>That will bring us all the leagues inside the <code>league</code> table, in just one line of code!</p>
+<p><code>NOTE: If you are struggling with the </code>.await<code> keyword, review the intro chapter of this block</code></p>
+<h1 id="find-by-id"><a class="header" href="#find-by-id">Find by ID</a></h1>
+<p>Annoted common data read pattern, it's to find a record by it's <code>ID</code>. Almost always, every table contains
+a column called <code>ID</code>, which it's primary responsability it's to identify every record in the table
+with an <code>unique identifier</code>. This is achieved by making an auto-increment of the <code>ID</code> for every new
+record, so when you write some new data, a new generated <code>ID</code> it's associated with that data, making
+that new row unique because the <code>ID</code> will always be different!</p>
+<pre><code>NOTE: Other patterns for make unique keys exists, but are out of the scope for this tutorial,
+and in general, for the whole Canyon framework. Don't worry, we will review in more advanced
+chapter how Canyon deals with this concept.
+</code></pre>
+<p>We will write the following <code>Rust</code> code, considering our example type:</p>
+<pre><code>let some_int_id: IntegralNumber = 1;
+let league: Option&lt;League&gt; = League::find_by_id(some_int_id).await;
+</code></pre>
+<p>See the function's signature </p>
+<pre><code>async fn __find_by_id&lt;N&gt;(table_name: &amp;str, id: N) -&gt; DatabaseResult&lt;T&gt; 
+        where N: IntegralNumber;
+</code></pre>
+<p>and the definition for the <code>IntegralNumber</code> trait bound is the following:</p>
+<pre><code>pub trait IntegralNumber: ToSql + Sync + Send {}
+</code></pre>
+<p>This is telling us, that Rust will be able to accept as parameter any thing that
+also it's bounded to <code>ToSql</code> + <code>Sync</code> + <code>Send</code> (this both two are required to safely
+send data through a Future<T>).
+But, <code>Canyon</code> only implements <code>IntegralNumber</code> for the following two:</p>
+<ul>
+<li><code>impl IntegralNumber for i32 {}</code></li>
+<li><code>impl IntegralNumber for i64 {}</code></li>
+</ul>
+<p>This was made because most client libraries thinks about <code>PRIMARY KEYS</code> as <code>i64</code>, 
+and it's a little more clear just to play with <code>i32</code>, unless we have trillions of records 
+in the database (or not records, but the ID value was a very high number) or use hashes 
+instead of raw integers...</p>
+<p>In summary, we can pass in as argument to the find by id, a <em>signed 32 bits integer</em>,
+or <em>a signed 64 bits integer</em>.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../crud_mapping/quick_note.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../crud_mapping/insert.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../crud_mapping/quick_note.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../crud_mapping/insert.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
