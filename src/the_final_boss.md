@@ -114,5 +114,3 @@ needs in order to know and relate the data for every entity managed in your prog
 compilation after compilation, because, if they are modified, `Canyon` has to 
 update them in the database to make everything works correctly, and that's not
 an easy-to-do job.
-
-

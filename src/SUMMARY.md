@@ -23,4 +23,6 @@
 
 - [The final boss](./the_final_boss.md)
 
+- [Foreign Keys](./foreign_keys.md)
+
 - [A real world example](./real_world_example.md)
