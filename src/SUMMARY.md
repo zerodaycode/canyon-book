@@ -10,6 +10,7 @@
     - [The database config](./getting_started/configuring_the_database.md)
 
 - [CRUD and Mapping operations](./crud_mapping/intro.md)
+    - [Quick note](./crud_mapping/quick_note.md)
     - [Select](./crud_mapping/select.md)
     - [Insert](./crud_mapping/insert.md)
     - [Update](./crud_mapping/update.md)
@@ -23,6 +24,7 @@
 
 - [The final boss](./the_final_boss.md)
 
-- [Foreign Keys](./foreign_keys.md)
+- [Relations](./relations/relations.md)
+    - [Foreign Keys](./relations/foreign_keys.md)
 
 - [A real world example](./real_world_example.md)

@@ -134,5 +134,5 @@ In this chapter, we setted up a `Rust` project to work with `Canyon`. We install
 a database engine to work with, created an user and a database with some tables to start having fun
 querying them with `Canyon`.
 
-In the next chapter, we will write the first lines of `Rust` code to work with the already configured database, presenting the most basic operations but yet powerful available with `Canyon`, the
-classical `CRUD` operations.
+In the next chapter, we will write the first lines of `Rust` code to work with the already configured database, 
+presenting the most basic operations but yet powerful available with `Canyon`, the classical `CRUD` operations.

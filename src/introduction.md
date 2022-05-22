@@ -11,20 +11,20 @@ outlined in the officially maintained Rust Book before you getting started with 
 
 ## Contributing to Canyon's source code or to the book documentation
 
-We are really glad to met new developers that push up this project to a new level, but, in order to maintain a certain order 
+We are really glad to meet new developers that push up this project to a new level, but, in order to maintain a certain order 
 and consistency during development, assuming you want to add new functionality, modify or improve some part of the source code, 
 or fix a bug, we would like any contributor to respect the following guidelines:
 
 * Open an issue [here](https://github.com/zerodaycode/Canyon-SQL/issues) explaining what do you want to change or upgrade on the source code
 * Locally clone the repo and work in the source code
-* Open a `PR` to a new branch, and try to documentate as much as posible the changes made it in the commits to your working branch.
+* Open a `PR` to a new branch, and try to documentate as much as posible the changes made in the commits to your working branch.
 
 So, if you want to *contribute* to the source code:
 
 * `Canyon-SQL` it's a fully open-source project. You cand find it [here](https://github.com/zerodaycode/Canyon-SQL)
 
-If you go ahead, and want to upgrade the documentation with things that you miss that must be explained, or with some changes
-that has been accepted on a `PR`, and you want to document it:
+If you go ahead, and want to upgrade the documentation with things that you missed that must be explained, or with some changes
+that have been accepted on a `PR`, and you want to document it:
 
 * The source code for this book is [this one](https://github.com/zerodaycode/canyon-book).
 

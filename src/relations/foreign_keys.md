@@ -14,7 +14,8 @@ The table with the foreign key is called the *child* table, and the table with t
 is called the *referenced* or *parent* table.
 
 For this examples, we'll need two `Canyon Entities` to demonstrate what solution has `Canyon`
-for implementing this relations.
+for im
+plementing this relations.
 
 ```
 use canyon_sql::*;
@@ -31,6 +32,7 @@ pub struct League {
 }
 ```
 *league.rs*
+
 
 ```
 use canyon_sql::*;
@@ -58,7 +60,9 @@ As you may notice, a new annotation has been introduced in the `Tournament` enti
 `#[foreign_key(table = "league", column = "id")]`
 
 This annotation will generate a new `parent-child` relation between `League` being
-the *parent* or the *referenced* and `tournament` being the *child*.
+the *parent* or the *referenced* and `tournament` being the *child*, where this is
+specified through the `table` argument, and the refered field through the `column`
+argument.
 
 But, for this to work `Canyon` *full mode* must be enabled. This is because the
 creation, modification of delete `CONSTRAINT` relation must be specified querying
@@ -183,6 +187,7 @@ concrete type, or in other words, what `Tournaments` are pointing to a concrete 
 Note that the associated function, has a nomemclature convenction of `search_by` + `__` + `parent_type`.
 Also, note how it receives a reference to an instance of `League` (&lec), so you will need first
 of all a valid `League` instance. 
+
 
 
 # The _result variations
