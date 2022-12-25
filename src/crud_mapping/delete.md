@@ -2,11 +2,11 @@
 
 Delete operations consists in removing rows of data from the database.
 
-`Canyon` provides an instance method of your `T` type to delete one concrete 
-record at a time.
+`Canyon` provides an instance method of your `T` type to delete one concrete record at a time.
 
 Let's refresh our `lec` instance for the `League` entity:
-```
+
+```rust
 let mut lec: League = League::new(
     134524353253, 
     "LEC".to_string(),
@@ -16,22 +16,11 @@ let mut lec: League = League::new(
 );
 ```
 
-If we didn't insert it already, let's go ahead:
-`lec.insert().await;`
-
-So, the `delete` method works by getting the `id` field and make a query based
-on `DELETE FROM table_name WHERE table_name.id = id`.
+So, the `delete` method works by getting the `primary_key` field and make a query based on `DELETE FROM table_name WHERE table_name.<pk_name> = value`.
 
 `Canyon` will delete that row from the database where the id matches our instance id.
 
-Note that if you try to make a `DELETE` operation before the `INSERT` one, it will
-It just simply makes no sence to create a random instance and try to perform a `DELETE`
-operation on it, because that data only exists in our code.
+In summary, to delete one record of the database, that record must exists and being mapped to an instance. If the record for that row was already deleted, any operation on the database is perfomed, but the query is executed.
 
-If we didn't insert the data of the instace, we could query the database to retrieve
-an entity that exists in the database, to have real data that we can delete.
-
-In summary, to delete one record of the database, that record must exists and 
-being mapped to an instance.
-
-Always take care with this kind of action whenever you're working with `Canyon`.
+- Remeber that you have the `_datasource(datasource_name: &str)` alternatives.
+- Remember that, if you don't provide a `#[primary_key]` operation, the *delete* methods won't be generated for your type!

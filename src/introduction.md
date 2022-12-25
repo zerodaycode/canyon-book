@@ -13,7 +13,7 @@ every entity or model (concepts just for tell that a struct should map a databas
 
 ### Write code that writes code
 
-Most of the powerful concepts in `Canyon` are achieved through it's incredible macro system.
+Most of the powerful concepts in `Canyon.SQL` are achieved through the *Rust* incredible macro system.
 This is the perfect definition for those macros: `they write code that writes code`.
 
 In concrete, `Canyon's` most beautiful solutions are created through `procedural and derive macros`,
