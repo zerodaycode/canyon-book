@@ -15,12 +15,10 @@
   - [Insert](./crud_mapping/insert.md)
   - [Update](./crud_mapping/update.md)
   - [Delete](./crud_mapping/delete.md)
+  - [Foreign Keys](./crud_mapping/foreign_keys.md)
 
 - [The QueryBuilder](./querybuilder.md)
 
-- [Relations](./relations/relations.md)
-  - [Foreign Keys](./relations/foreign_keys.md)
-
-- [The final boss](./the_final_boss.md)
+- [The migrations](./the_migratons.md)
 
 - [A real world example](./real_world_example.md)
