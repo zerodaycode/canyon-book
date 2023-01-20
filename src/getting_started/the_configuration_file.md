@@ -17,6 +17,32 @@ datasources = [
 ]
 ```
 
+Depending on your preferences you can also use the TOML array of tables:
+
+``` toml
+[[canyon_sql.datasources]]
+name = 'postgres_docker'
+
+[canyon_sql.datasources.properties]
+db_type = 'postgresql'
+username = 'postgres'
+password = 'postgres'
+host = 'localhost'
+port = 5438
+db_name = 'postgres'
+
+[[canyon_sql.datasources]]
+name = 'sqlserver_docker'
+
+[canyon_sql.datasources.properties]
+db_type = 'sqlserver'
+username = 'sa'
+password = 'SqlServer-10'
+host = 'localhost'
+port = 1434
+db_name = 'master'
+```
+
 were you should declare:
 
 - **name** - The unique identifier for the `datasource` that you are configuring
