@@ -1,35 +1,50 @@
-# The minimum requirements
+# Initial Setup
 
-`Canyon` it's a database manager, an ORM, a querybuilder... and your best tool to construct
-you persistence layer without pain.
+- [Initial Setup](#initial-setup)
+  - [Minimum Requirements](#minimum-requirements)
+  - [Supported database engines](#supported-database-engines)
+  - [Downloading the PostgreSQL engine](#downloading-the-postgresql-engine)
+  - [Add Canyon-SQL as a dependency](#add-canyon-sql-as-a-dependency)
+    - [Fetching from Github](#fetching-from-github)
+  - [Building the project](#building-the-project)
 
-But, as obvious, the framework only will work after a minimum set-up.
+---
+
+## Minimum Requirements
+
+`Canyon` is a versatile tool that combines a database manager, ORM, and query builder to create your persistence layer with ease. However, before using the framework, a minimum setup is required.
+
+---
 
 ## Supported database engines
 
-For now, `Canyon` supports the following database engines to work with:
-    - PostgreSQL
-    - MSSQL (SqlServer)
+At present, Canyon supports the following database engines:
 
-The development teams is planning to add support for more database engines, but at this time, the available ones are the listed above.
-For this tutorial, we will be using our most beloved one: `PostgreSQL`.
+ - PostgreSQL
+ - MSSQL (SqlServer)
 
-## Download your engine from internet
+The development team is planning to add support for additional database engines in the future. For the purposes of this tutorial, we will be using `PostgreSQL`.
 
-You must have an active installation of `PostgreSQL`. If you never work with it, you can download
-and install it from [here](https://www.postgresql.org/download/).
+---
 
-Choose your operating system and follow the installation program. If you're working on Linux, you will find a tutorial for your distro just by searching the topic *postgresql installation guide on [my-linux-distro]* on the web.
+## Downloading the PostgreSQL engine
 
-If you're a more experienced user, or you already have installed `PostgreSQL`, just omit this part.
+To use Canyon with PostgreSQL, an active installation of PostgreSQL is required.  If you are an experienced user and have already installed PostgreSQL, you can skip this section.
 
-## Add Canyon-SQL as a dependency to your project
+Installation and instructions can be found in the [official website](https://www.postgresql.org/download/). Choose your operation system. If using Linux, more instructions can be found for each specific distro by searching in the web.
 
-The next thing it's code. YES! So, as usual, in `Rust`, you will generate a new project with the invocation of the command `cargo new --project-name`.
-If you already have a project made, and you desires to add `Canyon` to your project, the next step for
-the two points of view are the same: Add Canyon to your *Cargo.toml* file
+---
 
-So, we just need to add the following lines:
+## Add Canyon-SQL as a dependency
+
+To create a new Rust project from scratch. Run:
+
+```bash
+# Replace project-name with the project name
+cargo new project-name
+```
+
+In the existing project, open `Cargo.toml` to include the new dependency.
 
 ```toml
 # Cargo.toml
@@ -39,33 +54,46 @@ So, we just need to add the following lines:
 canyon_sql = 0.1.0^
 ```
 
-This will notify `Cargo` that he must bring to your project `Canyon` in the version `0.1.0` or higher. You can replace this for a concrete version that you desire, but we are talking in general terms to
-make the very basic explanations, so it will be fine for the moment.
+Compiling will now download `canyon_sql` to the project. The `^` symbol tells the compiler to use version "`0.1.0` or higher".
 
-### Directly from GitHub
+```bash
+cargo build
+```
 
-If you prefer, you can ask `Cargo` to fetch the code directly from the GitHub repo and have the latest
-available version in whatever branch you want.
+### Fetching from Github
+
+Cargo can fetch the latest updates directly from the Canyon-SQL GitHub repository. These will include the latest changes that aren't included in a specific release.
+
+Include the following lines to `Cargo.toml`:
 
 ```toml
-# Cargo toml.file
-
+# Cargo.toml
 
 [dependencies]
 canyon_sql = { git = "https://github.com/zerodaycode/Canyon-SQL" }
-
 ```
 
-You could also desire to have the source code from an specific branch, for example, the *development* brach:
+To fetch from a specific branch, such as the development branch, specify as follows:
 
 ```toml
+# Cargo.toml
+
 [dependencies]
 canyon_sql = { git = "https://github.com/zerodaycode/Canyon-SQL", branch = "development" }
 ```
 
-## Check the project
+---
 
-`Cargo` automatically do everything for you, so, from the root of your project, run `cargo build` and you will see a very similar error:
+## Building the project
+
+After including Canyon-SQL as a dependency in `Cargo.toml`. The crate can be built with:
+
+```bash
+# When in project root
+cargo build
+```
+
+If everything is set up correctly, the build process will complete successfully. However, if the `canyon.toml` file is not found, the following error will appear:
 
 ```rust
 error: custom attribute panicked
@@ -84,7 +112,4 @@ error: custom attribute panicked
     ...
 ```
 
-This error it's telling us that `Canyon-SQL` needs the `canyon.toml` file in order to be built properly.
-We are ready to know how `Canyon-SQL` handles the connection with the databases.
-
-Yay! Let's go ahead and solve the error in the next chapter.
+A file named `canyon.toml` is required to run `Canyon-SQL`. It should be located in the root directory of the project. `canyon.toml` contains the necessary properties required to connect to the database. Next chapter will explain how to configure it.
