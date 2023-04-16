@@ -59,6 +59,4 @@ It is worth noting that migrations are a powerful tool that will be discussed in
 
 > **Note:** It should be noted that inlined TOML tables, which are the objects inside the datasources collection, should be in a unique line without any jumps. This is an imposed restriction by the *TOML standard itself*. You can read more about this at the following link: https://toml.io/en/v1.0.0#inline-table. You may choose to use the classic table notation if you prefer. However, note that the example above may appear with new line jumps due to the TOML formatting.
 
-And that's all! Your program now should compile successfully if you run `cargo build` again, noticing that everything it's reading to start to write some code.
-
 Upon completing these steps, your program should now compile successfully. By running `cargo build` again, the compiler should be equipped with the necessary information for us to start writing code.
