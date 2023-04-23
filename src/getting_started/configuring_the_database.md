@@ -1,30 +1,31 @@
-# Creating a working environment
+# Setting up a Working Environment
 
-In order to test the `Canyon-SQL` funcionalities, we need to have a working database with some data stored in to have a little fun.
+To test the functionality of `Canyon-SQL`, it is necessary to have a working database with some data stored in it.
 
-The quickest way of getting such environment is by using `Docker`.
-Docker is an open-source project for automating the deployment of applications as portable, self-sufficient containers that can run almost everywhere.
+One quick way to set up such an environment is by using Docker. Docker is an open-source project that automates the deployment of applications as portable, self-sufficient containers that can run almost anywhere.
 
-For those who are not familiar with Docker yet, you can find it's official documentation [here](https://www.docker.com/), along with the installers for every supported platform.
+For those who are not yet familiar with Docker, official documentation is available [here](https://www.docker.com/), along with installers for every supported platform.
 
 ## Creating a PostgreSQL container
 
-Now, we will assume that your `Docker` environment is ready to start have some fun, next step will
-be creating a container with a `PostgreSQL` installation.
+Assuming that your `Docker` environment is ready, the next step is to create a container with a `PostgreSQL` installation.
 
-This isn't a `Docker` tutorial, so we will provide you an example of a `docker-compose` file at the [scripts folder](../../scripts) that is located at the root of this repository, so you can use that to create a new container and populated with data.
+To accomplish this, we provide an example of a `docker-compose` file located in the [scripts folder](../../scripts) at the root of this repository. You may use this file  to create a new container and populate it with data.
 
-There's in the same folder an sql folder that contains some `SQL` scripts, that will be automatically detected by the `docker-compose` file and will be used to fill the tables of the examples.
+The file contains information about a `PostgreSQL` and  a `SQLServer` containers to start.
 
-> Note: We are assuming that you have docker-compose already installed, and that you copied the scripts folder into your project. Adecuate the paths according your desires.
+In the same folder, you will also find an sql folder containing some `SQL` scripts. These scripts will be automatically detected by the `docker-compose` file and used to fill the tables of the examples.
 
-You only need to run:
+> Please note that we assume you have already installed `docker-compose` and copied the scripts folder into your project. Adjust the paths according to your preferences.
+
+
+Build and start containers by running:
 
 ```bash
 docker-compose -f ./scripts/docker-compose.yml up
 ```
 
-Finally, as you remember from the last chapter, we will need a `canyon.toml` file. You can use the following snippet and place it inside of such file:
+Lastly, you will need to create a `canyon.toml` file as mentioned in the previous chapter. You can use the following snippet on it:
 
 ```toml
 [canyon_sql]
@@ -33,7 +34,12 @@ datasources = [
 ]
 ```
 
-> Note: Remember about formatting correctly the inlined tables, without not jump lines, if you copy the snippet
+> Note: Please ensure that the inlined tables are correctly formatted without any line breaks.
 
-Now, everything will start to run, creating a `PostgreSQL` database, creating the tables and populating them.
-When everything finishes, you will be ready to start to write `Canyon-SQL` *Rust* code, and start to finally have fun!
+Next time the code is compiled, Canyon will:
+
+ - Connect to the databases;
+ - Create the tables if needed;
+ - Populate each table if needed;
+
+Now it is time to start writing the code...
