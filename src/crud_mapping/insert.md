@@ -1,10 +1,10 @@
 # INSERT operations
 
-Now it's time for write some data to the database.
+Now it is time to write data into the database.
 
-`Canyon` provides you a nice and neat way to insert data. Directly from an instanciated object.
+Canyon provides a convenient way to insert data directly from an instantiated object.
 
-Remeber this?
+Remember this?
 
 ```rust
 #[derive(CanyonCrud, CanyonMapper)]
@@ -33,29 +33,33 @@ let mut lec: League = League {
 };
 ```
 
-Now, we will write the following `Rust` code, considering our example type:
-`lec.insert().await;`
+Notice how the `id` is `Default::default()`. For the type i32, this just means `0`.
 
-*BOOM!* And that record it's now inserted on the database!
+Now, with that value, we will call the following instruction:
 
-But notate one thing. Our `lec` instance now it's a `mut` one. Why?
+```rust
+lec.insert().await;
+```
 
-The key thing on the `insert` method it's that `Canyon` automatically will update your `self.id` field with the new generated id after the insert! So, the next time that you will access the `id` field to retrieve it's value, there will be the real one!
+And that record is now inserted into the database!
 
-The `insert method` it's really convenient and nice when you have to write data to your database.
+But note one thing: the `lec` instance was declared as mutable. Why?
 
-For example, one common scenario. You make a call to an external service, parses the data into a new instance of your `Rust` type (with for example, some Serde serialization code), and now you can insert it directly, with one expresion!
+It is important to remember that the `insert` method from `Canyon` will automatically update the `self.id` field. The previous `id` was replaced by the newly generated ID after the insert.
+
+Thanks to it, the `insert` method is a really convenient method for writing data into the database. For example, a common scenario is when you make a call to an external service and parse the data into a new instance of your Rust type. With this you can insert it directly in a single expression!
 
 ## The new associated function pattern
 
-One common alternative for write better and mantainable code, w'd be use the convention about *"constructors"* in `Rust`.
+A common alternative to writing better and more maintainable code is to use the convention of "constructors" in Rust.
 
-Even that there's no such exact concept in the language, a convention was made to create and initialize new instances for a `T` type.
+Although there is no exact concept of constructors in the language, a convention has been established for creating new instances of a given type `T`.
 
-This convection it's to write a `::new(params)` *associated function* to initialize new objects in the `impl` block for your type. Then, we can take advantage of that aproach, and write such an associated function omitting the `id` field and assign it a default value inside the function, so the details of the initializacion are now *encapsulated* inside that piece of code.
+This convention is to write an associated function `::new(params)` in the `impl` block for initializing objects of the given type. Through this approach, an initializer may be implemented as follows:
 
 ```rust
 impl League {
+    // Notice how id is not included in the parameters
     pub fn new(
         ext_id: i64,
         slug: String,
@@ -75,9 +79,10 @@ impl League {
 }
 ```
 
-So, with this in mind, we can refactor our initialization and write it like the following:
+With this in mind, the previous example can be written and inserted into the database as follows:
 
 ```rust
+// Create new instance
 let lec: League = League::new(
     134524353253,
     "LEC".to_string(),
@@ -85,25 +90,25 @@ let lec: League = League::new(
     "EU West".to_string(),
     image_url: "https://lec.eu".to_string()
 );
+
+// Insert new instance into the database
+lec.insert().await;
 ```
 
-and just insert the new generated data:
-`lec.insert().await;`
+The `insert` instruction returns a `Result<(), Err>` type. For simplicity, we are omiting handling results. For more information on the topic, see in [The Official Book](https://doc.rust-lang.org/book/ch09-00-error-handling.html).
 
-It returns a `Result<(), Err>`. Note that, for simplicity, we are omiting handling results.
+## Performing Multiple Inserts
 
-## The multiple insert
+In addition to allowing the insertion of individual entities, `Canyon` also enables users to insert multiple entities with a single operation. The multi-insert feature is implemented as an associated function rather than a method of the instantiated object.
 
-`Canyon` also allows you to make the insert of multiple entities in just one operation.
-The multi insert isn't designed as a method of your type `T`, but as an associated function.
+You can pass instances of your type as a reference to a raw Rust array, and then await the result. The values generated for fields declared as primary keys will then be assigned to the corresponding field of each instance.
 
-You can pass instances to a reference to a raw Rust array, and await the result. The autogenerated values for the declared fields as primary key will be placed in that field for every instance.
-
-The syntax it's a little bit more complicated, althought not too much. Here's an example:
+The syntax for the multi-insert feature is shown below:
 
 ```rust
 /// Demonstration on how to perform an insert of multiple items on a table
 async fn _multi_insert_example() {
+    // Create an instance
     let new_league = League {
         id: Default::default(),
         ext_id: 392489032,
@@ -112,6 +117,7 @@ async fn _multi_insert_example() {
         region: "Denmark".to_owned(),
         image_url: "https://www.an_url.com".to_owned()
     };
+    // Create a second instance
     let new_league2 = League {
         id: Default::default(),
         ext_id: 392489032,
@@ -120,6 +126,7 @@ async fn _multi_insert_example() {
         region: "Ireland".to_owned(),
         image_url: "https://www.yet_another_url.com".to_owned()
     };
+    // Create a third instance
     let new_league3 = League {
         id: Default::default(),
         ext_id: 9687392489032,
@@ -130,20 +137,21 @@ async fn _multi_insert_example() {
     };
 
     // Unused Result<T, E>
+    // Insert all three instances in a single transaction
     League::insert_into(
         &[new_league, new_league2, new_league3]
     ).await;
 }
 ```
 
-## #[primary_key] notes
+The `insert_into` instruction returns a result with an array of the updated values that were inserted.
 
-As you may notice, having a `#[primary_key]` is mandatory if your database table contains one.
-By default, `Canyon` omits the `PK` value on the insert operation, because assumes that there's a sequence or similar database concept in the column that holds the primary key, and the database is taking care of making a unique and autoincremental value.
+## Notes on the `#[primary_key]` annotation
 
-However, you will be able to insert in tables that any of it's columns has a primary key. You just will need to not declare a `#[primary_key]` in your entity.
+It is important to note that if the database has a primary key, the `#[primary_key]` annotation is mandatory. By default, `Canyon` assumes that the column holding the primary key has a sequence or similar database concept and will omit the `PK` value on the insert operation. This will result in the database generating a unique and auto-incremental value.
 
-That's the reason why the `#[primary_key]` annotation is so important on the insert operations. If a column's table has a primary key, `Canyon` won't try to serialize the value for that column, and if there's no annotation, `Canyon` will serialize it to insert it. Any other combination will make the insert operation fail, because we were trying to do an illegal or incomplete operation.
+However, you can still insert into tables that do not have any columns marked as primary key. In such cases, you should not declare a `#[primary_key]` in your entity.
 
-- Remeber that you have the `_datasource(datasource_name: &str)` alternatives.
-- Remember that, if you don't provide a `#[primary_key]` operation, the *insert* methods won't be generated for your type! But the associated function `T::multi_insert()` will remain available.
+Therefore, it is important to include the `#[primary_key]` annotation when performing insert operations. If a table's column has a primary key and `Canyon` does not find the `#[primary_key]` annotation, it will serialize the value to insert it, which is an illegal or incomplete operation.
+
+It is also worth noting that `_datasource(datasource_name: &str)` alternatives are available, and if you do not provide a `#[primary_key]` annotation, the insert methods will not be generated for that type. However, the associated function `T::multi_insert()` will still be available.
