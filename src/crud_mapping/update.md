@@ -1,10 +1,8 @@
 # UPDATE operations
 
-Update operations consists in alter the values written in the database for a new ones.
+Update operations involve altering the values in the database with new ones. `Canyon` offer developers an easy way to perform operations on a specific instance of a given `T` type that was properly set up.
 
-`Canyon` provides the developer a really easy way to perform operations over a concrete instance of some `T` type.
-
-Let's refresh our `lec` instance for the `League` entity:
+Considering the following `League` instance:
 
 ```rust
 let mut lec: League = League::new(
@@ -16,16 +14,21 @@ let mut lec: League = League::new(
 );
 ```
 
-Imagine that we need to update our `image_url` field. We will write something like:
-`lec.image_url = "https://new_lec_url.eu".to_string()`
+Suppose that the `image_url` field has to be modified. It can be done as follows:
 
-We are modifying the value by accesing directly the declared `pub` field. We can avoid this by generating `getters` and `setters` to provide a more `object-oriented` feel, but it serves to our purposes right now.
+```rust
+// modify the field first
+lec.image_url = "https://new_lec_url.eu".to_string();
+// synchronize the changes with the database
+lec.update().await; // unused result
+```
 
-To update the new modified data into the already existing record in the database, we just need to write:
-`lec.update().await;  // Unused result`
+`image_url` is a public field, so it can be modified at will. Some objects require validation before making changes. In such cases, usually the fields will be private. Although `getters` and `setters` should be also available for interacting with the fields.
 
-Again, just one line of code to performn such an action!
-Obviously, we can modify every field that we want and perform an `update` operation, and every new data will be updated in the corresponding database row in it's corresponding column.
+When running the `update` instructions, an "update row request" with all the new fields will be made with the database. Synchronizing the new state with the database.
 
-- Remeber that you have the `_datasource(datasource_name: &str)` alternatives.
-- Remember that, if you don't provide a `#[primary_key]` operation, the *update* methods won't be generated for your type!
+There is no need to call `update` more than once. Make all the changes that are required, call `update` once, then all the changes will be reflected to the database.
+
+> Note: Don't forget about using `_datasources` methods when not using the default `datasource`.
+
+> Note: If a `#[primary_key]` does not exist on the type declaration, the update methods for it will not be generated.
