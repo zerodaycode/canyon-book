@@ -19,6 +19,6 @@
 
 - [The QueryBuilder](./querybuilder.md)
 
-- [The migrations](./the_migratons.md)
+- [The migrations](./the_migrations.md)
 
 - [A real world example](./real_world_example.md)
