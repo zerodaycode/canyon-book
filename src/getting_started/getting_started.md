@@ -1,7 +1,9 @@
 # Getting started
 
-Are you excited thinking on how much time you will save from now after meet `Canyon-SQL`?
-Are you thinking on a new app, and you won't have to worry about the `data access layer` because
-`Canyon-SQL` will do everything under the hood for you?
+Before getting started with the code. Some small steps need to be taken care of. In section 1, the following topics will be discussed:
 
-Let's dive in and see, from the most basic to the most advanced concepts on the framework, what `Canyon-SQL` can do for you.
+ - Making sure that all dependencies are installed;
+ - Understanding `Canyon`'s configuration file;
+ - Setting up databases to use with `Canyon`;
+
+If everything is already set up and tested correctly. Feel free to skip to section 2 where entities are explained.
