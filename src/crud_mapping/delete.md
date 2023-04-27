@@ -2,9 +2,9 @@
 
 Delete operations consists in removing rows of data from the database.
 
-`Canyon` provides an instance method of your `T` type to delete one concrete record at a time.
+With `Canyon`, developers can delete a single record at a time using an instance method of the given `T` type that was properly set up as an entity.
 
-Let's refresh our `lec` instance for the `League` entity:
+Once again, using the `League` entity:
 
 ```rust
 let mut lec: League = League::new(
@@ -16,11 +16,16 @@ let mut lec: League = League::new(
 );
 ```
 
-So, the `delete` method works by getting the `primary_key` field and make a query based on `DELETE FROM table_name WHERE table_name.<pk_name> = value`.
+The existing entry can be deleted from the database by running:
 
-`Canyon` will delete that row from the database where the id matches our instance id.
+```rust
+lec.delete();
+```
 
-In summary, to delete one record of the database, that record must exists and being mapped to an instance. If the record for that row was already deleted, any operation on the database is perfomed, but the query is executed.
+The `delete` method will run a query similar to `DELETE FROM table_name WHERE table_name.<pk_name> = value`, where `pk_name` and `value` comes from the `#[primary_key]` set on the type declaration for `League`. `Canyon` will delete the row from the database where the id matches the instance id.
 
-- Remeber that you have the `_datasource(datasource_name: &str)` alternatives.
-- Remember that, if you don't provide a `#[primary_key]` operation, the *delete* methods won't be generated for your type!
+In summary, to delete a record from the database using `Canyon`, the record must exist and be mapped to an instance. If the record for that row doesn't exist, the query will still be executed on the database.
+
+> Note: Don't forget about using `_datasources` methods when not using the default `datasource`.
+
+> Note: If a `#[primary_key]` does not exist on the type declaration, the *delete* methods for it will not be generated.
