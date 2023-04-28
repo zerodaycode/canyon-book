@@ -1,36 +1,44 @@
-# The final boss. Canyon migrations
+# Canyon Migrations: The Final Boss
 
-*NOTE: Please, take in mind that this feature it's still unstable. Read the last section*
-*of this document (the # Disclaimer one) to get more information about this.*
+> *Note: Please be advised that this feature is still unstable. For further information, please refer to the [disclaimer section](#disclaimer) a the end of this document.*
 
-As a modern ORM framework, `Canyon` must implement something that completly manages all the
-relations with the database developer-agnostic.
+## Index
 
-That concept has a term probably familiar to the most of you. `Migrations`. But, for the ones
-who don't know about it, it's a way to say that the framework it's the ultimate responsable
-for handle every single aspect managing the database. This includes the creation and the dropping
-of the tables, alter it's name, columns, columns name, columns types, generates `GRANT` permissions,
-and the list goes on.
+- [Canyon Migrations: The Final Boss](#canyon-migrations-the-final-boss)
+  - [Index](#index)
+  - [Introduction](#introduction)
+  - [Only one entity per `.rs` file](#only-one-entity-per-rs-file)
+  - [The #\[canyon\] annotation](#the-canyon-annotation)
+    - [The 'full mode' concept](#the-full-mode-concept)
+  - [The migrations](#the-migrations)
+  - [Disclaimer](#disclaimer)
 
-But, unlike other `ORM's`, `Canyon` proposes a new way of handling the migrations for you.
+## Introduction
 
-Typically, others comes with a built in cmd tool to manage it. Others has a separate cmd tool
-for it that you must download, install and manage.
+As a modern ORM framework, `Canyon` aims to provide a comprehensive solution for managing all relations with the database in a manner that is agnostic to the developer. This concept is commonly referred to as "migrations". Migrations are a way for the framework to take full responsibility for managing every aspect of the database, including creating and dropping tables, altering their names, columns, column names, column types, generating `GRANT` permissions, etc.
 
-What `Canyon` proposes for the `migrations` concept it's new. Everything it's managed by
-`Canyon` itself at compile time, and executed just in the beginning of the client's code.
-But this is a feature that must be enabled, it does not comes active by default.
+However, unlike other ORM frameworks, `Canyon` proposes a new way of handling migrations. Other frameworks come with a built-in command tool or require a separate command tool to be downloaded, installed, and managed. `Canyon`, on the other hand, manages everything at compile time and executes the migrations at the beginning of the client's code. 
+
+> It should be noted that this feature must be enabled, as it is not active by default.
+ 
+## Only one entity per `.rs` file
+[(back to top)](#canyon-migrations-the-final-boss)
+
+To enable the framework to manage the entity types, they must be annotated with the `#[canyon_entity]` macro, which was introduced in the [Entities chapter](./canyon_entities.md).
+
+```rust
+#[canyon_entity]  // ready to be tracked and managed by Canyon
+pub struct League { /* fields... */ }
+```
+
+It is important to remember that only one annotated entity with `#[canyon_entity]` is allowed per file due to the way migrations work.  Attempting to implement more than one entity in the same file will result in a compiler error.
 
 ## The #[canyon] annotation
+[(back to top)](#canyon-migrations-the-final-boss)
 
-As always, the behaviour of the components of the framework are annotation-driven. This means,
-if you need something, probably `Canyon` has an annotation that makes the hard work for you.
+As is typical with components of a modern ORM framework. `Canyon` utilizes annotations to drive its behavior. This means that when needing something, `Canyon` most likely has an annotation to solve it.
 
-But, how `Canyon` knows that he must enable the `migrations` feature, and starting to take
-control of whatever action is necessary in your program?
-
-Simple answer. A new annotation. That's probably the most special one, and it must be placed
-in the `Rust` more special part of a program. The `main()` function.
+In order to enable `migrations`, include the following annotation for the `main()` function.
 
 ```rust
 #[canyon]
@@ -38,85 +46,35 @@ fn main() {
     /* code in main */ 
 }
 ```
-*Canyon's #[canyon] annotation, that unlocks the 'full mode'*
+*Canyon's #[canyon] annotation. It unlocks the 'full mode'*
 
+###  The 'full mode' concept
+[(back to top)](#canyon-migrations-the-final-boss)
 
-## The 'full mode' concept
-
-When talking about the *framework*, the `full mode` words are used to describe that `Canyon`
-has enabled all of his features to take the control about everything database related in
-your program.
+When discussing about the *framework*, the term 'full mode' is used to indicate that `Canyon` has activated all of its features to assume complete control over everything related to the database in your program.
 
 ## The migrations
+[(back to top)](#canyon-migrations-the-final-boss)
 
-`Canyon` handles the migrations when the *full mode* it's enabled. For the complete lifecycle
-of your program, it will take care about everything... for the full lifecycle? Wow, wow...
-wait a moment... it will `Canyon` interfer at runtime on my program?
+When the full mode is enabled, `Canyon` takes care of managing the migrations for the complete lifecycle of the program. Migrations are designed to manage every declared entity during compile time. Thanks to the complex macro system, it will generate all the necessary queries to be applied at the start of the application.
 
-Respecting to the migrations, (obviously, your queries are executed at runtime) the answer is...
-just as the beginning (for now!).
+> Note: Currently, we are making efforts to ensure that the migration process is only executed when `cargo build` or `cargo run` are invoked. The execution of migrations by code static analyzers, which make use of the `cargo check` functionality, can lead to obscure feedback.
 
-> Note: We are trying to look for a solution that this process is only executed when `cargo build` or
-`cargo run` are invoked. Code static analizers makes use of the `cargo check` functionality, which
-leads to the execution of the migrations in a obscure way, due that we don't receive any feedback.
+`Canyon` searches for structs annotated with `canyon_entity`, then checks the database information provided in the `canyon.toml` file. It generates everything necessary for the entities in the database.
 
-`Canyon` migrations re designed to manage every entity for you at compile time, and (for now) generate
-the necessary queries for apply at the start of your application.
-This it's done via complex macro operations that you don't have yo worry about. It will be done for you.
+During compilation, `Canyon` searches for new entities, entities that have been removed from your code (which will then be deleted from the database), entities that have been renamed, entity fields that have been renamed or changed type, and any new or removed `field annotation` for an entity.
 
-But, for this to works, there's two extra requisites required.
-The structs that you want that `Canyon` manages, must be annotated with something that we've already
-learn in the *Canyon Entities* chapter, the `#[canyon_entity]` macro.
+When it is still compiling, `Canyon` generates the necessary queries for the database. Even though this is the most complicated feature of `Canyon`, there is not much more explanation about how it affects development. As mentioned earlier, the idea behind `Canyon` is simple:
 
-```rust
-#[canyon_entity]  // ready to be tracked and managed by Canyon
-pub struct League { /* fields... */ }
-```
-
-- You are only allowed to have one `Canyon Entity` per `.rs` source file. So, whenever you're
-defining a new entity, please, don't implement more that one in the same source file, or the
-compiler will refuses to build your program.
-
-When the *full mode* it's enabled, `Canyon` will look for your `canyon_entity` annotated structs.
-That's when your type is really an entity in `Canyon`!
-
-Then, it will check your provided database info in your `canyon.toml` file, and it will generate
-everything that is necessary for that entities in the database.
-
-Everytime that you compile your program, `Canyon` performs a quick search to determine if there
-are new entities, if an entity was deleted from your code (this will delete it in your database!),
-if an entity was renamed, if an entity field was renamed or changed it's type, and finally, if
-an entity has a new `field annotation` or a pre-existent one was removed from your code.
-
-Then, when it's still compiling, `Canyon` will generate the queries to the database.
-
-And that's all. Even if it's by far the most complicated feature of `Canyon`, there's no
-much more explanation about how affects you when are developing, and that's because,
-as already mentioned before, the idea of `Canyon` it's pretty simple.
-
-*Make the developer's life easier*
+*Make developer's life easier*
 
 ## Disclaimer
+[(back to top)](#canyon-migrations-the-final-boss)
 
-As you read at the beggining of this file, `Canyon` migrations are still an unstable and a baby feature.
+As stated at the beginning of this document, `Canyon` migrations are still an unstable feature under development.
 
-That's still code to rework in order to make them work as intended, and there's still
-mentioned features that aren't available for the `0.1.0` release.
+There is still some work to be done to ensure they function as intended, and some of the features mentioned are not yet available in the `0.1.0` release.
 
-There are already a lot of things implemented, like change the table name, create tables, drop tables,
-changes columns datatypes, drop and add constraints, modify (create, alter or delete) sequences or identities,
-but no alter a column name.
+Many functionalities are already implemented, such as changing table names, creating, dropping, altering tables, modifying sequences or identities, changing column data types. However, renaming columns is not yet possible.
 
-Also, some of the mentioned above are ready for `PostgreSQL` databases, but no for `MSSQL` ones.
-If `Canyon` encounters some action after detecting changes in the entities that should be processed
-for the Microsoft's database engine, a `todo!()` panic will be raised.
-
-Remember that you are able to disable migrations for a whole datasource in the configuration file,
-to avoid those kind of situations.
-
-Also please, remember the limitation of having one annotated entity with `#[canyon_entity]`
-per file.
-This is a restriction imposed because how the migrations works, and what `Canyon`
-needs in order to know and relate the data for every entity managed in your program,
-compilation after compilation, because, if they are modified, `Canyon` has to
-update them in the database to make everything works correctly.
+Furthermore, while some of these functionalities are ready for use with `PostgreSQL` databases, they may not be available for `MSSQL` databases, if `Canyon` encounters an action that requires processing from Microsoft's database engine, it will raise a `todo!()` panic. To avoid such situations, it is possible to disable migrations for a specific datasource in the configuration file.
