@@ -1,138 +1,138 @@
 # The QueryBuilder
 
-`Canyon-SQL` comes with a powerful querybuilder.
+So far, queries have been executed by mapping fields and their corresponding data for each type or instance of that type. Generating the necessary SQL sentences to perform the `CRUD` operations discussed earlier. 
 
-Until now, queries are executed by mapping fields and the data of the fields
-for every type or instance of that type, and generating the SQL senteces needed to perform
-the operations discussed before.
+However, the `SQL` language offers a wealth of additional power to analyze and manipulate data stored in tables. Specifically, we are referring to the `SQL clauses` that function as filters.
 
-But the `SQL` idiom offers a lot of more power to analyze and manipulate the data stored in its tables.
-We are concretly talking now about the `SQL Clauses` that acts like filters.
+## Index
 
-`Canyon` provides support for make the queries over your entities more flexible. They're also
-defined in the `CanyonCrud` macro. They belongs to a family called `QueryBuilder`, and exists three types that represents the `SELECT`, `UPDATE` and `DELETE` operations and that implements the base operations designed by the `QueryBuilder` trait, among their particular ones.
+- [The QueryBuilder](#the-querybuilder)
+  - [Index](#index)
+  - [Introduction](#introduction)
+  - [How does it work?](#how-does-it-work)
+  - [Available methods to work with the builder](#available-methods-to-work-with-the-builder)
+  - [The QueryBuilder implementors](#the-querybuilder-implementors)
+  - [The Comp enum type](#the-comp-enum-type)
+  - [Better by example](#better-by-example)
+  - [The #\[derive(Fields)\] macro](#the-derivefields-macro)
+  - [The Field enum](#the-field-enum)
+  - [The FieldValue enum](#the-fieldvalue-enum)
+  - [Next steps](#next-steps)
 
-+ The `SelectQueryBuilder`, invoked after call `T::select_query()`
-+ The `UpdateQueryBuilder`, invoked after call `T::update_query()`
-+ The `DeleteQueryBuilder`, invoked after call `T::delete_query()`
+## Introduction
+[(back to top)](#the-querybuilder)
 
-## How does it works?
+`Canyon` provides support for making queries over your entities more flexible. These queries are also defined in the `CanyonCrud` macro and belong to a family called `QueryBuilder`, which include three types representing the `SELECT`, `UPDATE` and `DELETE` operations. These types implement the `QueryBuilder` trait.
 
-Every associated function or method provided through the macro implementations
-that returns an implementor of the `QueryBuilder` type, can be used as a builder pattern to construct
-the query that `Canyon` will use to retrive data from the database. Those associated
-functions contains a `query()` consumer method, which will consume the builder and will execute the query against the database, returning the data.
++ The `SelectQueryBuilder`, is invoked after calling `T::select_query()`
++ The `UpdateQueryBuilder`, is invoked after calling `T::update_query()`
++ The `DeleteQueryBuilder`, is invoked after calling `T::delete_query()`
 
-The `QueryBuilder` works by first, generate the base `SQL` as the rest of the `CRUD` operations
-presented in the past chapters. But, instead of executing the query, it lets you to chain
-methods over a `QueryBuilder` instance that, for every method call, generates more `SQL` content
-for your query, being an efficient an elegant solution to build more complex queries.
+## How does it work?
+[(back to top)](#the-querybuilder)
+
+The macro implementations provide various associated functions or methods that return an implementor of the `QueryBuilder` type. These can be used as a builder pattern to construct the query that `Canyon` will use to retrieve data from the database. These functions also contain a `query()` consumer method, which consumes the builder and executes the query against the database, returning the data.
+
+The `QueryBuilder` works by generating the base `SQL`, similar to the `CRUD` operations presented in the previous chapters. However, instead of executing the query, it allows the user to chain methods over a `QueryBuilder` instance. With each method call, the query builder generates more `SQL` content, enabling an efficient and elegant solution to build more complex queries.
 
 ## Available methods to work with the builder
+[(back to top)](#the-querybuilder)
 
-// Hablar de la raíz de la familia
+> "Hablar de la raíz de la familia"
 
-You can *chain* calls over your specific `QueryBuilder` implementor to build a more complex query when you need it.
-Every method will return `&mut Self` to make you able to aggregate and modify your query according
-to your needs. By returning `&mut Self`, we can have access to the same instance of the `QueryBuilder`,
-modifying it's internal state until it's consumed.
+Method calls can be *chained* over a `QueryBuilder` implementor. This allows building a more complex query when needed. By returning `&mut Self`, the user may access the same instance of the `QueryBuilder` and modify its internal state until consumed.
 
-To start to see what the `QueryBuilder` it's capable to do, let's review
-the available declarations, that are the available methods in all the implementors.
+To understand the capabilities of the `QueryBuilder`, let's review the available declarations, which are the available methods in all the implementors.
+
+To see more about the capabilities of the `QueryBuilder`, below are the available methods of its implementors:
 
 ```rust
 pub trait QueryBuilder<'a, T>
     where T: CrudOperations<T> + Transaction<T> + RowMapper<T> 
 {
-    /// Returns a read-only reference to the underlying SQL sentence,
-    /// with the same lifetime as self
+    /// Returns a read-only reference to the underlying SQL sentence with the same lifetime as self.
     fn read_sql(&'a self) -> &'a str;
 
-    /// Public interface for append the content of an slice to the end of
-    /// the underlying SQL sentece.
-    /// 
-    /// This mutator will allow the user to wire SQL code to the already
-    /// generated one
-    /// 
-    /// * `sql` - The [`&str`] to be wired in the SQL
+    /// Allows the user to append the content of a string slice to the
+    /// end of the underlying SQL sentence.
+    ///
+    /// # Arguments
+    ///
+    /// * `sql` - The [`&str`] to be appended to the SQL query.
     fn push_sql(&mut self, sql: &str);
 
-    /// Generates a `WHERE` SQL clause for constraint the query.
-    /// 
-    /// * `column` - A [`FieldValueIdentifier`] that will provide the target
-    /// column name and the value for the filter
-    /// * `op` - Any element that implements [`Operator`] for create the comparison
-    /// or equality binary operator 
+    /// Generates a `WHERE` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the filter.
+    /// * `op` - Any type that implements the `Operator` trait.
     fn r#where<Z: FieldValueIdentifier<'a, T>>(&mut self, column: Z, op: impl Operator) -> &mut Self
         where T: Debug + CrudOperations<T> + Transaction<T> + RowMapper<T>;
 
-    /// Generates an `AND` SQL clause for constraint the query.
-    /// 
-    /// * `column` - A [`FieldValueIdentifier`] that will provide the target
-    /// column name and the value for the filter
-    /// * `op` - Any element that implements [`Operator`] for create the comparison
-    /// or equality binary operator 
+    /// Generates an `AND` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the  filter.
+    /// * `op` - A type that implements `Operator` for the comparison.
     fn and<Z: FieldValueIdentifier<'a, T>>(&mut self, column: Z, op: impl Operator) -> &mut Self;
 
-    /// Generates an `AND` SQL clause for constraint the query that will create
-    /// the filter in conjunction with an `IN` operator that will ac
-    /// 
-    /// * `column` - A [`FieldIdentifier`] that will provide the target
-    /// column name for the filter, based on the variant that represents
-    /// the field name that maps the targeted column name
-    /// * `values` - An array of [`QueryParameters`] with the values to filter
-    /// inside the `IN` operator
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a set of values that are contained within the column.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldIdentifier` for the column name.
+    /// * `values` - An array of `QueryParameter` with the values that are contained within the column.
     fn and_values_in<Z, Q>(&mut self, column: Z, values: &'a [Q]) -> &mut Self
         where 
             Z: FieldIdentifier<T>,
             Q: QueryParameters<'a>;
 
-    /// Generates an `OR` SQL clause for constraint the query that will create
-    /// the filter in conjunction with an `IN` operator that will ac
-    /// 
-    /// * `column` - A [`FieldIdentifier`] that will provide the target
-    /// column name for the filter, based on the variant that represents
-    /// the field name that maps the targeted column name
-    /// * `values` - An array of [`QueryParameters`] with the values to filter
-    /// inside the `IN` operator
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a set of values that are contained within the column.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldIdentifier` that will provide the target column name for the filter.
+    /// * `values` - An array of `QueryParameter` with the values to filter.
     fn or_values_in<Z, Q>(&mut self, r#or: Z, values: &'a [Q]) -> &mut Self
         where Z: FieldIdentifier<T>, Q: QueryParameters<'a>;
 
-    /// Generates an `OR` SQL clause for constraint the query.
-    /// 
-    /// * `column` - A [`FieldValueIdentifier`] that will provide the target
-    /// column name and the value for the filter
-    /// * `op` - Any element that implements [`Operator`] for create the comparison
-    /// or equality binary operator 
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the filter.
+    /// * `op` - Any type that implements `Operator` for the comparison
     fn or<Z: FieldValueIdentifier<'a, T>>(&mut self, column: Z, op: impl Operator) -> &mut Self;
 
-    /// Generates a `ORDER BY` SQL clause for constraint the query.
-    /// 
-    /// * `order_by` - A [`FieldIdentifier`] that will provide the target
-    /// column name
-    /// * `desc` - a boolean indicating if the generated `ORDER_BY` must be
-    /// in ascending or descending order
+    /// Generates an `ORDER BY` SQL clause for ordering the results of the query.
+    ///
+    /// # Arguments
+    ///
+    /// * `order_by`: A `FieldIdentifier` for the column name.
+    /// * `desc`: A boolean indicating whether ordering should be ascending or descending.
     fn order_by<Z: FieldIdentifier<T>>(&mut self, order_by: Z, desc: bool) -> &mut Self;
 }
 ```
 
-> Note: If you miss the 'LIKE' clause, don't worry. It will be released soon.*
+> Note: The 'Like' clause will be included in a later release.
 
-That's will make you and idea on what the chained methods do over the instance. It really just appends more `SQL` code to the base one, to filter the results or to concretize an operation acording to your needs.
+This will provide you with an idea of the functions performed by the chained methods on the instance. These methods essentially append additional SQL code to the base code to filter the results or execute a particular operation based on your requirements.
+
 
 ## The QueryBuilder implementors
+[(back to top)](#the-querybuilder)
 
-Every implementor offers the public interface showed above, plus it's logical operations. For example, the `SelectQueryBuilder`, that you can get one by calling `T::select_query()`, offers an interface to add `JOIN` clauses to your SQL sentence. For now, you can use `LEFT, RIGHT, INNER and FULL` joins.
-Taking the signature of the INNER join:
+Each `QueryBuilder` implementor provides a public interface that contains the methods discussed above, as well as its logical operations. For instance, calling `T::select_query()` returns a `SelectQueryBuilder`, which offers an interface to add `JOIN` clauses to the SQL statement. Currently, `LEFT`, `RIGHT`, `INNER` and `FULL` joins are available. the `inner_join()` method signature is:
 
 ```rust
 pub fn inner_join(&mut self, join_table: &str, col1: &str, col2: &str) -> &mut Self;
 ```
 
-where *join_table* is the entity that you want to make the join with, and *col1* and *col2* are the columns that you want to declare in the `ON` clause.
-The rest of the joins have the exact same parameters.
+Where `join_table` is the entity to perform the join, and `col1` and `col2` are the columns to declare in the `ON` clause. The other join methods have the same parameters.
 
-The `T::update_query()` builds an `UPDATE` exposing all the methods available in the `QueryBuilder` trait declaration, but adding a:
+The `T::update_query()` builds an `UPDATE` statement, providing all the methods defined in the `QueryBuilder` trait declaration. Additionally, it includes a `set()` method:
 
 ```rust
 pub fn set<Z, Q>(&mut self, columns: &'a [(Z, Q)]) -> &mut Self
@@ -141,7 +141,7 @@ pub fn set<Z, Q>(&mut self, columns: &'a [(Z, Q)]) -> &mut Self
         Q: QueryParameter<'a>
 ```
 
-that you can use like this:
+You may use it as follows:
 
 ```rust
 let mut q: UpdateQueryBuilder<Player> = Player::update_query_datasource(SQL_SERVER_DS);
@@ -156,9 +156,9 @@ let mut q: UpdateQueryBuilder<Player> = Player::update_query_datasource(SQL_SERV
     .expect("Failed to update records with the querybuilder");
 ```
 
-Note the array of tuples, where the element at 0 is the column name that will be targeted, and the index 1 is reserved for the value that will be updated in your database column.
+Notice the array of tuples. The first element is the column to target, and the second is the value to update in the database column.
 
-Finally, there's a `T::delete_query()` that builds a `DELETE` statement.
+Finally, `T::delete_query()` constructs a `DELETE` statement.
 
 ```rust
 Tournament::delete_query()
@@ -166,48 +166,45 @@ Tournament::delete_query()
     .and(TournamentFieldValue::id(&16), Comp::Lt)
     .query()
     .await
-    .expect("Error connecting with the database on the delete operation");
+    .expect("Error connecting to the database during the delete operation");
 ```
 
 ## The Comp enum type
+[(back to top)](#the-querybuilder)
 
-The `QueryBuilder` usually works receiving in some methods a comparation operator.
-In `Canyon` it's created from the `Comp` enum type, which it's received by parameter by the methods that required them, and allows you to generate comparation operators
-in a procedural way.
+The `QueryBuilder` require a comparison operator in some of its methods. This is created from the `Comp` enum type, which is passed as a parameter to the methods that require it. Allowing you to generate comparison operators in a procedural manner.
 
-This are the available ones:
+The available operators are:
 
 ```rust
 pub enum Comp {
-    /// Operator "=" equals
+    /// Operator "=" equal
     Eq,
-    /// Operator "!=" not equals
+    /// Operator "!=" not equal
     Neq,
-    /// Operator ">" greather than <value>
+    /// Operator ">" greater than <value>
     Gt,
-    /// Operator ">=" greather or equals than <value>
+    /// Operator ">=" greater than or equal to <value>
     GtEq,
     /// Operator "<" less than <value>
     Lt,
-    /// Operator "=<" less or equals than <value>
+    /// Operator "=<" less than or equal to <value>
     LtEq,
 }
 ```
 
 ## Better by example
+[(back to top)](#the-querybuilder)
 
-We know that it could be confusing how the `QueryBuilder` works, essentially if you not
-fight too often with `Builders`, but, wait... probably you will use it a lot!
+Using the `QueryBuilder` might be confusing at first. Specially for developers that are not accustomed to the `builder pattern`. However, with practice, developers will see that it is a very practical way of querying.
 
-Let's put an use case, working with our beloved `League` type: We want to recover
-all the `league` table records which `id` are less than 20 and it's `slug` it is
-equals to `LCK`.
+Let's consider an example where we are working once again with the `League` type: we want to retrieve all records in the `league` table with `id` less than 20 and `slug` equal to `LCK`.
 
 ```rust
 let leagues: Result<Vec<League>, _> = League::select_query()
     .r#where(
         LeagueFieldValue::id(20),    // This will create a filter -> `WHERE league.id < 20`
-        Comp::Lt                     // where the `<` symbol it's generated by Canyon when sees this variant
+        Comp::Lt                     // where the `<` symbol is generated by Canyon when it sees this variant
     ).and(
         LeagueFieldValue::slug("LCK".to_string()),
         Comp::Eq
@@ -218,41 +215,27 @@ let leagues: Result<Vec<League>, _> = League::select_query()
 println!("League elements: {:?}", &leagues);
 ```
 
-The rest of methods that you may desire to chain are trivial. You can chain as many as you need, but
-obviously, try to use those one who makes sense for your queries.
+The remaining methods that can be chained are self-explanatory. You can chain as many methods as needed. Make sure that the methods are chained properly to avoid errors.
 
-Also, if you need to look at more examples, go to our repository, to the `/tests/crud` folder, and look for the `querybuilder_operations.rs` tests. You eventually will have any of the available operations within the `Canyon` querybuilders written there.
+In addition, if needing more examples, you can visit our repository's `/tests/crud` folder and refer to the `querybuilder_operations.rs` tests. There you will find code examples for all available operations within the `Canyon` query builders.
 
-Hmmm... but where does all of the `LeagueField`, `LeagueFieldValue(T)` and the `FieldIdentifier` and `FieldValueIdentifier` types or bounds comes from?
+Now, you may be wondering where `LeagueField`, `LeagueFieldValue(T)`, `FieldIdentifier`, and `FieldValueIdentifier` types and bounds come from.
 
-## The #[derive(Fields)] derive macro
+## The #[derive(Fields)] macro
+[(back to top)](#the-querybuilder)
 
-Usually, when working with `SQL`, there's a lot of places where you want to
-specify the column of the type of the column for some reason in some operation.
+When working with SQL, it is often necessary to specify the column name or type of a column in some operations. To avoid using raw or literal values, we created the `#[derive(Fields)]` derive macro. This macro generates special enumerated types that allows the user to refer to a database column name, type or value in a procedural way. It replaces the string that is usually used with a piece of valid Rust code.
 
-We liked to have a different way of specifiying those values without being just raw or literal values.
-So we created the #[derive(Fields)] derive macro.
-This macro provides the autogeneration of a very special enumerated types. They are the way of refer
-to a database column name, it's type or it's value in a procedural way, replacing
-the string that you usually will put in that place to reference it for a
-piece of valid `Rust` code.
-
-Ah, don't worry, `Canyon` already translates that procedures for the correspondent
-identifiers whenever it needs it.
-
-Let's now review those two beasts!
+Rest assured that `Canyon` translates these procedures into the corresponding identifiers whenever they are needed. Let's take a closer look at these two types.
 
 ## The Field enum
+[(back to top)](#the-querybuilder)
 
-The field enum it's an autogenerated enum, which main purpose it's to relate
-every field of your type with a database column name, as a procedural way of reflecting them through the code.
+The field enum is an autogenerated enum that serves to relate each field of a type with a database column name in a procedural way, making it easier to reflect them through the code.
 
-It's identifier it's generated as the concatenation of your type's identifier + "Field".
+The identifier of the Field enum is generated as the concatenation of the type's identifier with "Field". It is important to note that there is a naming convention in `Canyon`, where the variants of an enumeration in Rust are typically written in `PascalCase`, while in `Canyon` they are written in `snake_case` to match the way that the field is written.
 
-> Note: There's an important convenction here in Canyon about the way on how the variants
-are written. By default, variants of an enumeration in Rust are written in PascalCase form,
-while in Canyon are written exactly the same on how the field it's written (convenction here
-applies snake_case).
+For example:
 
 ```rust
 #[derive(Clone, Debug)]
@@ -269,39 +252,18 @@ pub enum LeagueField {
 impl FieldIdentifier<LeagueField> for LeagueField {}
 ```
 
-In any place that you must specify a concrete column of the `league` table, for example, the
-`slug` column, you will write `"slug"`. Any literal in the code it's error prone, since a lot of
-bad things can go wrong with them, plus IDE's don't offer autocompletation of information about
-them (we're not refering to the AI autocompletion tools, which are out of scope for this).
+When directly interacting with a database, it is common to refer to a column using a plain string. That is a problem, because the compiler wouldn't be able to detect any mistake until it attempts to make the query. We, Rust developers, didn't choose this language in order to have runtime errors.
 
-So now, you only need to type `LeagueField::slug`.
+Therefore, whenever a concrete column of the `league` table must be specified, such as the `slug` column, you could write `LeagueField::slug`. While this may seem like more code, it removes the potential errors that can come with using literals in the code. IDEs can also offer autocompletion, making it easier to write and detect wrong variants.
 
-Yes, we know. "It's more code"... HA! But we removing a literal from our code, and potencially
-every literal written in this situation. The IDE now will help us if we write a bad one, or
-autocompleting (God bless the `Ctrl + spacebar`).
-
-Also, it's easier to detect a wrong variant. Even they are translated into literals, when used,
-you can only put the wrong one and make a bad operation, but now you can't write a literal
-that does not even exists and makes your code panic!
-
-About the `impl FieldIdentifier<LeagueField> for LeagueField {}` trait impl, it's just part of the `Canyon's` way of knowing when it must accept a FieldIdentifier
-type as an argument of the functions that generates the filters for the queries, and for constraint the concrete arguments of some operations of the `QueryBuilder`
-to the same type, avoding the potential error of specify variants of different types.
-Almost always are used when you generate some kind of filter for your query in the `SQL` language.
+The `impl FieldIdentifier<LeagueField> for LeagueField {}` trait implementation is part of Canyon's method of identifying when it must accept a `FieldIdentifier` type as an argument for functions that generate filters for queries, or when constraining the concrete arguments of some operations of the `QueryBuilder` to the same type. This helps to avoid potential errors of specifying variants or different types, and is almost always used when you generate a filter for your SQL query.
 
 ## The FieldValue enum
+[(back to top)](#the-querybuilder)
 
-In a complementary way to the `Field` enum, another one it's generated with the `canyon_entity`
-proc-macro annotation.
+In addition to the `Field` enum, another enum is generated by the `canyon_entity` proc-macro annotation, known as the `FieldValue` enum. This enum serves as a procedural way to determine which field is being referred to, but with the added capability of accepting a value as an argument in every variant. This value can be any supported literal or type for which the `QueryParameter<'a>` is implemented. The main purpose of this enum is to create filters for an `SQL` query where the filter needs a value to perform the filtering.
 
-This new one it's known as the `FieldValue` enum, and represents the same as the `Field`
-enum (a procedural way to determine to what field we are refering) but accepts a value
-as an argument in every variant. That argument can be any supported literal or type
-for which the `QueryParamters<'a>` it's implemented.
-The main purpose of this enum, it's to make filters for an `SQL` query, where the
-filter needs a value to perform the filtering.
-
-It looks similar to this:
+The `FieldValue` enum looks like this:
 
 ```rust
 #[derive(Clone, Debug)]
@@ -318,6 +280,9 @@ pub enum LeagueFieldValue {
 impl FieldIdentifierValue<LeagueFieldValue> for LeagueFieldValue {}
 ```
 
-It's just a powerful way of write filters for the `SQL` queries.
-For example, a `LeagueFieldValue::id(1);` could be used for generate
-a `WHERE` clause filter: `WHERE league.id = 1`, among other operations.
+Using the `FieldValue` enum provides a powerful way of writing filters for `SQL` queries. For instance, `LeagueFieldValue::id(1)` can be used to generate a `WHERE` clause filter: `WHERE league.id = 1`, among other operations.
+
+## Next steps
+[(back to top)](#the-querybuilder)
+
+Now that `Querybuilder` has been discussed, the next chapter is about `Migrations`. Where everything that have been discussed up until now will be wrapped into the full package that `Canyon` provides. See you there!
