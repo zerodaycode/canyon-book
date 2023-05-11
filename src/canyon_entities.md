@@ -1,22 +1,12 @@
 # Canyon Entity
 
-Woo! Time to get serious!
+Welcome to the section dedicated to one of the most iconic features of `Canyon` - *The Entities*.
 
-We are gonna review one of the most iconic of the `Canyon` features. *The entities*
+## Definition of Canyon Entity
 
-## What is a Canyon Entity?
+Throughout the previous chapters, we have already introduced the concept of entity and demonstrated its usage in various contexts. In `Canyon`, however, an entity holds an even more powerful meaning than what was presented before.
 
-You already see how, in the past chapters, we defined the concept of entity and
-how it was used in a lot of contexts.
-
-But in `Canyon` an *entity* still has a powerful meaning that the presented before.
-
-Let's start simple. A `Canyon Entity` it's a user defined type, a struct, that
-it's annotated with a really special `proc-macro`.
-
-`#[canyon_entity]`
-
-It looks like this attached to our `League` example for the past chapters:
+Put simply, a `Canyon Entity` is a *user-defined type*, which is represented as a struct, and is annotated with a special `procedural macro`:
 
 ```rust
 use canyon_sql::macros::canyon_entity;
@@ -33,41 +23,48 @@ pub struct League {
 }
 ```
 
-This macro unlocks a set of new features to our type. But, how this affect you? Why is so special?
+This macro unlocks a set of new features for the type. These features include:
 
-This annotation makes two important things for you:
+- Inform `Canyon` that it should handle everything in the program that relates to this type on the database;
+- Track the type along with all the necessary metadata on a special register;
+- Allow the user to configure an alternative table name and specify the schema in which the entity being pointed to resides;
 
-- Let to `Canyon` knows that you desire that it should take care about
-everything in your program related with this type
-- Tracks it in a special register, with all the metadata needed
-- Let you configure an alternative table name and let's you specify the schema where entity that is being pointed lives.
+These features provide a wealth of functionalities that will be explored further in upcoming chapters.
 
-Those are only three things, but the implications behind them are really huge for the upcoming lectures. But for now, let's gonna discuss the second point to discover something new about `Canyon` and to prepare ourselves for the next chapter.
+## The `table_name` and the `schema` attribute parameters
 
-## The `table_name` and the `schema` attribute parameter
+The `canyon_entity` macro can optionally receive two parameters: `table_name` and `schema`.
 
-The `canyon_entity` macro optionally receives two parameters.
-`#[canyon_entity(table_name = "other_league", schema = "tic" )]`
+Example:
 
-Usually, the convention within `Canyon` is to convert your struct's name to a snake case identifier
-for the generated operations. This allows you to not have to modify anything different than the defaults, and follow the typical ORM conventions along with the most used way of defining a table
-name between the different engines.
+```rust
+#[canyon_entity(table_name = "other_league", schema = "tic")]
+```
 
-But that's not has to be the case always. Sometimes, your tables already exists in the database, and you need other mapping, or even better, you want to use a different name in your *Rust* struct that doesn't fits into the direct convertion to snake case presented above. So you can specify the name of the database entity that you want to relate with your type.
+The naming convention for Rust types is `CamelCase`. On the other hand, the naming convention for databases tables and schemas is often `snake_case`. These attributes allow us to fulfill both standards.
 
-Also, Canyon assumes that your entities will be placed in the default schema. For example, `public` in `PostgreSQL` or `dbo` in `MSSQL`. And could be the case that you need to use and alternative schema. Well, this is configurable per entity with the parameters showed above.
+Typically, `Canyon` adheres to the convention of converting the name of a user-defined struct to a snake-case identifier for the purpose of generating database operations. This approach eliminates the need for modifying anything other than the defaults. Enabling users to conform to established ORM conventions in conjunction with the most common method of defining a table across various database engines.
 
-## The #[primary_key] field attribute
+However, it is not always necessary to follow this convention. In some cases, tables may already exist in the database, requiring different mapping. There may also be situations where the user prefer to use a different type name that cannot be converted to `snake_case` as described above. To accomodate these scenarios, the user has the ability to specify the name of the database entity accordingly.
 
-Let's review one of the most important concepts in relational databases. The `primary_key`.
-Each table within a database will typically have its own primary key. The main purpose of designating a primary key is to identify each unique record in a particular table.
+Additionally, `Canyon` assumes assumes that the entities will be placed in the default schema, such as `public` in PostgreSQL or `dbo` in MSSQL. If there is need to use an alternative schema, the user may configure this on a per-entity basis using the `schema` parameter.
 
-Within `Canyon`, it's a very big thing. Every entity must be (almost always) annotated with a `primary_key`. This let's you unlock the full potential of the `CRUD` operations generated by the `CanyonCrud` derive macro. Also, it handles another things, like data-serialization or the automatic mapping with the autogenerated unique autoincremental new value for that column after an insert operation, putting that new value directly in your instance.
+## The `#[primary_key]` field attribute
 
-It has one optional parameter: `autoincremetal`. Sometimes you don't have an incremental primary key,
-or you don't want your id to be autoincremental (typically, on rare text columns that acts as a kind of primary key). This is not really common, but is allowed, and sometimes used. So we offer the oportunity to set the `primary_key` annotation as *NOT* autoincremental, by just writting:
-`#[primary_key(autoincremental = false)]`
+Let's discuss one of the fundamental concepts in relational databases: the `primary_key`. Each table in a database typically has its own primary key, and the primary purpose of designating one is to identify each unique record in a particular table.
 
-Note that it's default value is `#[primary_key(autoincremental = true)]`, so this lets you write only the field annotation: `#[primary_key]`
+In `Canyon`, this is a significant concept. Almost every entity must be annotated with a `primary_key` to unlock the full potential of the `CRUD` operations generated by the `CanyonCrud` derive macro. It also manages other things, such as:
 
-So, unless you've already have a table that uses compound primary keys or text columns that looks like primary keys, remeber to annotate your `primary_key` column with the `#[primary_key]` annotation.
+- Identifying each unique record in a table;
+- Facilitating data serialization;
+- Auto-incrementing the `primary_key` of new inserted rows;
+
+The `primary_key` attribute has one optional parameter: `autoincremental`. This is `enabled by default`. And means that each new row will have the key of the *last row* incremented by 1.
+
+Sometimes, the user may not wish an incremental primary key (usually on rare cases where a unique `String` is used as primary key). Although this is not common, it is sometimes used. In that case, the user may ***disable*** `autoincremental` by including:
+
+```rust
+#[primary_key(autoincremental = false)]
+```
+
+> Note: `autoincremental` is *enabled by default*. Not specifying it means it is `true`.

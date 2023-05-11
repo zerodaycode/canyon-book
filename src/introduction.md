@@ -2,6 +2,10 @@
 
 Welcome to `The Canyon's SQL book`! This is a *work-in-progress* user guide for the `Canyon-SQL` ORM and querybuilder.
 
+## Join our discord
+
+For the latest announcements, frequently asked questions, and discussions about `Canyon` in general, join our [Discord](https://discord.gg/MhwSymk7F6).
+
 ## Phylosophy of design
 
 The idea behind `Canyon-SQL` is a really simple one: *Make the developer's life easier*.
@@ -31,6 +35,7 @@ If you're new to the `Rust` programming language, it is highly recommended that 
 
 We welcome the contributions of new developers in advancing this project. However, in order to maintain order and consistency during development, we request that all contributors adhere to the following guidelines when adding new functionality, modifying or improving the source code, or fixing a bug:
 
+* Check with the community on [Discord](#join-our-discord) to keep updated with the latest announcements, issues and goals;
 * Open an issue [here](https://github.com/zerodaycode/Canyon-SQL/issues) explaining what you wish to change or upgrade on the source code;
 * Clone the repo locally and work in the source code;
 * Open a `PR` to a new branch, and try to documentate as much as possible the changes made in the commits to your working branch.

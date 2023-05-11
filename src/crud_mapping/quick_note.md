@@ -1,14 +1,23 @@
-# The main function
+# The Canyon Runtime
 
-Before you getting started, you may know about one indispensable requisite.
+Before getting started with `Canyon`, there is an essential requirement to consider.
 
-`Canyon-SQL` needs an asincronous runtime in order to work. This means that you will
-must modify the signature of your functions or methods with the async modifier.
 
-And, for getting and asyncronous runtime, you must rely in some library to achieve it.
-`Canyon` comes with a reexport of `tokio` which is a crate that will provides you
-that asyncronous runtime. But, for enable your program to work with `Canyon`,
-the *main* function must be modified in this way:
+`Canyon-SQL` requires an asynchronous runtime to function, which means that the signature of functions or methods should be modified with the `async` modifier.
+
+```rust
+// from
+fn a_synchronous_function(){
+    // ...
+}
+
+// to
+async fn an_asynchronous_function() {
+    // ...
+}
+```
+
+To use the asynchronous runtime, `Canyon` re-exports the `tokio` crate. Which can be enabled by modifying the main function as follows:
 
 ```rust
 #[tokio::main]
@@ -17,8 +26,7 @@ async fn main() {
 }
 ```
 
-But, if you prefer, `Canyon` comes with a prebuild solution to this that reduces the presented
-above to only this:
+`Canyon` also comes with a prebuilt solution to this that reduces the presented above to only this:
 
 ```rust
 #[canyon]
@@ -27,6 +35,4 @@ fn main() {
 }
 ```
 
-Whatever you choose will be fine. Second solution it's much simpler, and enables features that
-won't be discussed until [here](../migrations.md). This won't affect you in any bad way,
-but we're just not discussing what they are until that point.
+Either solution is acceptable. The second option is simpler and enables additional features that will be discussed later in the [migrations section](../the_migrations.md)
