@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Insert - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="../getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> The configuration file</a></li><li class="chapter-item expanded "><a href="../getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="../canyon_entities.html"><strong aria-hidden="true">2.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="../crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="../crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="../crud_mapping/insert.html" class="active"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="../crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="../crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="../crud_mapping/foreign_keys.html"><strong aria-hidden="true">3.6.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="../querybuilder.html"><strong aria-hidden="true">4.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="../the_migrations.html"><strong aria-hidden="true">5.</strong> The migrations</a></li><li class="chapter-item expanded "><a href="../real_world_example.html"><strong aria-hidden="true">6.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="insert-operations"><a class="header" href="#insert-operations">INSERT operations</a></h1>
+<p>Now it is time to write data into the database.</p>
+<p>Canyon provides a convenient way to insert data directly from an instantiated object.</p>
+<p>Remember this?</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Let's create a <code>League</code> instance:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut lec: League = League {
+    id: Default::default(),
+    ext_id: 134524353253,
+    slug: &quot;LEC&quot;.to_string(),
+    name: &quot;League Europe Champions&quot;.to_string(),
+    region: &quot;EU West&quot;.to_string(),
+    image_url: &quot;https://lec.eu&quot;.to_string(),
+};
+<span class="boring">}
+</span></code></pre></pre>
+<p>Notice how the <code>id</code> is <code>Default::default()</code>. For the type i32, this just means <code>0</code>.</p>
+<p>Now, with that value, we will call the following instruction:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>lec.insert().await;
+<span class="boring">}
+</span></code></pre></pre>
+<p>And that record is now inserted into the database!</p>
+<p>But note one thing: the <code>lec</code> instance was declared as mutable. Why?</p>
+<p>It is important to remember that the <code>insert</code> method from <code>Canyon</code> will automatically update the <code>self.id</code> field. The previous <code>id</code> was replaced by the newly generated ID after the insert.</p>
+<p>Thanks to it, the <code>insert</code> method is a really convenient method for writing data into the database. For example, a common scenario is when you make a call to an external service and parse the data into a new instance of your Rust type. With this you can insert it directly in a single expression!</p>
+<h2 id="the-new-associated-function-pattern"><a class="header" href="#the-new-associated-function-pattern">The new associated function pattern</a></h2>
+<p>A common alternative to writing better and more maintainable code is to use the convention of &quot;constructors&quot; in Rust.</p>
+<p>Although there is no exact concept of constructors in the language, a convention has been established for creating new instances of a given type <code>T</code>.</p>
+<p>This convention is to write an associated function <code>::new(params)</code> in the <code>impl</code> block for initializing objects of the given type. Through this approach, an initializer may be implemented as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl League {
+    // Notice how id is not included in the parameters
+    pub fn new(
+        ext_id: i64,
+        slug: String,
+        name: String,
+        region: String,
+        image_url: String
+    ) -&gt; Self {
+        Self {
+            id: Default::default(),
+            ext_id: ext_id,
+            slug: slug,
+            name: name,
+            region: region,
+            image_url: image_url
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>With this in mind, the previous example can be written and inserted into the database as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create new instance
+let lec: League = League::new(
+    134524353253,
+    &quot;LEC&quot;.to_string(),
+    &quot;League Europe Champions&quot;.to_string(),
+    &quot;EU West&quot;.to_string(),
+    image_url: &quot;https://lec.eu&quot;.to_string()
+);
+
+// Insert new instance into the database
+lec.insert().await;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>insert</code> instruction returns a <code>Result&lt;(), Err&gt;</code> type. For simplicity, we are omiting handling results. For more information on the topic, see in <a href="https://doc.rust-lang.org/book/ch09-00-error-handling.html">The Official Book</a>.</p>
+<h2 id="performing-multiple-inserts"><a class="header" href="#performing-multiple-inserts">Performing Multiple Inserts</a></h2>
+<p>In addition to allowing the insertion of individual entities, <code>Canyon</code> also enables users to insert multiple entities with a single operation. The multi-insert feature is implemented as an associated function rather than a method of the instantiated object.</p>
+<p>You can pass instances of your type as a reference to a raw Rust array, and then await the result. The values generated for fields declared as primary keys will then be assigned to the corresponding field of each instance.</p>
+<p>The syntax for the multi-insert feature is shown below:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Demonstration on how to perform an insert of multiple items on a table
+async fn _multi_insert_example() {
+    // Create an instance
+    let new_league = League {
+        id: Default::default(),
+        ext_id: 392489032,
+        slug: &quot;DKC&quot;.to_owned(),
+        name: &quot;Denmark Competitive&quot;.to_owned(),
+        region: &quot;Denmark&quot;.to_owned(),
+        image_url: &quot;https://www.an_url.com&quot;.to_owned()
+    };
+    // Create a second instance
+    let new_league2 = League {
+        id: Default::default(),
+        ext_id: 392489032,
+        slug: &quot;IreL&quot;.to_owned(),
+        name: &quot;Ireland ERL&quot;.to_owned(),
+        region: &quot;Ireland&quot;.to_owned(),
+        image_url: &quot;https://www.yet_another_url.com&quot;.to_owned()
+    };
+    // Create a third instance
+    let new_league3 = League {
+        id: Default::default(),
+        ext_id: 9687392489032,
+        slug: &quot;LEC&quot;.to_owned(),
+        name: &quot;League Europe Champions&quot;.to_owned(),
+        region: &quot;EU&quot;.to_owned(),
+        image_url: &quot;https://www.lag.com&quot;.to_owned()
+    };
+
+    // Unused Result&lt;T, E&gt;
+    // Insert all three instances in a single transaction
+    League::insert_into(
+        &amp;[new_league, new_league2, new_league3]
+    ).await;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>insert_into</code> instruction returns a result with an array of the updated values that were inserted.</p>
+<h2 id="notes-on-the-primary_key-annotation"><a class="header" href="#notes-on-the-primary_key-annotation">Notes on the <code>#[primary_key]</code> annotation</a></h2>
+<p>It is important to note that if the database has a primary key, the <code>#[primary_key]</code> annotation is mandatory. By default, <code>Canyon</code> assumes that the column holding the primary key has a sequence or similar database concept and will omit the <code>PK</code> value on the insert operation. This will result in the database generating a unique and auto-incremental value.</p>
+<p>However, you can still insert into tables that do not have any columns marked as primary key. In such cases, you should not declare a <code>#[primary_key]</code> in your entity.</p>
+<p>Therefore, it is important to include the <code>#[primary_key]</code> annotation when performing insert operations. If a table's column has a primary key and <code>Canyon</code> does not find the <code>#[primary_key]</code> annotation, it will serialize the value to insert it, which is an illegal or incomplete operation.</p>
+<p>It is also worth noting that <code>_datasource(datasource_name: &amp;str)</code> alternatives are available, and if you do not provide a <code>#[primary_key]</code> annotation, the insert methods will not be generated for that type. However, the associated function <code>T::multi_insert()</code> will still be available.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../crud_mapping/select.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../crud_mapping/update.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../crud_mapping/select.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../crud_mapping/update.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

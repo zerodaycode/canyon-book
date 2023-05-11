@@ -1,0 +1,443 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The QueryBuilder - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> The configuration file</a></li><li class="chapter-item expanded "><a href="getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="canyon_entities.html"><strong aria-hidden="true">2.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="crud_mapping/foreign_keys.html"><strong aria-hidden="true">3.6.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="querybuilder.html" class="active"><strong aria-hidden="true">4.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="the_migrations.html"><strong aria-hidden="true">5.</strong> The migrations</a></li><li class="chapter-item expanded "><a href="real_world_example.html"><strong aria-hidden="true">6.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="the-querybuilder"><a class="header" href="#the-querybuilder">The QueryBuilder</a></h1>
+<p>So far, queries have been executed by mapping fields and their corresponding data for each type or instance of that type. Generating the necessary SQL sentences to perform the <code>CRUD</code> operations discussed earlier. </p>
+<p>However, the <code>SQL</code> language offers a wealth of additional power to analyze and manipulate data stored in tables. Specifically, we are referring to the <code>SQL clauses</code> that function as filters.</p>
+<h2 id="index"><a class="header" href="#index">Index</a></h2>
+<ul>
+<li><a href="#the-querybuilder">The QueryBuilder</a>
+<ul>
+<li><a href="#index">Index</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#how-does-it-work">How does it work?</a></li>
+<li><a href="#available-methods-to-work-with-the-builder">Available methods to work with the builder</a></li>
+<li><a href="#the-querybuilder-implementors">The QueryBuilder implementors</a></li>
+<li><a href="#the-comp-enum-type">The Comp enum type</a></li>
+<li><a href="#better-by-example">Better by example</a></li>
+<li><a href="#the-derivefields-macro">The #[derive(Fields)] macro</a></li>
+<li><a href="#the-field-enum">The Field enum</a></li>
+<li><a href="#the-fieldvalue-enum">The FieldValue enum</a></li>
+<li><a href="#next-steps">Next steps</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p><code>Canyon</code> provides support for making queries over your entities more flexible. These queries are also defined in the <code>CanyonCrud</code> macro and belong to a family called <code>QueryBuilder</code>, which include three types representing the <code>SELECT</code>, <code>UPDATE</code> and <code>DELETE</code> operations. These types implement the <code>QueryBuilder</code> trait.</p>
+<ul>
+<li>The <code>SelectQueryBuilder</code>, is invoked after calling <code>T::select_query()</code></li>
+<li>The <code>UpdateQueryBuilder</code>, is invoked after calling <code>T::update_query()</code></li>
+<li>The <code>DeleteQueryBuilder</code>, is invoked after calling <code>T::delete_query()</code></li>
+</ul>
+<h2 id="how-does-it-work"><a class="header" href="#how-does-it-work">How does it work?</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>The macro implementations provide various associated functions or methods that return an implementor of the <code>QueryBuilder</code> type. These can be used as a builder pattern to construct the query that <code>Canyon</code> will use to retrieve data from the database. These functions also contain a <code>query()</code> consumer method, which consumes the builder and executes the query against the database, returning the data.</p>
+<p>The <code>QueryBuilder</code> works by generating the base <code>SQL</code>, similar to the <code>CRUD</code> operations presented in the previous chapters. However, instead of executing the query, it allows the user to chain methods over a <code>QueryBuilder</code> instance. With each method call, the query builder generates more <code>SQL</code> content, enabling an efficient and elegant solution to build more complex queries.</p>
+<h2 id="available-methods-to-work-with-the-builder"><a class="header" href="#available-methods-to-work-with-the-builder">Available methods to work with the builder</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<blockquote>
+<p>&quot;Hablar de la raíz de la familia&quot;</p>
+</blockquote>
+<p>Method calls can be <em>chained</em> over a <code>QueryBuilder</code> implementor. This allows building a more complex query when needed. By returning <code>&amp;mut Self</code>, the user may access the same instance of the <code>QueryBuilder</code> and modify its internal state until consumed.</p>
+<p>To understand the capabilities of the <code>QueryBuilder</code>, let's review the available declarations, which are the available methods in all the implementors.</p>
+<p>To see more about the capabilities of the <code>QueryBuilder</code>, below are the available methods of its implementors:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait QueryBuilder&lt;'a, T&gt;
+    where T: CrudOperations&lt;T&gt; + Transaction&lt;T&gt; + RowMapper&lt;T&gt; 
+{
+    /// Returns a read-only reference to the underlying SQL sentence with the same lifetime as self.
+    fn read_sql(&amp;'a self) -&gt; &amp;'a str;
+
+    /// Allows the user to append the content of a string slice to the
+    /// end of the underlying SQL sentence.
+    ///
+    /// # Arguments
+    ///
+    /// * `sql` - The [`&amp;str`] to be appended to the SQL query.
+    fn push_sql(&amp;mut self, sql: &amp;str);
+
+    /// Generates a `WHERE` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the filter.
+    /// * `op` - Any type that implements the `Operator` trait.
+    fn r#where&lt;Z: FieldValueIdentifier&lt;'a, T&gt;&gt;(&amp;mut self, column: Z, op: impl Operator) -&gt; &amp;mut Self
+        where T: Debug + CrudOperations&lt;T&gt; + Transaction&lt;T&gt; + RowMapper&lt;T&gt;;
+
+    /// Generates an `AND` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the  filter.
+    /// * `op` - A type that implements `Operator` for the comparison.
+    fn and&lt;Z: FieldValueIdentifier&lt;'a, T&gt;&gt;(&amp;mut self, column: Z, op: impl Operator) -&gt; &amp;mut Self;
+
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a set of values that are contained within the column.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldIdentifier` for the column name.
+    /// * `values` - An array of `QueryParameter` with the values that are contained within the column.
+    fn and_values_in&lt;Z, Q&gt;(&amp;mut self, column: Z, values: &amp;'a [Q]) -&gt; &amp;mut Self
+        where 
+            Z: FieldIdentifier&lt;T&gt;,
+            Q: QueryParameters&lt;'a&gt;;
+
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a set of values that are contained within the column.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldIdentifier` that will provide the target column name for the filter.
+    /// * `values` - An array of `QueryParameter` with the values to filter.
+    fn or_values_in&lt;Z, Q&gt;(&amp;mut self, r#or: Z, values: &amp;'a [Q]) -&gt; &amp;mut Self
+        where Z: FieldIdentifier&lt;T&gt;, Q: QueryParameters&lt;'a&gt;;
+
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the filter.
+    /// * `op` - Any type that implements `Operator` for the comparison
+    fn or&lt;Z: FieldValueIdentifier&lt;'a, T&gt;&gt;(&amp;mut self, column: Z, op: impl Operator) -&gt; &amp;mut Self;
+
+    /// Generates an `ORDER BY` SQL clause for ordering the results of the query.
+    ///
+    /// # Arguments
+    ///
+    /// * `order_by`: A `FieldIdentifier` for the column name.
+    /// * `desc`: A boolean indicating whether ordering should be ascending or descending.
+    fn order_by&lt;Z: FieldIdentifier&lt;T&gt;&gt;(&amp;mut self, order_by: Z, desc: bool) -&gt; &amp;mut Self;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<blockquote>
+<p>Note: The 'Like' clause will be included in a later release.</p>
+</blockquote>
+<p>This will provide you with an idea of the functions performed by the chained methods on the instance. These methods essentially append additional SQL code to the base code to filter the results or execute a particular operation based on your requirements.</p>
+<h2 id="the-querybuilder-implementors"><a class="header" href="#the-querybuilder-implementors">The QueryBuilder implementors</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>Each <code>QueryBuilder</code> implementor provides a public interface that contains the methods discussed above, as well as its logical operations. For instance, calling <code>T::select_query()</code> returns a <code>SelectQueryBuilder</code>, which offers an interface to add <code>JOIN</code> clauses to the SQL statement. Currently, <code>LEFT</code>, <code>RIGHT</code>, <code>INNER</code> and <code>FULL</code> joins are available. the <code>inner_join()</code> method signature is:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn inner_join(&amp;mut self, join_table: &amp;str, col1: &amp;str, col2: &amp;str) -&gt; &amp;mut Self;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Where <code>join_table</code> is the entity to perform the join, and <code>col1</code> and <code>col2</code> are the columns to declare in the <code>ON</code> clause. The other join methods have the same parameters.</p>
+<p>The <code>T::update_query()</code> builds an <code>UPDATE</code> statement, providing all the methods defined in the <code>QueryBuilder</code> trait declaration. Additionally, it includes a <code>set()</code> method:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn set&lt;Z, Q&gt;(&amp;mut self, columns: &amp;'a [(Z, Q)]) -&gt; &amp;mut Self
+    where
+        Z: FieldIdentifier&lt;T&gt; + Clone,
+        Q: QueryParameter&lt;'a&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p>You may use it as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut q: UpdateQueryBuilder&lt;Player&gt; = Player::update_query_datasource(SQL_SERVER_DS);
+    q.set(&amp;[
+        (PlayerField::summoner_name, &quot;Random updated player name&quot;),
+        (PlayerField::first_name, &quot;I am an updated first name&quot;),
+    ])
+    .r#where(PlayerFieldValue::id(&amp;1), Comp::Gt)
+    .and(PlayerFieldValue::id(&amp;8), Comp::Lt)
+    .query()
+    .await
+    .expect(&quot;Failed to update records with the querybuilder&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Notice the array of tuples. The first element is the column to target, and the second is the value to update in the database column.</p>
+<p>Finally, <code>T::delete_query()</code> constructs a <code>DELETE</code> statement.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Tournament::delete_query()
+    .r#where(TournamentFieldValue::id(&amp;14), Comp::Gt)
+    .and(TournamentFieldValue::id(&amp;16), Comp::Lt)
+    .query()
+    .await
+    .expect(&quot;Error connecting to the database during the delete operation&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="the-comp-enum-type"><a class="header" href="#the-comp-enum-type">The Comp enum type</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>The <code>QueryBuilder</code> require a comparison operator in some of its methods. This is created from the <code>Comp</code> enum type, which is passed as a parameter to the methods that require it. Allowing you to generate comparison operators in a procedural manner.</p>
+<p>The available operators are:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Comp {
+    /// Operator &quot;=&quot; equal
+    Eq,
+    /// Operator &quot;!=&quot; not equal
+    Neq,
+    /// Operator &quot;&gt;&quot; greater than &lt;value&gt;
+    Gt,
+    /// Operator &quot;&gt;=&quot; greater than or equal to &lt;value&gt;
+    GtEq,
+    /// Operator &quot;&lt;&quot; less than &lt;value&gt;
+    Lt,
+    /// Operator &quot;=&lt;&quot; less than or equal to &lt;value&gt;
+    LtEq,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="better-by-example"><a class="header" href="#better-by-example">Better by example</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>Using the <code>QueryBuilder</code> might be confusing at first. Specially for developers that are not accustomed to the <code>builder pattern</code>. However, with practice, developers will see that it is a very practical way of querying.</p>
+<p>Let's consider an example where we are working once again with the <code>League</code> type: we want to retrieve all records in the <code>league</code> table with <code>id</code> less than 20 and <code>slug</code> equal to <code>LCK</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let leagues: Result&lt;Vec&lt;League&gt;, _&gt; = League::select_query()
+    .r#where(
+        LeagueFieldValue::id(20),    // This will create a filter -&gt; `WHERE league.id &lt; 20`
+        Comp::Lt                     // where the `&lt;` symbol is generated by Canyon when it sees this variant
+    ).and(
+        LeagueFieldValue::slug(&quot;LCK&quot;.to_string()),
+        Comp::Eq
+    ).query()
+    .await
+    .expect(&quot;Query failed&quot;);
+
+println!(&quot;League elements: {:?}&quot;, &amp;leagues);
+<span class="boring">}
+</span></code></pre></pre>
+<p>The remaining methods that can be chained are self-explanatory. You can chain as many methods as needed. Make sure that the methods are chained properly to avoid errors.</p>
+<p>In addition, if needing more examples, you can visit our repository's <code>/tests/crud</code> folder and refer to the <code>querybuilder_operations.rs</code> tests. There you will find code examples for all available operations within the <code>Canyon</code> query builders.</p>
+<p>Now, you may be wondering where <code>LeagueField</code>, <code>LeagueFieldValue(T)</code>, <code>FieldIdentifier</code>, and <code>FieldValueIdentifier</code> types and bounds come from.</p>
+<h2 id="the-derivefields-macro"><a class="header" href="#the-derivefields-macro">The #[derive(Fields)] macro</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>When working with SQL, it is often necessary to specify the column name or type of a column in some operations. To avoid using raw or literal values, we created the <code>#[derive(Fields)]</code> derive macro. This macro generates special enumerated types that allows the user to refer to a database column name, type or value in a procedural way. It replaces the string that is usually used with a piece of valid Rust code.</p>
+<p>Rest assured that <code>Canyon</code> translates these procedures into the corresponding identifiers whenever they are needed. Let's take a closer look at these two types.</p>
+<h2 id="the-field-enum"><a class="header" href="#the-field-enum">The Field enum</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>The field enum is an autogenerated enum that serves to relate each field of a type with a database column name in a procedural way, making it easier to reflect them through the code.</p>
+<p>The identifier of the Field enum is generated as the concatenation of the type's identifier with &quot;Field&quot;. It is important to note that there is a naming convention in <code>Canyon</code>, where the variants of an enumeration in Rust are typically written in <code>PascalCase</code>, while in <code>Canyon</code> they are written in <code>snake_case</code> to match the way that the field is written.</p>
+<p>For example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug)]
+#[allow(non_camel_case_types)]
+pub enum LeagueField {
+    id,
+    ext_id,
+    slug, 
+    name, 
+    region, 
+    image_url
+}
+
+impl FieldIdentifier&lt;LeagueField&gt; for LeagueField {}
+<span class="boring">}
+</span></code></pre></pre>
+<p>When directly interacting with a database, it is common to refer to a column using a plain string. That is a problem, because the compiler wouldn't be able to detect any mistake until it attempts to make the query. We, Rust developers, didn't choose this language in order to have runtime errors.</p>
+<p>Therefore, whenever a concrete column of the <code>league</code> table must be specified, such as the <code>slug</code> column, you could write <code>LeagueField::slug</code>. While this may seem like more code, it removes the potential errors that can come with using literals in the code. IDEs can also offer autocompletion, making it easier to write and detect wrong variants.</p>
+<p>The <code>impl FieldIdentifier&lt;LeagueField&gt; for LeagueField {}</code> trait implementation is part of Canyon's method of identifying when it must accept a <code>FieldIdentifier</code> type as an argument for functions that generate filters for queries, or when constraining the concrete arguments of some operations of the <code>QueryBuilder</code> to the same type. This helps to avoid potential errors of specifying variants or different types, and is almost always used when you generate a filter for your SQL query.</p>
+<h2 id="the-fieldvalue-enum"><a class="header" href="#the-fieldvalue-enum">The FieldValue enum</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>In addition to the <code>Field</code> enum, another enum is generated by the <code>canyon_entity</code> proc-macro annotation, known as the <code>FieldValue</code> enum. This enum serves as a procedural way to determine which field is being referred to, but with the added capability of accepting a value as an argument in every variant. This value can be any supported literal or type for which the <code>QueryParameter&lt;'a&gt;</code> is implemented. The main purpose of this enum is to create filters for an <code>SQL</code> query where the filter needs a value to perform the filtering.</p>
+<p>The <code>FieldValue</code> enum looks like this:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug)]
+#[allow(non_camel_case_types)]
+pub enum LeagueFieldValue {
+    id(&amp;dyn QueryParameter&lt;'_&gt;),
+    ext_id(&amp;dyn QueryParameter&lt;'_&gt;),
+    slug(&amp;dyn QueryParameter&lt;'_&gt;), 
+    name(&amp;dyn QueryParameter&lt;'_&gt;), 
+    region(&amp;dyn QueryParameter&lt;'_&gt;), 
+    image_url(&amp;dyn QueryParameter&lt;'_&gt;)
+}
+
+impl FieldIdentifierValue&lt;LeagueFieldValue&gt; for LeagueFieldValue {}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Using the <code>FieldValue</code> enum provides a powerful way of writing filters for <code>SQL</code> queries. For instance, <code>LeagueFieldValue::id(1)</code> can be used to generate a <code>WHERE</code> clause filter: <code>WHERE league.id = 1</code>, among other operations.</p>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
+<p><a href="#the-querybuilder">(back to top)</a></p>
+<p>Now that <code>Querybuilder</code> has been discussed, the next chapter is about <code>Migrations</code>. Where everything that have been discussed up until now will be wrapped into the full package that <code>Canyon</code> provides. See you there!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="crud_mapping/foreign_keys.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="the_migrations.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="crud_mapping/foreign_keys.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="the_migrations.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The migrations - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> The configuration file</a></li><li class="chapter-item expanded "><a href="getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="canyon_entities.html"><strong aria-hidden="true">2.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="crud_mapping/foreign_keys.html"><strong aria-hidden="true">3.6.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="querybuilder.html"><strong aria-hidden="true">4.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="the_migrations.html" class="active"><strong aria-hidden="true">5.</strong> The migrations</a></li><li class="chapter-item expanded "><a href="real_world_example.html"><strong aria-hidden="true">6.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="canyon-migrations-the-final-boss"><a class="header" href="#canyon-migrations-the-final-boss">Canyon Migrations: The Final Boss</a></h1>
+<blockquote>
+<p><em>Note: Please be advised that this feature is still unstable. For further information, please refer to the <a href="#disclaimer">disclaimer section</a> a the end of this document.</em></p>
+</blockquote>
+<h2 id="index"><a class="header" href="#index">Index</a></h2>
+<ul>
+<li><a href="#canyon-migrations-the-final-boss">Canyon Migrations: The Final Boss</a>
+<ul>
+<li><a href="#index">Index</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#only-one-entity-per-rs-file">Only one entity per <code>.rs</code> file</a></li>
+<li><a href="#the-canyon-annotation">The #[canyon] annotation</a>
+<ul>
+<li><a href="#the-full-mode-concept">The 'full mode' concept</a></li>
+</ul>
+</li>
+<li><a href="#the-migrations">The migrations</a></li>
+<li><a href="#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>As a modern ORM framework, <code>Canyon</code> aims to provide a comprehensive solution for managing all relations with the database in a manner that is agnostic to the developer. This concept is commonly referred to as &quot;migrations&quot;. Migrations are a way for the framework to take full responsibility for managing every aspect of the database, including creating and dropping tables, altering their names, columns, column names, column types, generating <code>GRANT</code> permissions, etc.</p>
+<p>However, unlike other ORM frameworks, <code>Canyon</code> proposes a new way of handling migrations. Other frameworks come with a built-in command tool or require a separate command tool to be downloaded, installed, and managed. <code>Canyon</code>, on the other hand, manages everything at compile time and executes the migrations at the beginning of the client's code. </p>
+<blockquote>
+<p>It should be noted that this feature must be enabled, as it is not active by default.</p>
+</blockquote>
+<h2 id="only-one-entity-per-rs-file"><a class="header" href="#only-one-entity-per-rs-file">Only one entity per <code>.rs</code> file</a></h2>
+<p><a href="#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>To enable the framework to manage the entity types, they must be annotated with the <code>#[canyon_entity]</code> macro, which was introduced in the <a href="./canyon_entities.html">Entities chapter</a>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[canyon_entity]  // ready to be tracked and managed by Canyon
+pub struct League { /* fields... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>It is important to remember that only one annotated entity with <code>#[canyon_entity]</code> is allowed per file due to the way migrations work.  Attempting to implement more than one entity in the same file will result in a compiler error.</p>
+<h2 id="the-canyon-annotation"><a class="header" href="#the-canyon-annotation">The #[canyon] annotation</a></h2>
+<p><a href="#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>As is typical with components of a modern ORM framework. <code>Canyon</code> utilizes annotations to drive its behavior. This means that when needing something, <code>Canyon</code> most likely has an annotation to solve it.</p>
+<p>In order to enable <code>migrations</code>, include the following annotation for the <code>main()</code> function.</p>
+<pre><pre class="playground"><code class="language-rust">#[canyon]
+fn main() { 
+    /* code in main */ 
+}
+</code></pre></pre>
+<p><em>Canyon's #[canyon] annotation. It unlocks the 'full mode'</em></p>
+<h3 id="the-full-mode-concept"><a class="header" href="#the-full-mode-concept">The 'full mode' concept</a></h3>
+<p><a href="#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>When discussing about the <em>framework</em>, the term 'full mode' is used to indicate that <code>Canyon</code> has activated all of its features to assume complete control over everything related to the database in your program.</p>
+<h2 id="the-migrations"><a class="header" href="#the-migrations">The migrations</a></h2>
+<p><a href="#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>When the full mode is enabled, <code>Canyon</code> takes care of managing the migrations for the complete lifecycle of the program. Migrations are designed to manage every declared entity during compile time. Thanks to the complex macro system, it will generate all the necessary queries to be applied at the start of the application.</p>
+<blockquote>
+<p>Note: Currently, we are making efforts to ensure that the migration process is only executed when <code>cargo build</code> or <code>cargo run</code> are invoked. The execution of migrations by code static analyzers, which make use of the <code>cargo check</code> functionality, can lead to obscure feedback.</p>
+</blockquote>
+<p><code>Canyon</code> searches for structs annotated with <code>canyon_entity</code>, then checks the database information provided in the <code>canyon.toml</code> file. It generates everything necessary for the entities in the database.</p>
+<p>During compilation, <code>Canyon</code> searches for new entities, entities that have been removed from your code (which will then be deleted from the database), entities that have been renamed, entity fields that have been renamed or changed type, and any new or removed <code>field annotation</code> for an entity.</p>
+<p>When it is still compiling, <code>Canyon</code> generates the necessary queries for the database. Even though this is the most complicated feature of <code>Canyon</code>, there is not much more explanation about how it affects development. As mentioned earlier, the idea behind <code>Canyon</code> is simple:</p>
+<p><em>Make developer's life easier</em></p>
+<h2 id="disclaimer"><a class="header" href="#disclaimer">Disclaimer</a></h2>
+<p><a href="#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>As stated at the beginning of this document, <code>Canyon</code> migrations are still an unstable feature under development.</p>
+<p>There is still some work to be done to ensure they function as intended, and some of the features mentioned are not yet available in the <code>0.1.0</code> release.</p>
+<p>Many functionalities are already implemented, such as changing table names, creating, dropping, altering tables, modifying sequences or identities, changing column data types. However, renaming columns is not yet possible.</p>
+<p>Furthermore, while some of these functionalities are ready for use with <code>PostgreSQL</code> databases, they may not be available for <code>MSSQL</code> databases, if <code>Canyon</code> encounters an action that requires processing from Microsoft's database engine, it will raise a <code>todo!()</code> panic. To avoid such situations, it is possible to disable migrations for a specific datasource in the configuration file.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="querybuilder.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="real_world_example.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="querybuilder.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="real_world_example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
