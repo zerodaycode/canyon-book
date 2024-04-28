@@ -22,6 +22,7 @@ At present, Canyon supports the following database engines:
 
  - PostgreSQL
  - MSSQL (SqlServer)
+ - MySql
 
 The development team is planning to add support for additional database engines in the future. For the purposes of this tutorial, we will be using `PostgreSQL`.
 
