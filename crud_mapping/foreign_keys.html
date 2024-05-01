@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Foreign Keys - The Canyon&#x27;s Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="../getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> The configuration file</a></li><li class="chapter-item expanded "><a href="../getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="../canyon_entities.html"><strong aria-hidden="true">2.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="../crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="../crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="../crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="../crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="../crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="../crud_mapping/foreign_keys.html" class="active"><strong aria-hidden="true">3.6.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="../querybuilder.html"><strong aria-hidden="true">4.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="../the_migrations.html"><strong aria-hidden="true">5.</strong> The migrations</a></li><li class="chapter-item expanded "><a href="../real_world_example.html"><strong aria-hidden="true">6.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="relations-foreign-keys"><a class="header" href="#relations-foreign-keys">Relations: Foreign Keys</a></h1>
+<p><code>Canyon</code> provides an easy-to-implement solution for enforcing rules over relations or associations in a database. This chapter will explore how to add SQL <code>CONSTRAINTS</code> to the classic relation in the SQL standard, the <code>FOREIGN KEY</code>.</p>
+<h2 id="index"><a class="header" href="#index">Index</a></h2>
+<ul>
+<li><a href="#relations-foreign-keys">Relations: Foreign Keys</a>
+<ul>
+<li><a href="#index">Index</a></li>
+<li><a href="#foreign-key">Foreign Key</a></li>
+<li><a href="#the-foreign_key-annotation-and-the-foreignkeyable-derive-macro">The <code>foreign_key</code> annotation and the <code>ForeignKeyable</code> derive macro</a></li>
+<li><a href="#foreign-key-queries">Foreign Key Queries</a>
+<ul>
+<li><a href="#retrieve-data-for-a-league-referenced-by-a-tournament">Retrieve data for a <code>League</code> referenced by a <code>Tournament</code></a></li>
+<li><a href="#find-out-how-many-tournaments-are-associated-with-a-specific-league">Find out how many <code>Tournament</code>s are associated with a specific <code>League</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="foreign-key"><a class="header" href="#foreign-key">Foreign Key</a></h2>
+<p><a href="#relations-foreign-keys">(back to top)</a></p>
+<p>The <code>FOREIGN KEY</code> constraint is used to prevent actions that would destroy links between tables. A <code>FOREIGN KEY</code> is a field or collection of fields in one table that refers to the <code>PRIMARY KEY</code> in another table. The table with the foreign key is called the child table, and the table with the <code>PRIMARY KEY</code> is called the referenced or parent table.</p>
+<p>To demonstrate how <code>Canyon</code> implements this relation, two entities will be used:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper, ForeignKeyable)]
+#[canyon_macros::canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>league.rs</em></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct Tournament {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub start_date: NaiveDate,
+    pub end_date: NaiveDate,
+    #[foreign_key(table = &quot;league&quot;, column = &quot;id&quot;)]
+    pub league: i32
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>tournament.rs</em></p>
+<h2 id="the-foreign_key-annotation-and-the-foreignkeyable-derive-macro"><a class="header" href="#the-foreign_key-annotation-and-the-foreignkeyable-derive-macro">The <code>foreign_key</code> annotation and the <code>ForeignKeyable</code> derive macro</a></h2>
+<p><a href="#relations-foreign-keys">(back to top)</a></p>
+<p>As you may have noticed, a new annotation has been introduced in the <code>Tournament</code> entity: </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[foreign_key(table = &quot;league&quot;, column = &quot;id&quot;)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>This annotation generates a new parent-child relation between <code>League</code> and <code>Tournament</code>, where <code>League</code> is the parent or the referenced entity, where <code>League</code> is the parent or the referenced entity, and <code>Tournament</code> is the child entity. This is specified through the <code>table</code> argument. Which indicates the parent table, and the <code>column</code> argument, which indicates the referred field.</p>
+<p><code>foreign_key</code> annotations describe a parent-child relation between two tables. It requires two arguments:</p>
+<ul>
+<li><code>table</code> : The parent table. In the above example, it is &quot;league&quot;;</li>
+<li><code>column</code> : The column or field that is the <code>id</code> of the parent table;</li>
+</ul>
+<p>The current table is <code>Tournament</code>. Therefore <code>Tournament</code> is the child and <code>League</code> is the parent. <code>Tournament</code> can not exist without a <code>League</code> to reference. But <code>League</code> can exist without any <code>Tournament</code> existing.</p>
+<blockquote>
+<p>Note: The <code>table</code> and <code>column</code> arguments currently accept an <code>&amp;str</code> to create the data necessary for generating the SQL for each operation. However, this behavior will change in upcoming releases, where the <code>table</code> argument will accept a valid Rust identifier, and the <code>column</code> argument will accept a <code>FieldIdentifier</code> discussed in previous chapters.</p>
+</blockquote>
+<p>For this relation to be implemented successfully, a new derive macro must be included along with the ones presented in past chapters. Entities that behave like parents must have the <code>ForeignKeyable</code> derive macro.</p>
+<p>Whenever there is a foreign key relation in the code, you must tell <code>Canyon</code> that this entity <code>T</code> at some point will be the parent for some other entity <code>T</code>. There is no need to specify the child because <code>Canyon</code> will be able to resolve that question through the first annotation.</p>
+<p>However, do not forget to annotate your parents with the <code>ForeignKeyable</code> macro, or <code>Canyon</code> will issue a warning later when trying to query the database given this relation.</p>
+<h2 id="foreign-key-queries"><a class="header" href="#foreign-key-queries">Foreign Key Queries</a></h2>
+<p><a href="#relations-foreign-keys">(back to top)</a></p>
+<p>In <code>Canyon</code>, a <code>SQL CONSTRAINT</code> operation offers two advantages:</p>
+<p>Firstly, it ensures data integrity by preventing invalid data insertion and removing data that depends on other records. This feature is particularly useful when working with relational databases.</p>
+<p>Secondly, it enables querying based on the relation. For instance, given the <code>League</code> and <code>Tournament</code> types defined at the beginning of this chapter, a user may query:</p>
+<ul>
+<li>Retrieve data for a <code>League</code> referenced by a <code>Tournament</code>.</li>
+<li>Find out how many <code>Tournament</code>s are associated with a specific <code>League</code>.</li>
+</ul>
+<h3 id="retrieve-data-for-a-league-referenced-by-a-tournament"><a class="header" href="#retrieve-data-for-a-league-referenced-by-a-tournament">Retrieve data for a <code>League</code> referenced by a <code>Tournament</code></a></h3>
+<p><a href="#relations-foreign-keys">(back to top)</a></p>
+<p>To retrieve data for a <code>League</code> referenced by a <code>Tournament</code>. Manually, a query similar to this could be made:</p>
+<pre><code class="language-sql">SELECT * FROM league WHERE league.id = tournament.league
+</code></pre>
+<p>In the above example <code>tournament.league</code> is the id of the league stored on the tournament instance.</p>
+<p>With <code>Canyon</code>, a method for this will be generated called <code>search_parent_table_league</code>. It returns an option that will be <code>Some</code> if it finds the <code>League</code> instance.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// You can search the 'League' that is the parent of a concrete instance of 'Tournament'
+let parent_league: Option&lt;League&gt; = tournament_itce.search_league().await;
+
+println!(
+    &quot;The related League queried through a method of tournament: {:?}&quot;, 
+    &amp;parent_league
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>In a more complete example, suppose you retrieve some <code>Tournament</code> from the database and then ask <code>Canyon</code> to find its <code>League</code> parent:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let tournament: Option&lt;Tournament&gt; = Tournament::find_by_id(1).await;
+println!(&quot;Tournament: {:?}&quot;, &amp;tournament);
+
+if let Some(trnmt) = tournament {
+    let result: Option&lt;League&gt; = trnmt.search_league().await;
+    println!(&quot;The related League as method if tournament is some: {:?}&quot;, &amp;result);
+} else { println!(&quot;`tournament` variable contains a None value&quot;) }
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>Note that the identifier for the autogenerated method is called 'search_league'</em></p>
+<h3 id="find-out-how-many-tournaments-are-associated-with-a-specific-league"><a class="header" href="#find-out-how-many-tournaments-are-associated-with-a-specific-league">Find out how many <code>Tournament</code>s are associated with a specific <code>League</code></a></h3>
+<p><a href="#relations-foreign-keys">(back to top)</a></p>
+<p>On the type declarations for <code>Tournament</code> and <code>League</code>. It can be noticed that <code>Tournament</code> stores the id of a foreign <code>League</code>. It is possible to have several tournaments that reference the <strong>same</strong> <code>League</code>. This query is about retrieving these entries.</p>
+<p>This is usually known as &quot;the reverse side of a Foreign Key&quot;. <code>Canyon</code> offers the possibility to find the children of a specific type or, in other words, the <code>Tournaments</code> associated with a particular <code>League</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    /* Find all the tournaments that are pointing to the same `League` record. This is usually known as the reverse side of a foreign key. It is a many-to-one relation on this side, not a one-to-one */
+
+    // Find league with id 1
+    let some_league: League = League::find_by_pk(&amp;1)
+        .await
+        .expect(&quot;Result variant of the query is err&quot;)
+        .expect(&quot;No result found for the given parameter&quot;);
+
+    // Retrieve all tournaments that reference to some_league
+    let child_tournaments: Vec&lt;Tournament&gt; = Tournament::search_league_childrens(&amp;some_league)
+        .await
+        .expect(&quot;Result variant of the query is err&quot;);
+
+    assert!(!child_tournaments.is_empty());
+    child_tournaments
+        .iter()
+        .for_each(|t| assert_eq!(t.league, some_league.id));    
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>Finds the records that are directly pointing to an existing League instance.</em></p>
+<p>It is important to note that the associated function follows a naming convention of <code>search_</code> + <code>parent_type</code> + <code>childrens</code>. Furthermore, it receives a reference to an instance of <code>League</code>(<code>&amp;lec</code>), necessitating the existence of a valid record of <code>League</code> prior to executing the function.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../crud_mapping/delete.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../querybuilder.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../crud_mapping/delete.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../querybuilder.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

@@ -1,0 +1,1358 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Canyon&#x27;s Book</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Initial setup</a></li><li class="chapter-item expanded "><a href="getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> The configuration file</a></li><li class="chapter-item expanded "><a href="getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> The database config</a></li></ol></li><li class="chapter-item expanded "><a href="canyon_entities.html"><strong aria-hidden="true">2.</strong> Canyon Entity</a></li><li class="chapter-item expanded "><a href="crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> CRUD and Mapping operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Quick note</a></li><li class="chapter-item expanded "><a href="crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Select</a></li><li class="chapter-item expanded "><a href="crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="crud_mapping/foreign_keys.html"><strong aria-hidden="true">3.6.</strong> Foreign Keys</a></li></ol></li><li class="chapter-item expanded "><a href="querybuilder.html"><strong aria-hidden="true">4.</strong> The QueryBuilder</a></li><li class="chapter-item expanded "><a href="the_migrations.html"><strong aria-hidden="true">5.</strong> The migrations</a></li><li class="chapter-item expanded "><a href="real_world_example.html"><strong aria-hidden="true">6.</strong> A real world example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon&#x27;s Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Welcome to <code>The Canyon's SQL book</code>! This is a <em>work-in-progress</em> user guide for the <code>Canyon-SQL</code> ORM and querybuilder.</p>
+<h2 id="join-our-discord"><a class="header" href="#join-our-discord">Join our discord</a></h2>
+<p>For the latest announcements, frequently asked questions, and discussions about <code>Canyon</code> in general, join our <a href="https://discord.gg/MhwSymk7F6">Discord</a>.</p>
+<h2 id="phylosophy-of-design"><a class="header" href="#phylosophy-of-design">Phylosophy of design</a></h2>
+<p>The idea behind <code>Canyon-SQL</code> is a really simple one: <em>Make the developer's life easier</em>.</p>
+<p>This is the core concept of the full development. We wanted to create an <em>out-of-the-box</em> solution to quickly
+develop any application that interacts with a database. With simplicity in mind. Hiding the ugly
+implementation details of handling database connections, connectors or repetitive code for every entity or model.</p>
+<h3 id="write-code-that-writes-code"><a class="header" href="#write-code-that-writes-code">Write code that writes code</a></h3>
+<p>Most of the powerful concepts in <code>Canyon.SQL</code> are achieved through the <em>Rust</em> incredible macro system.
+This is the perfect definition for metaprogramming: <code>they write code that writes code</code>.</p>
+<p>In concrete, <code>Canyon's</code> most beautiful solutions are created through <code>procedural</code> and <code>derive macros</code>. By writing attributes attached to a few structs or fields, the user achieve all functionalities provided by the framework.</p>
+<h3 id="the-advantages"><a class="header" href="#the-advantages">The advantages</a></h3>
+<p>With this in mind, <code>Canyon</code> enables the development of code that requires a persistence solution. Allowing the focus to be placed on application design rather than infrastructure or technical requirements. This facilitates the scalability of the project to meet business requirements.</p>
+<h2 id="the-rust-programming-language"><a class="header" href="#the-rust-programming-language">The Rust programming language</a></h2>
+<p>If you're new to the <code>Rust</code> programming language, it is highly recommended that you first familiarize yourself with all of the concepts outlined in the <a href="https://www.rust-lang.org/">officially maintained Rust Book</a>.</p>
+<h2 id="contributing-to-canyons-source-code-or-to-the-book-documentation"><a class="header" href="#contributing-to-canyons-source-code-or-to-the-book-documentation">Contributing to Canyon's source code or to the book documentation</a></h2>
+<p>We welcome the contributions of new developers in advancing this project. However, in order to maintain order and consistency during development, we request that all contributors adhere to the following guidelines when adding new functionality, modifying or improving the source code, or fixing a bug:</p>
+<ul>
+<li>Check with the community on <a href="introduction.html#join-our-discord">Discord</a> to keep updated with the latest announcements, issues and goals;</li>
+<li>Open an issue <a href="https://github.com/zerodaycode/Canyon-SQL/issues">here</a> explaining what you wish to change or upgrade on the source code;</li>
+<li>Clone the repo locally and work in the source code;</li>
+<li>Open a <code>PR</code> to a new branch, and try to documentate as much as possible the changes made in the commits to your working branch.</li>
+</ul>
+<p>So, if you wish to <em>contribute</em> to the source code:</p>
+<ul>
+<li><code>Canyon-SQL</code> it's a fully open-source project. You can find it <a href="https://github.com/zerodaycode/Canyon-SQL">here</a></li>
+</ul>
+<p>If you wish to update the documentation with any information that was previously omitted or with changes that have been accepted in a pull request, please proceed as follows:</p>
+<ul>
+<li>The source code for this book is <a href="https://github.com/zerodaycode/canyon-book">this one</a>.</li>
+</ul>
+<h2 id="license"><a class="header" href="#license">License</a></h2>
+<p><code>Canyon-SQL</code>, and this user guide, are both licensed under the MIT license.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
+<p>Before getting started with the code. Some small steps need to be taken care of. In section 1, the following topics will be discussed:</p>
+<ul>
+<li>Making sure that all dependencies are installed;</li>
+<li>Understanding <code>Canyon</code>'s configuration file;</li>
+<li>Setting up databases to use with <code>Canyon</code>;</li>
+</ul>
+<p>If everything is already set up and tested correctly. Feel free to skip to section 2 where entities are explained.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="initial-setup"><a class="header" href="#initial-setup">Initial Setup</a></h1>
+<ul>
+<li><a href="getting_started/initial_setup.html#initial-setup">Initial Setup</a>
+<ul>
+<li><a href="getting_started/initial_setup.html#minimum-requirements">Minimum Requirements</a></li>
+<li><a href="getting_started/initial_setup.html#supported-database-engines">Supported database engines</a></li>
+<li><a href="getting_started/initial_setup.html#downloading-the-postgresql-engine">Downloading the PostgreSQL engine</a></li>
+<li><a href="getting_started/initial_setup.html#add-canyon-sql-as-a-dependency">Add Canyon-SQL as a dependency</a>
+<ul>
+<li><a href="getting_started/initial_setup.html#fetching-from-github">Fetching from Github</a></li>
+</ul>
+</li>
+<li><a href="getting_started/initial_setup.html#building-the-project">Building the project</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="minimum-requirements"><a class="header" href="#minimum-requirements">Minimum Requirements</a></h2>
+<p><code>Canyon</code> is a versatile tool that combines a database manager, ORM, and query builder to create your persistence layer with ease. However, before using the framework, a minimum setup is required.</p>
+<hr />
+<h2 id="supported-database-engines"><a class="header" href="#supported-database-engines">Supported database engines</a></h2>
+<p>At present, Canyon supports the following database engines:</p>
+<ul>
+<li>PostgreSQL</li>
+<li>MSSQL (SqlServer)</li>
+<li>MySql</li>
+</ul>
+<p>The development team is planning to add support for additional database engines in the future. For the purposes of this tutorial, we will be using <code>PostgreSQL</code>.</p>
+<hr />
+<h2 id="downloading-the-postgresql-engine"><a class="header" href="#downloading-the-postgresql-engine">Downloading the PostgreSQL engine</a></h2>
+<p>To use Canyon with PostgreSQL, an active installation of PostgreSQL is required.  If you are an experienced user and have already installed PostgreSQL, you can skip this section.</p>
+<p>Installation and instructions can be found in the <a href="https://www.postgresql.org/download/">official website</a>. Choose your operation system. If using Linux, more instructions can be found for each specific distro by searching in the web.</p>
+<hr />
+<h2 id="add-canyon-sql-as-a-dependency"><a class="header" href="#add-canyon-sql-as-a-dependency">Add Canyon-SQL as a dependency</a></h2>
+<p>To create a new Rust project from scratch. Run:</p>
+<pre><code class="language-bash"># Replace project-name with the project name
+cargo new project-name
+</code></pre>
+<p>In the existing project, open <code>Cargo.toml</code> to include the new dependency.</p>
+<pre><code class="language-toml"># Cargo.toml
+
+# More dependencies and configurations
+
+canyon_sql = 0.1.0^
+</code></pre>
+<p>Compiling will now download <code>canyon_sql</code> to the project. The <code>^</code> symbol tells the compiler to use version &quot;<code>0.1.0</code> or higher&quot;.</p>
+<pre><code class="language-bash">cargo build
+</code></pre>
+<h3 id="fetching-from-github"><a class="header" href="#fetching-from-github">Fetching from Github</a></h3>
+<p>Cargo can fetch the latest updates directly from the Canyon-SQL GitHub repository. These will include the latest changes that aren't included in a specific release.</p>
+<p>Include the following lines to <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml"># Cargo.toml
+
+[dependencies]
+canyon_sql = { git = &quot;https://github.com/zerodaycode/Canyon-SQL&quot; }
+</code></pre>
+<p>To fetch from a specific branch, such as the development branch, specify as follows:</p>
+<pre><code class="language-toml"># Cargo.toml
+
+[dependencies]
+canyon_sql = { git = &quot;https://github.com/zerodaycode/Canyon-SQL&quot;, branch = &quot;development&quot; }
+</code></pre>
+<hr />
+<h2 id="building-the-project"><a class="header" href="#building-the-project">Building the project</a></h2>
+<p>After including Canyon-SQL as a dependency in <code>Cargo.toml</code>. The crate can be built with:</p>
+<pre><code class="language-bash"># When in project root
+cargo build
+</code></pre>
+<p>If everything is set up correctly, the build process will complete successfully. However, if the <code>canyon.toml</code> file is not found, the following error will appear:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>error: custom attribute panicked
+  --&gt; src\main.rs:17:1
+   |
+17 | #[canyon]
+   | ^^^^^^^^^
+   |
+   = help: message:
+
+           No file --&gt; canyon.toml &lt;-- founded on the root of this project.
+           Please, ensure that you created one .toml file with the necesary properties needed in order to connect to the database.
+
+           : Os { code: 2, kind: NotFound, message: &quot;The system can't found the specified file.&quot; }
+
+    ...
+<span class="boring">}
+</span></code></pre></pre>
+<p>A file named <code>canyon.toml</code> is required to run <code>Canyon-SQL</code>. It should be located in the root directory of the project. <code>canyon.toml</code> contains the necessary properties required to connect to the database. Next chapter will explain how to configure it.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-secretstoml-file"><a class="header" href="#the-secretstoml-file">The secrets.toml file</a></h1>
+<p>In order for <code>Canyon</code> to work properly, it requires a <code>canyon.toml</code> file which stores the configuration details for each datasource declared. Essentially, this file contains the user configuration information for every datasource, each of which represents a connection to a database.</p>
+<p>The <code>canyon.toml</code> file is a regular <code>.toml</code> file and should be kept <em><strong>secure</strong></em>, as it contains sensitive information such as passwords and credentials needed to access the databases. Therefore, it should not be stored in a public repository or be accessible to unauthorized users.</p>
+<h2 id="the-format"><a class="header" href="#the-format">The format</a></h2>
+<p>A <code>Canyon-SQL</code> <code>canyon.toml</code> configuration file should be structured like this:</p>
+<pre><code class="language-toml">[canyon_sql]
+datasources = [
+    {name = 'postgres_docker', properties.db_type = 'postgresql', properties.username = 'postgres', properties.password = 'postgres', properties.host = 'localhost', properties.port = 5438, properties.db_name = 'postgres'},
+    {name = 'sqlserver_docker', properties.db_type = 'sqlserver', properties.username = 'sa', properties.password = 'SqlServer-10', properties.host = 'localhost', properties.port = 1434, properties.db_name = 'master'}
+]
+</code></pre>
+<p>Depending on your preferences you may also use &quot;<em>TOML array of tables</em>&quot;:</p>
+<pre><code class="language-toml">[[canyon_sql.datasources]]
+name = 'postgres_docker'
+
+[canyon_sql.datasources.properties]
+db_type = 'postgresql'
+username = 'postgres'
+password = 'postgres'
+host = 'localhost'
+port = 5438
+db_name = 'postgres'
+
+[[canyon_sql.datasources]]
+name = 'sqlserver_docker'
+
+[canyon_sql.datasources.properties]
+db_type = 'sqlserver'
+username = 'sa'
+password = 'SqlServer-10'
+host = 'localhost'
+port = 1434
+db_name = 'master'
+</code></pre>
+<p>In this configuration file, you should declare the following properties for each datasource:</p>
+<ul>
+<li><strong>name:</strong> A unique identifier for the datasource.</li>
+<li><strong>db_type:</strong> A string value that represents the type of database engine being used. Possible values are <code>'postgres'</code> or <code>'postgresql'</code> for PostgreSQL engines, and <code>'sqlserver'</code> or <code>'mssql'</code> for <em>Microsoft SQL Server</em> engines.</li>
+<li><strong>username:</strong> The username used to access the database.</li>
+<li><strong>password:</strong> The password associated with the above username.</li>
+<li><strong>host:</strong> (Optional) The address where the database lives. Defaults to localhost.</li>
+<li><strong>port:</strong> (Optional) A number representing the address port value. Defaults to the default value of the engine.</li>
+<li><strong>db_name:</strong> The name of the database that you want to connect with.</li>
+<li><strong>migrations:</strong> (Optional) Allows you to disable migrations for a whole datasource. Can be set to <code>'Enabled'</code> or <code>'enabled'</code> to explicitly enable migrations for this datasource (not necessary, since this is the default value), or <code>'Disabled'</code> or <code>'disabled'</code> to avoid processing migrations for this datasource.</li>
+</ul>
+<p>It is worth noting that migrations are a powerful tool that will be discussed in later chapters, but for now, you may choose to skip them.</p>
+<blockquote>
+<p><strong>Note:</strong> It is recommended to use the TOML syntax for Canyon-SQL configuration file as presented <a href="getting_started/the_configuration_file.html#the-format">above</a>, with one table called <code>[canyon_sql]</code>, a property named <code>datasources</code>, which is a collection of <code>datasources</code>, and json-like objects inside the collection representing every datasource that should be configured.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> It should be noted that inlined TOML tables, which are the objects inside the datasources collection, should be in a unique line without any jumps. This is an imposed restriction by the <em>TOML standard itself</em>. You can read more about this at the following link: https://toml.io/en/v1.0.0#inline-table. You may choose to use the classic table notation if you prefer. However, note that the example above may appear with new line jumps due to the TOML formatting.</p>
+</blockquote>
+<p>Upon completing these steps, your program should now compile successfully. By running <code>cargo build</code> again, the compiler should be equipped with the necessary information for us to start writing code.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="setting-up-a-working-environment"><a class="header" href="#setting-up-a-working-environment">Setting up a Working Environment</a></h1>
+<p>To test the functionality of <code>Canyon-SQL</code>, it is necessary to have a working database with some data stored in it.</p>
+<p>One quick way to set up such an environment is by using Docker. Docker is an open-source project that automates the
+deployment of applications as portable, self-sufficient containers that can run almost anywhere.</p>
+<p>For those who are not yet familiar with Docker, official documentation is available <a href="https://www.docker.com/">here</a>,
+along with installers for every supported platform.</p>
+<h2 id="creating-a-database-container"><a class="header" href="#creating-a-database-container">Creating a DataBase container</a></h2>
+<p>Assuming your <code>Docker</code> environment is ready, the next step is to create a container with a supported database
+installation.</p>
+<p>To accomplish this, we provide an example of a <code>docker-compose</code> file located in the <a href="getting_started/../../scripts">scripts folder</a> in
+the root of this repository. You can use this file to create a new container and populate it with data.</p>
+<p>The file contains information about a <code>PostgreSQL</code>, <code>SQLServer</code> and <code>MySql</code> containers to start.</p>
+<p>In the same folder, you will also find an sql folder containing some SQL scripts. These scripts will be automatically
+detected by the docker-compose file and used to fill the tables of the examples.</p>
+<blockquote>
+<p>Please note that we assume you have already installed <code>docker-compose</code> and copied the scripts folder into your
+project. Adjust the paths according to your preferences.</p>
+</blockquote>
+<p>Build and start containers by running:</p>
+<pre><code class="language-bash">docker-compose -f ./scripts/docker-compose.yml up
+</code></pre>
+<p>Lastly, you will need to create a <code>canyon.toml</code> file as mentioned in the previous chapter. You can use the following
+snippet on it:</p>
+<pre><code class="language-toml">[canyon_sql]
+datasources = [
+    { name = 'PostgresDS', auth = { postgresql = { basic = { username = &quot;postgres&quot;, password = &quot;postgres&quot; } } }, properties.host = 'localhost', properties.db_name = 'triforce', properties.migrations = 'enabled' },
+    { name = 'SqlServerDS', auth = { sqlserver = { basic = { username = &quot;sa&quot;, password = &quot;SqlServer-10&quot; } } }, properties.host = '192.168.0.250.1', properties.port = 3340, properties.db_name = 'triforce2', properties.migrations = 'disabled' },
+    { name = 'MysqlDS', auth = { mysql = { basic = { username = &quot;root&quot;, password = &quot;root&quot; } } }, properties.host = '192.168.0.250.1', properties.port = 3340, properties.db_name = 'triforce2', properties.migrations = 'disabled' }
+]
+</code></pre>
+<blockquote>
+<p>Note: In <code>SqlServer</code> the data will not be loaded automatically, user interaction is required.
+Note: Please ensure that the inlined tables are correctly formatted without any line breaks.
+Next time the code is compiled, Canyon will:</p>
+</blockquote>
+<ul>
+<li>Connect to the databases;</li>
+<li>Create the tables if needed;</li>
+<li>Populate each table if needed;</li>
+</ul>
+<p>Now it is time to start writing the code...</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="canyon-entity"><a class="header" href="#canyon-entity">Canyon Entity</a></h1>
+<p>Welcome to the section dedicated to one of the most iconic features of <code>Canyon</code> - <em>The Entities</em>.</p>
+<h2 id="definition-of-canyon-entity"><a class="header" href="#definition-of-canyon-entity">Definition of Canyon Entity</a></h2>
+<p>Throughout the previous chapters, we have already introduced the concept of entity and demonstrated its usage in various contexts. In <code>Canyon</code>, however, an entity holds an even more powerful meaning than what was presented before.</p>
+<p>Put simply, a <code>Canyon Entity</code> is a <em>user-defined type</em>, which is represented as a struct, and is annotated with a special <code>procedural macro</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::macros::canyon_entity;
+
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This macro unlocks a set of new features for the type. These features include:</p>
+<ul>
+<li>Inform <code>Canyon</code> that it should handle everything in the program that relates to this type on the database;</li>
+<li>Track the type along with all the necessary metadata on a special register;</li>
+<li>Allow the user to configure an alternative table name and specify the schema in which the entity being pointed to resides;</li>
+</ul>
+<p>These features provide a wealth of functionalities that will be explored further in upcoming chapters.</p>
+<h2 id="the-table_name-and-the-schema-attribute-parameters"><a class="header" href="#the-table_name-and-the-schema-attribute-parameters">The <code>table_name</code> and the <code>schema</code> attribute parameters</a></h2>
+<p>The <code>canyon_entity</code> macro can optionally receive two parameters: <code>table_name</code> and <code>schema</code>.</p>
+<p>Example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[canyon_entity(table_name = &quot;other_league&quot;, schema = &quot;tic&quot;)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>The naming convention for Rust types is <code>CamelCase</code>. On the other hand, the naming convention for databases tables and schemas is often <code>snake_case</code>. These attributes allow us to fulfill both standards.</p>
+<p>Typically, <code>Canyon</code> adheres to the convention of converting the name of a user-defined struct to a snake-case identifier for the purpose of generating database operations. This approach eliminates the need for modifying anything other than the defaults. Enabling users to conform to established ORM conventions in conjunction with the most common method of defining a table across various database engines.</p>
+<p>However, it is not always necessary to follow this convention. In some cases, tables may already exist in the database, requiring different mapping. There may also be situations where the user prefer to use a different type name that cannot be converted to <code>snake_case</code> as described above. To accomodate these scenarios, the user has the ability to specify the name of the database entity accordingly.</p>
+<p>Additionally, <code>Canyon</code> assumes assumes that the entities will be placed in the default schema, such as <code>public</code> in PostgreSQL or <code>dbo</code> in MSSQL. If there is need to use an alternative schema, the user may configure this on a per-entity basis using the <code>schema</code> parameter.</p>
+<h2 id="the-primary_key-field-attribute"><a class="header" href="#the-primary_key-field-attribute">The <code>#[primary_key]</code> field attribute</a></h2>
+<p>Let's discuss one of the fundamental concepts in relational databases: the <code>primary_key</code>. Each table in a database typically has its own primary key, and the primary purpose of designating one is to identify each unique record in a particular table.</p>
+<p>In <code>Canyon</code>, this is a significant concept. Almost every entity must be annotated with a <code>primary_key</code> to unlock the full potential of the <code>CRUD</code> operations generated by the <code>CanyonCrud</code> derive macro. It also manages other things, such as:</p>
+<ul>
+<li>Identifying each unique record in a table;</li>
+<li>Facilitating data serialization;</li>
+<li>Auto-incrementing the <code>primary_key</code> of new inserted rows;</li>
+</ul>
+<p>The <code>primary_key</code> attribute has one optional parameter: <code>autoincremental</code>. This is <code>enabled by default</code>. And means that each new row will have the key of the <em>last row</em> incremented by 1.</p>
+<p>Sometimes, the user may not wish an incremental primary key (usually on rare cases where a unique <code>String</code> is used as primary key). Although this is not common, it is sometimes used. In that case, the user may <em><strong>disable</strong></em> <code>autoincremental</code> by including:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[primary_key(autoincremental = false)]
+<span class="boring">}
+</span></code></pre></pre>
+<blockquote>
+<p>Note: <code>autoincremental</code> is <em>enabled by default</em>. Not specifying it means it is <code>true</code>.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="crud-and-mapping-operations"><a class="header" href="#crud-and-mapping-operations">CRUD and Mapping Operations</a></h1>
+<ul>
+<li><a href="crud_mapping/intro.html#crud-and-mapping-operations">CRUD and Mapping Operations</a>
+<ul>
+<li><a href="crud_mapping/intro.html#introduction">Introduction</a></li>
+<li><a href="crud_mapping/intro.html#the-canyoncrud-and-canyonmapper-derive-macros">The <code>CanyonCrud</code> and <code>CanyonMapper</code> derive macros</a></li>
+<li><a href="crud_mapping/intro.html#the-asynchronous-behavior-of-canyon">The asynchronous behavior of <code>Canyon</code></a></li>
+<li><a href="crud_mapping/intro.html#the-datasource-concept">The <code>datasource</code> concept</a>
+<ul>
+<li><a href="crud_mapping/intro.html#specifying-datasources">Specifying Datasources</a></li>
+<li><a href="crud_mapping/intro.html#default-datasources">Default Datasources</a></li>
+</ul>
+</li>
+<li><a href="crud_mapping/intro.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h2>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p>The primary purpose of <code>Canyon</code> is to facilitate database querying and retrieval of data. Writing raw SQL statements every time data is needed can be tedious, error-prone, and challenging to debug. Therefore, <code>Canyon</code> provides a solution to make the developer's life easier by automatically generating the desired queries.</p>
+<p>As described in previous chapter, the macros <code>#[canyon_entity]</code> and <code>#[primary_key]</code> describe an entity and the primary key, respectively. In Canyon's common language, an entity represents a Rust type that models a real world object. It is a term used to refer to a type that maps against a database table. <code>Canyon</code> recognizes this and generate an implementation block with methods and associated functions to allow the type to communicate with the database. </p>
+<p>Consider the following Rust type declaration:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>This struct represents the data of a professional competitive league from the <code>League of Legends</code> MOBA obtained from the <code>LolEsports API</code>. Suppose there is a web application that requests this information. The first thing that can be done is store it in the database and then serve it to the main application. Which could be, for instance, a mobile front-end application.</p>
+<p>Methods will have to be implemented for saving, retrieving, and updating data...</p>
+<p>To accomplish these tasks, <code>Canyon</code> will support the development by reducing the extensive amount of Rust code required to perform such database operations.</p>
+<h2 id="the-canyoncrud-and-canyonmapper-derive-macros"><a class="header" href="#the-canyoncrud-and-canyonmapper-derive-macros">The <code>CanyonCrud</code> and <code>CanyonMapper</code> derive macros</a></h2>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p>Canyon provides two powerful macros to simplify the developer's work:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>These two derive macros work together and are essential for communicating with the database. They will implement the following traits on the type:</p>
+<ul>
+<li><code>CanyonCrud</code> is responsible for generating the CRUD methods for interacting with the database;</li>
+<li><code>CanyonMapper</code> is responsible for serializing/deserializing the data as it sends/receives messages with the database;</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="the-asynchronous-behavior-of-canyon"><a class="header" href="#the-asynchronous-behavior-of-canyon">The asynchronous behavior of <code>Canyon</code></a></h2>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p>It should be noted that every <code>Canyon</code> action requires the usage of a <code>.await</code> expression. This is because every operation in <code>Canyon</code> is designed to be asynchronous, which means that the result must be awaited in order to be obtained.</p>
+<p>It is also important to remember that from this point forward, every action with <code>Canyon</code> that leads to  the execution of a database query must be followed by the <code>await</code> instruction. This is because futures are <em>lazy by default</em>, which means that they will <em>not be consumed unless they are awaited</em>.</p>
+<p>If you are not familiar with the concept of asynchronous programming, we recommend taking a look at <a href="https://rust-lang.github.io/async-book/03_async_await/01_chapter.html">The Rust async book</a>. This resource can provide valuable insight about asynchronous programming.</p>
+<h2 id="the-datasource-concept"><a class="header" href="#the-datasource-concept">The <code>datasource</code> concept</a></h2>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p>Before we proceed, let's discuss the concept of <code>datasource</code> in Canyon.</p>
+<p>A <code>datasource</code> in Canyon refers to the channel that connects the framework with a specific database. A user may have multiple datasources, even if they use different database engines. With Canyon, you can query one database in a statement and then query a completely different one in the next statement.</p>
+<h3 id="specifying-datasources"><a class="header" href="#specifying-datasources">Specifying Datasources</a></h3>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p>It is worth noting that all CRUD operations, whether they are a method from your type or an associated function, will have a duplicate ending with <code>_datasource</code>. For instance, the <code>::find_all()</code> operation will have a replica called <code>::find_all_datasource(datasource_name: &amp;str)</code>. In this duplicate, <code>datasource_name</code> matches one of the datasource names defined in the configuration file.</p>
+<h3 id="default-datasources"><a class="header" href="#default-datasources">Default Datasources</a></h3>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p><code>Canyon</code> takes the first declared datasource as the default one. Therefore, you may find code that uses <code>::find_all()</code> without the need to specify a datasource, as <code>Canyon</code> will use the default directly in the queries.</p>
+<p>To avoid duplication in the next chapters, it is essential to remember that there will be a <code>_datasource</code> alternative for every CRUD operation. This can be used to specify a datasource when the default is not the target.</p>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
+<p><a href="crud_mapping/intro.html#introduction">(back to top)</a></p>
+<p>In this chapter, we have created a new type that is capable of querying the database and properly serializing/deserializing messages as needed.</p>
+<p>However it is important to explore what Canyon is really capable of doing with these annotations. The following chapters will discuss more in-depth about each of the CRUD operations...</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-canyon-runtime"><a class="header" href="#the-canyon-runtime">The Canyon Runtime</a></h1>
+<p>Before getting started with <code>Canyon</code>, there is an essential requirement to consider.</p>
+<p><code>Canyon-SQL</code> requires an asynchronous runtime to function, which means that the signature of functions or methods should be modified with the <code>async</code> modifier.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// from
+fn a_synchronous_function(){
+    // ...
+}
+
+// to
+async fn an_asynchronous_function() {
+    // ...
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>To use the asynchronous runtime, <code>Canyon</code> re-exports the <code>tokio</code> crate. Which can be enabled by modifying the main function as follows:</p>
+<pre><pre class="playground"><code class="language-rust">#[tokio::main]
+async fn main() { 
+    /* code in main */ 
+}
+</code></pre></pre>
+<p><code>Canyon</code> also comes with a prebuilt solution to this that reduces the presented above to only this:</p>
+<pre><pre class="playground"><code class="language-rust">#[canyon]
+fn main() { 
+    /* code in main */ 
+}
+</code></pre></pre>
+<p>Either solution is acceptable. The second option is simpler and enables additional features that will be discussed later in the <a href="crud_mapping/../the_migrations.html">migrations section</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="select-operations"><a class="header" href="#select-operations">SELECT operations</a></h1>
+<p>The most fundamental operation when querying a database is the <code>read</code> operation, which involves requesting a particular set of data stored in one or more tables.</p>
+<p>When any of the CRUD operations are processed, the data received as response from the database will be of a generic type referred to as <code>Row</code>. <code>Row</code> is unique for each <em>client library</em>, but each of them refer to a single &quot;row&quot; retrieved from the database.</p>
+<p><code>Canyon</code>'s job is to then parse this retrieved response into <code>T</code> or <code>Vec&lt;T&gt;</code>, where <code>T</code> is your defined type. As long as the types are properly annotated, the users don't need to worry about parsing the data themselves.</p>
+<p>Here is the type that was described in the previous chapter:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Let's review what <em>SELECT</em> operations are automatically available now. With focus on those that are well known in the <code>CRUD</code> world.</p>
+<h2 id="find_all"><a class="header" href="#find_all"><code>find_all</code></a></h2>
+<p>One of the most commonly used queries when working with databases. In summary, it is the same as saying:</p>
+<blockquote>
+<p>&quot;Please, database, give me all the data that you have for this table, including all of the columns!&quot;</p>
+</blockquote>
+<p>In <code>Canyon</code>, this method is available as an associated function for your defined type <code>T</code>. The <code>type::find_all()</code> method can be translated to a SQL query <code>SELECT * FROM {table_name}</code>, which will return a collection of <code>Row</code> instances.</p>
+<p>The retrieved <code>Row</code> collection will then be automatically mapped into a <code>Vec&lt;T&gt;</code>, where <code>T</code> is the same type of the object where <code>type::find_all</code> was called.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>We can retrieve all rows of the <code>league</code> table with the following line:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let leagues: Result&lt;Vec&lt;League&gt;, _&gt; = League::find_all().await;
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="unchecked-alternatives"><a class="header" href="#unchecked-alternatives">Unchecked alternatives</a></h2>
+<p>There are two more operations associated with the <code>find_all()</code> function that provide unchecked alternatives.</p>
+<p>In <code>Canyon</code>, every database operation returns a <code>Result&lt;T, E&gt;</code>. However, during software development, debugging, or prototyping, it may be useful to access query results without additional complications. For this purpose, <code>Canyon</code> provides:</p>
+<ul>
+<li><code>T::find_all_unchecked()</code></li>
+<li><code>T::find_all_unchecked_datasource()</code></li>
+</ul>
+<p>Both functions return a <code>Vec&lt;T&gt;</code> directly, bypassing the <code>Result</code> type. However, if there is any error during the database connection, the program will panic. Therefore, these functions are only recommended for quickly profiling or experimentation.</p>
+<h2 id="find-by-pk"><a class="header" href="#find-by-pk">Find by PK</a></h2>
+<p>Another common pattern for reading data is to find a record by its primary key (<code>PK</code>). </p>
+<p>Looking at the previous example <code>League</code> again:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The primary key in this case is <code>id</code>. Therefore, only one <code>League</code> row exists for every unique <code>id</code> value. The <code>auto-incrementing</code> parameter isn't set. So it <strong>is enabled</strong>. Check previous chapter for more information.</p>
+<p>To find a record by its primary key, the method <code>type::find_by_id</code> can be used:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Searching for a row that has id=1
+let league: Result&lt;Option&lt;League&gt;, _&gt; = League::find_by_id(&amp;1).await;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Note the reference on the function argument. The <code>find_by_id</code> associated function doesn't take ownership of the parameter.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="insert-operations"><a class="header" href="#insert-operations">INSERT operations</a></h1>
+<p>Now it is time to write data into the database.</p>
+<p>Canyon provides a convenient way to insert data directly from an instantiated object.</p>
+<p>Remember this?</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Let's create a <code>League</code> instance:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut lec: League = League {
+    id: Default::default(),
+    ext_id: 134524353253,
+    slug: &quot;LEC&quot;.to_string(),
+    name: &quot;League Europe Champions&quot;.to_string(),
+    region: &quot;EU West&quot;.to_string(),
+    image_url: &quot;https://lec.eu&quot;.to_string(),
+};
+<span class="boring">}
+</span></code></pre></pre>
+<p>Notice how the <code>id</code> is <code>Default::default()</code>. For the type i32, this just means <code>0</code>.</p>
+<p>Now, with that value, we will call the following instruction:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>lec.insert().await;
+<span class="boring">}
+</span></code></pre></pre>
+<p>And that record is now inserted into the database!</p>
+<p>But note one thing: the <code>lec</code> instance was declared as mutable. Why?</p>
+<p>It is important to remember that the <code>insert</code> method from <code>Canyon</code> will automatically update the <code>self.id</code> field. The previous <code>id</code> was replaced by the newly generated ID after the insert.</p>
+<p>Thanks to it, the <code>insert</code> method is a really convenient method for writing data into the database. For example, a common scenario is when you make a call to an external service and parse the data into a new instance of your Rust type. With this you can insert it directly in a single expression!</p>
+<h2 id="the-new-associated-function-pattern"><a class="header" href="#the-new-associated-function-pattern">The new associated function pattern</a></h2>
+<p>A common alternative to writing better and more maintainable code is to use the convention of &quot;constructors&quot; in Rust.</p>
+<p>Although there is no exact concept of constructors in the language, a convention has been established for creating new instances of a given type <code>T</code>.</p>
+<p>This convention is to write an associated function <code>::new(params)</code> in the <code>impl</code> block for initializing objects of the given type. Through this approach, an initializer may be implemented as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl League {
+    // Notice how id is not included in the parameters
+    pub fn new(
+        ext_id: i64,
+        slug: String,
+        name: String,
+        region: String,
+        image_url: String
+    ) -&gt; Self {
+        Self {
+            id: Default::default(),
+            ext_id: ext_id,
+            slug: slug,
+            name: name,
+            region: region,
+            image_url: image_url
+        }
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>With this in mind, the previous example can be written and inserted into the database as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create new instance
+let lec: League = League::new(
+    134524353253,
+    &quot;LEC&quot;.to_string(),
+    &quot;League Europe Champions&quot;.to_string(),
+    &quot;EU West&quot;.to_string(),
+    image_url: &quot;https://lec.eu&quot;.to_string()
+);
+
+// Insert new instance into the database
+lec.insert().await;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>insert</code> instruction returns a <code>Result&lt;(), Err&gt;</code> type. For simplicity, we are omiting handling results. For more information on the topic, see in <a href="https://doc.rust-lang.org/book/ch09-00-error-handling.html">The Official Book</a>.</p>
+<h2 id="performing-multiple-inserts"><a class="header" href="#performing-multiple-inserts">Performing Multiple Inserts</a></h2>
+<p>In addition to allowing the insertion of individual entities, <code>Canyon</code> also enables users to insert multiple entities with a single operation. The multi-insert feature is implemented as an associated function rather than a method of the instantiated object.</p>
+<p>You can pass instances of your type as a reference to a raw Rust array, and then await the result. The values generated for fields declared as primary keys will then be assigned to the corresponding field of each instance.</p>
+<p>The syntax for the multi-insert feature is shown below:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Demonstration on how to perform an insert of multiple items on a table
+async fn _multi_insert_example() {
+    // Create an instance
+    let new_league = League {
+        id: Default::default(),
+        ext_id: 392489032,
+        slug: &quot;DKC&quot;.to_owned(),
+        name: &quot;Denmark Competitive&quot;.to_owned(),
+        region: &quot;Denmark&quot;.to_owned(),
+        image_url: &quot;https://www.an_url.com&quot;.to_owned()
+    };
+    // Create a second instance
+    let new_league2 = League {
+        id: Default::default(),
+        ext_id: 392489032,
+        slug: &quot;IreL&quot;.to_owned(),
+        name: &quot;Ireland ERL&quot;.to_owned(),
+        region: &quot;Ireland&quot;.to_owned(),
+        image_url: &quot;https://www.yet_another_url.com&quot;.to_owned()
+    };
+    // Create a third instance
+    let new_league3 = League {
+        id: Default::default(),
+        ext_id: 9687392489032,
+        slug: &quot;LEC&quot;.to_owned(),
+        name: &quot;League Europe Champions&quot;.to_owned(),
+        region: &quot;EU&quot;.to_owned(),
+        image_url: &quot;https://www.lag.com&quot;.to_owned()
+    };
+
+    // Unused Result&lt;T, E&gt;
+    // Insert all three instances in a single transaction
+    League::insert_into(
+        &amp;[new_league, new_league2, new_league3]
+    ).await;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>insert_into</code> instruction returns a result with an array of the updated values that were inserted.</p>
+<h2 id="notes-on-the-primary_key-annotation"><a class="header" href="#notes-on-the-primary_key-annotation">Notes on the <code>#[primary_key]</code> annotation</a></h2>
+<p>It is important to note that if the database has a primary key, the <code>#[primary_key]</code> annotation is mandatory. By default, <code>Canyon</code> assumes that the column holding the primary key has a sequence or similar database concept and will omit the <code>PK</code> value on the insert operation. This will result in the database generating a unique and auto-incremental value.</p>
+<p>However, you can still insert into tables that do not have any columns marked as primary key. In such cases, you should not declare a <code>#[primary_key]</code> in your entity.</p>
+<p>Therefore, it is important to include the <code>#[primary_key]</code> annotation when performing insert operations. If a table's column has a primary key and <code>Canyon</code> does not find the <code>#[primary_key]</code> annotation, it will serialize the value to insert it, which is an illegal or incomplete operation.</p>
+<p>It is also worth noting that <code>_datasource(datasource_name: &amp;str)</code> alternatives are available, and if you do not provide a <code>#[primary_key]</code> annotation, the insert methods will not be generated for that type. However, the associated function <code>T::multi_insert()</code> will still be available.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="update-operations"><a class="header" href="#update-operations">UPDATE operations</a></h1>
+<p>Update operations involve altering the values in the database with new ones. <code>Canyon</code> offer developers an easy way to perform operations on a specific instance of a given <code>T</code> type that was properly set up.</p>
+<p>Considering the following <code>League</code> instance:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut lec: League = League::new(
+    134524353253, 
+    &quot;LEC&quot;.to_string(),
+    &quot;League Europe Champions&quot;.to_string(),
+    &quot;EU West&quot;.to_string(),
+    image_url: &quot;https://lec.eu&quot;.to_string()
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Suppose that the <code>image_url</code> field has to be modified. It can be done as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// modify the field first
+lec.image_url = &quot;https://new_lec_url.eu&quot;.to_string();
+// synchronize the changes with the database
+lec.update().await; // unused result
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>image_url</code> is a public field, so it can be modified at will. Some objects require validation before making changes. In such cases, usually the fields will be private. Although <code>getters</code> and <code>setters</code> should be also available for interacting with the fields.</p>
+<p>When running the <code>update</code> instructions, an &quot;update row request&quot; with all the new fields will be made with the database. Synchronizing the new state with the database.</p>
+<p>There is no need to call <code>update</code> more than once. Make all the changes that are required, call <code>update</code> once, then all the changes will be reflected to the database.</p>
+<blockquote>
+<p>Note: Don't forget about using <code>_datasources</code> methods when not using the default <code>datasource</code>.</p>
+</blockquote>
+<blockquote>
+<p>Note: If a <code>#[primary_key]</code> does not exist on the type declaration, the update methods for it will not be generated.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="delete-operations"><a class="header" href="#delete-operations">DELETE operations</a></h1>
+<p>Delete operations consists in removing rows of data from the database.</p>
+<p>With <code>Canyon</code>, developers can delete a single record at a time using an instance method of the given <code>T</code> type that was properly set up as an entity.</p>
+<p>Once again, using the <code>League</code> entity:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut lec: League = League::new(
+    134524353253, 
+    &quot;LEC&quot;.to_string(),
+    &quot;League Europe Champions&quot;.to_string(),
+    &quot;EU West&quot;.to_string(),
+    image_url: &quot;https://lec.eu&quot;.to_string()
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>The existing entry can be deleted from the database by running:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>lec.delete();
+<span class="boring">}
+</span></code></pre></pre>
+<p>The <code>delete</code> method will run a query similar to <code>DELETE FROM table_name WHERE table_name.&lt;pk_name&gt; = value</code>, where <code>pk_name</code> and <code>value</code> comes from the <code>#[primary_key]</code> set on the type declaration for <code>League</code>. <code>Canyon</code> will delete the row from the database where the id matches the instance id.</p>
+<p>In summary, to delete a record from the database using <code>Canyon</code>, the record must exist and be mapped to an instance. If the record for that row doesn't exist, the query will still be executed on the database.</p>
+<blockquote>
+<p>Note: Don't forget about using <code>_datasources</code> methods when not using the default <code>datasource</code>.</p>
+</blockquote>
+<blockquote>
+<p>Note: If a <code>#[primary_key]</code> does not exist on the type declaration, the <em>delete</em> methods for it will not be generated.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="relations-foreign-keys"><a class="header" href="#relations-foreign-keys">Relations: Foreign Keys</a></h1>
+<p><code>Canyon</code> provides an easy-to-implement solution for enforcing rules over relations or associations in a database. This chapter will explore how to add SQL <code>CONSTRAINTS</code> to the classic relation in the SQL standard, the <code>FOREIGN KEY</code>.</p>
+<h2 id="index"><a class="header" href="#index">Index</a></h2>
+<ul>
+<li><a href="crud_mapping/foreign_keys.html#relations-foreign-keys">Relations: Foreign Keys</a>
+<ul>
+<li><a href="crud_mapping/foreign_keys.html#index">Index</a></li>
+<li><a href="crud_mapping/foreign_keys.html#foreign-key">Foreign Key</a></li>
+<li><a href="crud_mapping/foreign_keys.html#the-foreign_key-annotation-and-the-foreignkeyable-derive-macro">The <code>foreign_key</code> annotation and the <code>ForeignKeyable</code> derive macro</a></li>
+<li><a href="crud_mapping/foreign_keys.html#foreign-key-queries">Foreign Key Queries</a>
+<ul>
+<li><a href="crud_mapping/foreign_keys.html#retrieve-data-for-a-league-referenced-by-a-tournament">Retrieve data for a <code>League</code> referenced by a <code>Tournament</code></a></li>
+<li><a href="crud_mapping/foreign_keys.html#find-out-how-many-tournaments-are-associated-with-a-specific-league">Find out how many <code>Tournament</code>s are associated with a specific <code>League</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="foreign-key"><a class="header" href="#foreign-key">Foreign Key</a></h2>
+<p><a href="crud_mapping/foreign_keys.html#relations-foreign-keys">(back to top)</a></p>
+<p>The <code>FOREIGN KEY</code> constraint is used to prevent actions that would destroy links between tables. A <code>FOREIGN KEY</code> is a field or collection of fields in one table that refers to the <code>PRIMARY KEY</code> in another table. The table with the foreign key is called the child table, and the table with the <code>PRIMARY KEY</code> is called the referenced or parent table.</p>
+<p>To demonstrate how <code>Canyon</code> implements this relation, two entities will be used:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper, ForeignKeyable)]
+#[canyon_macros::canyon_entity]
+pub struct League {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub name: String,
+    pub region: String,
+    pub image_url: String
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>league.rs</em></p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(CanyonCrud, CanyonMapper)]
+#[canyon_entity]
+pub struct Tournament {
+    #[primary_key]
+    pub id: i32,
+    pub ext_id: i64,
+    pub slug: String,
+    pub start_date: NaiveDate,
+    pub end_date: NaiveDate,
+    #[foreign_key(table = &quot;league&quot;, column = &quot;id&quot;)]
+    pub league: i32
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>tournament.rs</em></p>
+<h2 id="the-foreign_key-annotation-and-the-foreignkeyable-derive-macro"><a class="header" href="#the-foreign_key-annotation-and-the-foreignkeyable-derive-macro">The <code>foreign_key</code> annotation and the <code>ForeignKeyable</code> derive macro</a></h2>
+<p><a href="crud_mapping/foreign_keys.html#relations-foreign-keys">(back to top)</a></p>
+<p>As you may have noticed, a new annotation has been introduced in the <code>Tournament</code> entity: </p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[foreign_key(table = &quot;league&quot;, column = &quot;id&quot;)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>This annotation generates a new parent-child relation between <code>League</code> and <code>Tournament</code>, where <code>League</code> is the parent or the referenced entity, where <code>League</code> is the parent or the referenced entity, and <code>Tournament</code> is the child entity. This is specified through the <code>table</code> argument. Which indicates the parent table, and the <code>column</code> argument, which indicates the referred field.</p>
+<p><code>foreign_key</code> annotations describe a parent-child relation between two tables. It requires two arguments:</p>
+<ul>
+<li><code>table</code> : The parent table. In the above example, it is &quot;league&quot;;</li>
+<li><code>column</code> : The column or field that is the <code>id</code> of the parent table;</li>
+</ul>
+<p>The current table is <code>Tournament</code>. Therefore <code>Tournament</code> is the child and <code>League</code> is the parent. <code>Tournament</code> can not exist without a <code>League</code> to reference. But <code>League</code> can exist without any <code>Tournament</code> existing.</p>
+<blockquote>
+<p>Note: The <code>table</code> and <code>column</code> arguments currently accept an <code>&amp;str</code> to create the data necessary for generating the SQL for each operation. However, this behavior will change in upcoming releases, where the <code>table</code> argument will accept a valid Rust identifier, and the <code>column</code> argument will accept a <code>FieldIdentifier</code> discussed in previous chapters.</p>
+</blockquote>
+<p>For this relation to be implemented successfully, a new derive macro must be included along with the ones presented in past chapters. Entities that behave like parents must have the <code>ForeignKeyable</code> derive macro.</p>
+<p>Whenever there is a foreign key relation in the code, you must tell <code>Canyon</code> that this entity <code>T</code> at some point will be the parent for some other entity <code>T</code>. There is no need to specify the child because <code>Canyon</code> will be able to resolve that question through the first annotation.</p>
+<p>However, do not forget to annotate your parents with the <code>ForeignKeyable</code> macro, or <code>Canyon</code> will issue a warning later when trying to query the database given this relation.</p>
+<h2 id="foreign-key-queries"><a class="header" href="#foreign-key-queries">Foreign Key Queries</a></h2>
+<p><a href="crud_mapping/foreign_keys.html#relations-foreign-keys">(back to top)</a></p>
+<p>In <code>Canyon</code>, a <code>SQL CONSTRAINT</code> operation offers two advantages:</p>
+<p>Firstly, it ensures data integrity by preventing invalid data insertion and removing data that depends on other records. This feature is particularly useful when working with relational databases.</p>
+<p>Secondly, it enables querying based on the relation. For instance, given the <code>League</code> and <code>Tournament</code> types defined at the beginning of this chapter, a user may query:</p>
+<ul>
+<li>Retrieve data for a <code>League</code> referenced by a <code>Tournament</code>.</li>
+<li>Find out how many <code>Tournament</code>s are associated with a specific <code>League</code>.</li>
+</ul>
+<h3 id="retrieve-data-for-a-league-referenced-by-a-tournament"><a class="header" href="#retrieve-data-for-a-league-referenced-by-a-tournament">Retrieve data for a <code>League</code> referenced by a <code>Tournament</code></a></h3>
+<p><a href="crud_mapping/foreign_keys.html#relations-foreign-keys">(back to top)</a></p>
+<p>To retrieve data for a <code>League</code> referenced by a <code>Tournament</code>. Manually, a query similar to this could be made:</p>
+<pre><code class="language-sql">SELECT * FROM league WHERE league.id = tournament.league
+</code></pre>
+<p>In the above example <code>tournament.league</code> is the id of the league stored on the tournament instance.</p>
+<p>With <code>Canyon</code>, a method for this will be generated called <code>search_parent_table_league</code>. It returns an option that will be <code>Some</code> if it finds the <code>League</code> instance.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// You can search the 'League' that is the parent of a concrete instance of 'Tournament'
+let parent_league: Option&lt;League&gt; = tournament_itce.search_league().await;
+
+println!(
+    &quot;The related League queried through a method of tournament: {:?}&quot;, 
+    &amp;parent_league
+);
+<span class="boring">}
+</span></code></pre></pre>
+<p>In a more complete example, suppose you retrieve some <code>Tournament</code> from the database and then ask <code>Canyon</code> to find its <code>League</code> parent:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let tournament: Option&lt;Tournament&gt; = Tournament::find_by_id(1).await;
+println!(&quot;Tournament: {:?}&quot;, &amp;tournament);
+
+if let Some(trnmt) = tournament {
+    let result: Option&lt;League&gt; = trnmt.search_league().await;
+    println!(&quot;The related League as method if tournament is some: {:?}&quot;, &amp;result);
+} else { println!(&quot;`tournament` variable contains a None value&quot;) }
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>Note that the identifier for the autogenerated method is called 'search_league'</em></p>
+<h3 id="find-out-how-many-tournaments-are-associated-with-a-specific-league"><a class="header" href="#find-out-how-many-tournaments-are-associated-with-a-specific-league">Find out how many <code>Tournament</code>s are associated with a specific <code>League</code></a></h3>
+<p><a href="crud_mapping/foreign_keys.html#relations-foreign-keys">(back to top)</a></p>
+<p>On the type declarations for <code>Tournament</code> and <code>League</code>. It can be noticed that <code>Tournament</code> stores the id of a foreign <code>League</code>. It is possible to have several tournaments that reference the <strong>same</strong> <code>League</code>. This query is about retrieving these entries.</p>
+<p>This is usually known as &quot;the reverse side of a Foreign Key&quot;. <code>Canyon</code> offers the possibility to find the children of a specific type or, in other words, the <code>Tournaments</code> associated with a particular <code>League</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    /* Find all the tournaments that are pointing to the same `League` record. This is usually known as the reverse side of a foreign key. It is a many-to-one relation on this side, not a one-to-one */
+
+    // Find league with id 1
+    let some_league: League = League::find_by_pk(&amp;1)
+        .await
+        .expect(&quot;Result variant of the query is err&quot;)
+        .expect(&quot;No result found for the given parameter&quot;);
+
+    // Retrieve all tournaments that reference to some_league
+    let child_tournaments: Vec&lt;Tournament&gt; = Tournament::search_league_childrens(&amp;some_league)
+        .await
+        .expect(&quot;Result variant of the query is err&quot;);
+
+    assert!(!child_tournaments.is_empty());
+    child_tournaments
+        .iter()
+        .for_each(|t| assert_eq!(t.league, some_league.id));    
+<span class="boring">}
+</span></code></pre></pre>
+<p><em>Finds the records that are directly pointing to an existing League instance.</em></p>
+<p>It is important to note that the associated function follows a naming convention of <code>search_</code> + <code>parent_type</code> + <code>childrens</code>. Furthermore, it receives a reference to an instance of <code>League</code>(<code>&amp;lec</code>), necessitating the existence of a valid record of <code>League</code> prior to executing the function.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-querybuilder"><a class="header" href="#the-querybuilder">The QueryBuilder</a></h1>
+<p>So far, queries have been executed by mapping fields and their corresponding data for each type or instance of that type. Generating the necessary SQL sentences to perform the <code>CRUD</code> operations discussed earlier. </p>
+<p>However, the <code>SQL</code> language offers a wealth of additional power to analyze and manipulate data stored in tables. Specifically, we are referring to the <code>SQL clauses</code> that function as filters.</p>
+<h2 id="index-1"><a class="header" href="#index-1">Index</a></h2>
+<ul>
+<li><a href="querybuilder.html#the-querybuilder">The QueryBuilder</a>
+<ul>
+<li><a href="querybuilder.html#index">Index</a></li>
+<li><a href="querybuilder.html#introduction">Introduction</a></li>
+<li><a href="querybuilder.html#how-does-it-work">How does it work?</a></li>
+<li><a href="querybuilder.html#available-methods-to-work-with-the-builder">Available methods to work with the builder</a></li>
+<li><a href="querybuilder.html#the-querybuilder-implementors">The QueryBuilder implementors</a></li>
+<li><a href="querybuilder.html#the-comp-enum-type">The Comp enum type</a></li>
+<li><a href="querybuilder.html#better-by-example">Better by example</a></li>
+<li><a href="querybuilder.html#the-derivefields-macro">The #[derive(Fields)] macro</a></li>
+<li><a href="querybuilder.html#the-field-enum">The Field enum</a></li>
+<li><a href="querybuilder.html#the-fieldvalue-enum">The FieldValue enum</a></li>
+<li><a href="querybuilder.html#next-steps">Next steps</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p><code>Canyon</code> provides support for making queries over your entities more flexible. These queries are also defined in the <code>CanyonCrud</code> macro and belong to a family called <code>QueryBuilder</code>, which include three types representing the <code>SELECT</code>, <code>UPDATE</code> and <code>DELETE</code> operations. These types implement the <code>QueryBuilder</code> trait.</p>
+<ul>
+<li>The <code>SelectQueryBuilder</code>, is invoked after calling <code>T::select_query()</code></li>
+<li>The <code>UpdateQueryBuilder</code>, is invoked after calling <code>T::update_query()</code></li>
+<li>The <code>DeleteQueryBuilder</code>, is invoked after calling <code>T::delete_query()</code></li>
+</ul>
+<h2 id="how-does-it-work"><a class="header" href="#how-does-it-work">How does it work?</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>The macro implementations provide various associated functions or methods that return an implementor of the <code>QueryBuilder</code> type. These can be used as a builder pattern to construct the query that <code>Canyon</code> will use to retrieve data from the database. These functions also contain a <code>query()</code> consumer method, which consumes the builder and executes the query against the database, returning the data.</p>
+<p>The <code>QueryBuilder</code> works by generating the base <code>SQL</code>, similar to the <code>CRUD</code> operations presented in the previous chapters. However, instead of executing the query, it allows the user to chain methods over a <code>QueryBuilder</code> instance. With each method call, the query builder generates more <code>SQL</code> content, enabling an efficient and elegant solution to build more complex queries.</p>
+<h2 id="available-methods-to-work-with-the-builder"><a class="header" href="#available-methods-to-work-with-the-builder">Available methods to work with the builder</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<blockquote>
+<p>&quot;Hablar de la raíz de la familia&quot;</p>
+</blockquote>
+<p>Method calls can be <em>chained</em> over a <code>QueryBuilder</code> implementor. This allows building a more complex query when needed. By returning <code>&amp;mut Self</code>, the user may access the same instance of the <code>QueryBuilder</code> and modify its internal state until consumed.</p>
+<p>To understand the capabilities of the <code>QueryBuilder</code>, let's review the available declarations, which are the available methods in all the implementors.</p>
+<p>To see more about the capabilities of the <code>QueryBuilder</code>, below are the available methods of its implementors:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait QueryBuilder&lt;'a, T&gt;
+    where T: CrudOperations&lt;T&gt; + Transaction&lt;T&gt; + RowMapper&lt;T&gt; 
+{
+    /// Returns a read-only reference to the underlying SQL sentence with the same lifetime as self.
+    fn read_sql(&amp;'a self) -&gt; &amp;'a str;
+
+    /// Allows the user to append the content of a string slice to the
+    /// end of the underlying SQL sentence.
+    ///
+    /// # Arguments
+    ///
+    /// * `sql` - The [`&amp;str`] to be appended to the SQL query.
+    fn push_sql(&amp;mut self, sql: &amp;str);
+
+    /// Generates a `WHERE` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the filter.
+    /// * `op` - Any type that implements the `Operator` trait.
+    fn r#where&lt;Z: FieldValueIdentifier&lt;'a, T&gt;&gt;(&amp;mut self, column: Z, op: impl Operator) -&gt; &amp;mut Self
+        where T: Debug + CrudOperations&lt;T&gt; + Transaction&lt;T&gt; + RowMapper&lt;T&gt;;
+
+    /// Generates an `AND` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the  filter.
+    /// * `op` - A type that implements `Operator` for the comparison.
+    fn and&lt;Z: FieldValueIdentifier&lt;'a, T&gt;&gt;(&amp;mut self, column: Z, op: impl Operator) -&gt; &amp;mut Self;
+
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a set of values that are contained within the column.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldIdentifier` for the column name.
+    /// * `values` - An array of `QueryParameter` with the values that are contained within the column.
+    fn and_values_in&lt;Z, Q&gt;(&amp;mut self, column: Z, values: &amp;'a [Q]) -&gt; &amp;mut Self
+        where 
+            Z: FieldIdentifier&lt;T&gt;,
+            Q: QueryParameters&lt;'a&gt;;
+
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a set of values that are contained within the column.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldIdentifier` that will provide the target column name for the filter.
+    /// * `values` - An array of `QueryParameter` with the values to filter.
+    fn or_values_in&lt;Z, Q&gt;(&amp;mut self, r#or: Z, values: &amp;'a [Q]) -&gt; &amp;mut Self
+        where Z: FieldIdentifier&lt;T&gt;, Q: QueryParameters&lt;'a&gt;;
+
+    /// Generates an `OR` SQL clause for constraining the query based on a column name and a binary comparison operator.
+    ///
+    /// # Arguments
+    ///
+    /// * `column` - A `FieldValueIdentifier` that will provide the target column name and the value for the filter.
+    /// * `op` - Any type that implements `Operator` for the comparison
+    fn or&lt;Z: FieldValueIdentifier&lt;'a, T&gt;&gt;(&amp;mut self, column: Z, op: impl Operator) -&gt; &amp;mut Self;
+
+    /// Generates an `ORDER BY` SQL clause for ordering the results of the query.
+    ///
+    /// # Arguments
+    ///
+    /// * `order_by`: A `FieldIdentifier` for the column name.
+    /// * `desc`: A boolean indicating whether ordering should be ascending or descending.
+    fn order_by&lt;Z: FieldIdentifier&lt;T&gt;&gt;(&amp;mut self, order_by: Z, desc: bool) -&gt; &amp;mut Self;
+}
+<span class="boring">}
+</span></code></pre></pre>
+<blockquote>
+<p>Note: The 'Like' clause will be included in a later release.</p>
+</blockquote>
+<p>This will provide you with an idea of the functions performed by the chained methods on the instance. These methods essentially append additional SQL code to the base code to filter the results or execute a particular operation based on your requirements.</p>
+<h2 id="the-querybuilder-implementors"><a class="header" href="#the-querybuilder-implementors">The QueryBuilder implementors</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>Each <code>QueryBuilder</code> implementor provides a public interface that contains the methods discussed above, as well as its logical operations. For instance, calling <code>T::select_query()</code> returns a <code>SelectQueryBuilder</code>, which offers an interface to add <code>JOIN</code> clauses to the SQL statement. Currently, <code>LEFT</code>, <code>RIGHT</code>, <code>INNER</code> and <code>FULL</code> joins are available. the <code>inner_join()</code> method signature is:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn inner_join(&amp;mut self, join_table: &amp;str, col1: &amp;str, col2: &amp;str) -&gt; &amp;mut Self;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Where <code>join_table</code> is the entity to perform the join, and <code>col1</code> and <code>col2</code> are the columns to declare in the <code>ON</code> clause. The other join methods have the same parameters.</p>
+<p>The <code>T::update_query()</code> builds an <code>UPDATE</code> statement, providing all the methods defined in the <code>QueryBuilder</code> trait declaration. Additionally, it includes a <code>set()</code> method:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn set&lt;Z, Q&gt;(&amp;mut self, columns: &amp;'a [(Z, Q)]) -&gt; &amp;mut Self
+    where
+        Z: FieldIdentifier&lt;T&gt; + Clone,
+        Q: QueryParameter&lt;'a&gt;
+<span class="boring">}
+</span></code></pre></pre>
+<p>You may use it as follows:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut q: UpdateQueryBuilder&lt;Player&gt; = Player::update_query_datasource(SQL_SERVER_DS);
+    q.set(&amp;[
+        (PlayerField::summoner_name, &quot;Random updated player name&quot;),
+        (PlayerField::first_name, &quot;I am an updated first name&quot;),
+    ])
+    .r#where(PlayerFieldValue::id(&amp;1), Comp::Gt)
+    .and(PlayerFieldValue::id(&amp;8), Comp::Lt)
+    .query()
+    .await
+    .expect(&quot;Failed to update records with the querybuilder&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<p>Notice the array of tuples. The first element is the column to target, and the second is the value to update in the database column.</p>
+<p>Finally, <code>T::delete_query()</code> constructs a <code>DELETE</code> statement.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>Tournament::delete_query()
+    .r#where(TournamentFieldValue::id(&amp;14), Comp::Gt)
+    .and(TournamentFieldValue::id(&amp;16), Comp::Lt)
+    .query()
+    .await
+    .expect(&quot;Error connecting to the database during the delete operation&quot;);
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="the-comp-enum-type"><a class="header" href="#the-comp-enum-type">The Comp enum type</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>The <code>QueryBuilder</code> require a comparison operator in some of its methods. This is created from the <code>Comp</code> enum type, which is passed as a parameter to the methods that require it. Allowing you to generate comparison operators in a procedural manner.</p>
+<p>The available operators are:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Comp {
+    /// Operator &quot;=&quot; equal
+    Eq,
+    /// Operator &quot;!=&quot; not equal
+    Neq,
+    /// Operator &quot;&gt;&quot; greater than &lt;value&gt;
+    Gt,
+    /// Operator &quot;&gt;=&quot; greater than or equal to &lt;value&gt;
+    GtEq,
+    /// Operator &quot;&lt;&quot; less than &lt;value&gt;
+    Lt,
+    /// Operator &quot;=&lt;&quot; less than or equal to &lt;value&gt;
+    LtEq,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<h2 id="better-by-example"><a class="header" href="#better-by-example">Better by example</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>Using the <code>QueryBuilder</code> might be confusing at first. Specially for developers that are not accustomed to the <code>builder pattern</code>. However, with practice, developers will see that it is a very practical way of querying.</p>
+<p>Let's consider an example where we are working once again with the <code>League</code> type: we want to retrieve all records in the <code>league</code> table with <code>id</code> less than 20 and <code>slug</code> equal to <code>LCK</code>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let leagues: Result&lt;Vec&lt;League&gt;, _&gt; = League::select_query()
+    .r#where(
+        LeagueFieldValue::id(20),    // This will create a filter -&gt; `WHERE league.id &lt; 20`
+        Comp::Lt                     // where the `&lt;` symbol is generated by Canyon when it sees this variant
+    ).and(
+        LeagueFieldValue::slug(&quot;LCK&quot;.to_string()),
+        Comp::Eq
+    ).query()
+    .await
+    .expect(&quot;Query failed&quot;);
+
+println!(&quot;League elements: {:?}&quot;, &amp;leagues);
+<span class="boring">}
+</span></code></pre></pre>
+<p>The remaining methods that can be chained are self-explanatory. You can chain as many methods as needed. Make sure that the methods are chained properly to avoid errors.</p>
+<p>In addition, if needing more examples, you can visit our repository's <code>/tests/crud</code> folder and refer to the <code>querybuilder_operations.rs</code> tests. There you will find code examples for all available operations within the <code>Canyon</code> query builders.</p>
+<p>Now, you may be wondering where <code>LeagueField</code>, <code>LeagueFieldValue(T)</code>, <code>FieldIdentifier</code>, and <code>FieldValueIdentifier</code> types and bounds come from.</p>
+<h2 id="the-derivefields-macro"><a class="header" href="#the-derivefields-macro">The #[derive(Fields)] macro</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>When working with SQL, it is often necessary to specify the column name or type of a column in some operations. To avoid using raw or literal values, we created the <code>#[derive(Fields)]</code> derive macro. This macro generates special enumerated types that allows the user to refer to a database column name, type or value in a procedural way. It replaces the string that is usually used with a piece of valid Rust code.</p>
+<p>Rest assured that <code>Canyon</code> translates these procedures into the corresponding identifiers whenever they are needed. Let's take a closer look at these two types.</p>
+<h2 id="the-field-enum"><a class="header" href="#the-field-enum">The Field enum</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>The field enum is an autogenerated enum that serves to relate each field of a type with a database column name in a procedural way, making it easier to reflect them through the code.</p>
+<p>The identifier of the Field enum is generated as the concatenation of the type's identifier with &quot;Field&quot;. It is important to note that there is a naming convention in <code>Canyon</code>, where the variants of an enumeration in Rust are typically written in <code>PascalCase</code>, while in <code>Canyon</code> they are written in <code>snake_case</code> to match the way that the field is written.</p>
+<p>For example:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug)]
+#[allow(non_camel_case_types)]
+pub enum LeagueField {
+    id,
+    ext_id,
+    slug, 
+    name, 
+    region, 
+    image_url
+}
+
+impl FieldIdentifier&lt;LeagueField&gt; for LeagueField {}
+<span class="boring">}
+</span></code></pre></pre>
+<p>When directly interacting with a database, it is common to refer to a column using a plain string. That is a problem, because the compiler wouldn't be able to detect any mistake until it attempts to make the query. We, Rust developers, didn't choose this language in order to have runtime errors.</p>
+<p>Therefore, whenever a concrete column of the <code>league</code> table must be specified, such as the <code>slug</code> column, you could write <code>LeagueField::slug</code>. While this may seem like more code, it removes the potential errors that can come with using literals in the code. IDEs can also offer autocompletion, making it easier to write and detect wrong variants.</p>
+<p>The <code>impl FieldIdentifier&lt;LeagueField&gt; for LeagueField {}</code> trait implementation is part of Canyon's method of identifying when it must accept a <code>FieldIdentifier</code> type as an argument for functions that generate filters for queries, or when constraining the concrete arguments of some operations of the <code>QueryBuilder</code> to the same type. This helps to avoid potential errors of specifying variants or different types, and is almost always used when you generate a filter for your SQL query.</p>
+<h2 id="the-fieldvalue-enum"><a class="header" href="#the-fieldvalue-enum">The FieldValue enum</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>In addition to the <code>Field</code> enum, another enum is generated by the <code>canyon_entity</code> proc-macro annotation, known as the <code>FieldValue</code> enum. This enum serves as a procedural way to determine which field is being referred to, but with the added capability of accepting a value as an argument in every variant. This value can be any supported literal or type for which the <code>QueryParameter&lt;'a&gt;</code> is implemented. The main purpose of this enum is to create filters for an <code>SQL</code> query where the filter needs a value to perform the filtering.</p>
+<p>The <code>FieldValue</code> enum looks like this:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Clone, Debug)]
+#[allow(non_camel_case_types)]
+pub enum LeagueFieldValue {
+    id(&amp;dyn QueryParameter&lt;'_&gt;),
+    ext_id(&amp;dyn QueryParameter&lt;'_&gt;),
+    slug(&amp;dyn QueryParameter&lt;'_&gt;), 
+    name(&amp;dyn QueryParameter&lt;'_&gt;), 
+    region(&amp;dyn QueryParameter&lt;'_&gt;), 
+    image_url(&amp;dyn QueryParameter&lt;'_&gt;)
+}
+
+impl FieldIdentifierValue&lt;LeagueFieldValue&gt; for LeagueFieldValue {}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Using the <code>FieldValue</code> enum provides a powerful way of writing filters for <code>SQL</code> queries. For instance, <code>LeagueFieldValue::id(1)</code> can be used to generate a <code>WHERE</code> clause filter: <code>WHERE league.id = 1</code>, among other operations.</p>
+<h2 id="next-steps-1"><a class="header" href="#next-steps-1">Next steps</a></h2>
+<p><a href="querybuilder.html#the-querybuilder">(back to top)</a></p>
+<p>Now that <code>Querybuilder</code> has been discussed, the next chapter is about <code>Migrations</code>. Where everything that have been discussed up until now will be wrapped into the full package that <code>Canyon</code> provides. See you there!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="canyon-migrations-the-final-boss"><a class="header" href="#canyon-migrations-the-final-boss">Canyon Migrations: The Final Boss</a></h1>
+<blockquote>
+<p><em>Note: Please be advised that this feature is still unstable. For further information, please refer to the <a href="the_migrations.html#disclaimer">disclaimer section</a> a the end of this document.</em></p>
+</blockquote>
+<h2 id="index-2"><a class="header" href="#index-2">Index</a></h2>
+<ul>
+<li><a href="the_migrations.html#canyon-migrations-the-final-boss">Canyon Migrations: The Final Boss</a>
+<ul>
+<li><a href="the_migrations.html#index">Index</a></li>
+<li><a href="the_migrations.html#introduction">Introduction</a></li>
+<li><a href="the_migrations.html#only-one-entity-per-rs-file">Only one entity per <code>.rs</code> file</a></li>
+<li><a href="the_migrations.html#the-canyon-annotation">The #[canyon] annotation</a>
+<ul>
+<li><a href="the_migrations.html#the-full-mode-concept">The 'full mode' concept</a></li>
+</ul>
+</li>
+<li><a href="the_migrations.html#the-migrations">The migrations</a></li>
+<li><a href="the_migrations.html#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction-3"><a class="header" href="#introduction-3">Introduction</a></h2>
+<p>As a modern ORM framework, <code>Canyon</code> aims to provide a comprehensive solution for managing all relations with the database in a manner that is agnostic to the developer. This concept is commonly referred to as &quot;migrations&quot;. Migrations are a way for the framework to take full responsibility for managing every aspect of the database, including creating and dropping tables, altering their names, columns, column names, column types, generating <code>GRANT</code> permissions, etc.</p>
+<p>However, unlike other ORM frameworks, <code>Canyon</code> proposes a new way of handling migrations. Other frameworks come with a built-in command tool or require a separate command tool to be downloaded, installed, and managed. <code>Canyon</code>, on the other hand, manages everything at compile time and executes the migrations at the beginning of the client's code. </p>
+<blockquote>
+<p>It should be noted that this feature must be enabled, as it is not active by default.</p>
+</blockquote>
+<h2 id="only-one-entity-per-rs-file"><a class="header" href="#only-one-entity-per-rs-file">Only one entity per <code>.rs</code> file</a></h2>
+<p><a href="the_migrations.html#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>To enable the framework to manage the entity types, they must be annotated with the <code>#[canyon_entity]</code> macro, which was introduced in the <a href="./canyon_entities.html">Entities chapter</a>.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[canyon_entity]  // ready to be tracked and managed by Canyon
+pub struct League { /* fields... */ }
+<span class="boring">}
+</span></code></pre></pre>
+<p>It is important to remember that only one annotated entity with <code>#[canyon_entity]</code> is allowed per file due to the way migrations work.  Attempting to implement more than one entity in the same file will result in a compiler error.</p>
+<h2 id="the-canyon-annotation"><a class="header" href="#the-canyon-annotation">The #[canyon] annotation</a></h2>
+<p><a href="the_migrations.html#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>As is typical with components of a modern ORM framework. <code>Canyon</code> utilizes annotations to drive its behavior. This means that when needing something, <code>Canyon</code> most likely has an annotation to solve it.</p>
+<p>In order to enable <code>migrations</code>, include the following annotation for the <code>main()</code> function.</p>
+<pre><pre class="playground"><code class="language-rust">#[canyon]
+fn main() { 
+    /* code in main */ 
+}
+</code></pre></pre>
+<p><em>Canyon's #[canyon] annotation. It unlocks the 'full mode'</em></p>
+<h3 id="the-full-mode-concept"><a class="header" href="#the-full-mode-concept">The 'full mode' concept</a></h3>
+<p><a href="the_migrations.html#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>When discussing about the <em>framework</em>, the term 'full mode' is used to indicate that <code>Canyon</code> has activated all of its features to assume complete control over everything related to the database in your program.</p>
+<h2 id="the-migrations"><a class="header" href="#the-migrations">The migrations</a></h2>
+<p><a href="the_migrations.html#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>When the full mode is enabled, <code>Canyon</code> takes care of managing the migrations for the complete lifecycle of the program. Migrations are designed to manage every declared entity during compile time. Thanks to the complex macro system, it will generate all the necessary queries to be applied at the start of the application.</p>
+<blockquote>
+<p>Note: Currently, we are making efforts to ensure that the migration process is only executed when <code>cargo build</code> or <code>cargo run</code> are invoked. The execution of migrations by code static analyzers, which make use of the <code>cargo check</code> functionality, can lead to obscure feedback.</p>
+</blockquote>
+<p><code>Canyon</code> searches for structs annotated with <code>canyon_entity</code>, then checks the database information provided in the <code>canyon.toml</code> file. It generates everything necessary for the entities in the database.</p>
+<p>During compilation, <code>Canyon</code> searches for new entities, entities that have been removed from your code (which will then be deleted from the database), entities that have been renamed, entity fields that have been renamed or changed type, and any new or removed <code>field annotation</code> for an entity.</p>
+<p>When it is still compiling, <code>Canyon</code> generates the necessary queries for the database. Even though this is the most complicated feature of <code>Canyon</code>, there is not much more explanation about how it affects development. As mentioned earlier, the idea behind <code>Canyon</code> is simple:</p>
+<p><em>Make developer's life easier</em></p>
+<h2 id="disclaimer"><a class="header" href="#disclaimer">Disclaimer</a></h2>
+<p><a href="the_migrations.html#canyon-migrations-the-final-boss">(back to top)</a></p>
+<p>As stated at the beginning of this document, <code>Canyon</code> migrations are still an unstable feature under development.</p>
+<p>There is still some work to be done to ensure they function as intended, and some of the features mentioned are not yet available in the <code>0.1.0</code> release.</p>
+<p>Many functionalities are already implemented, such as changing table names, creating, dropping, altering tables, modifying sequences or identities, changing column data types. However, renaming columns is not yet possible.</p>
+<p>Furthermore, while some of these functionalities are ready for use with <code>PostgreSQL</code> databases, they may not be available for <code>MSSQL</code> databases, if <code>Canyon</code> encounters an action that requires processing from Microsoft's database engine, it will raise a <code>todo!()</code> panic. To avoid such situations, it is possible to disable migrations for a specific datasource in the configuration file.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="todo"><a class="header" href="#todo">!todo()</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>
