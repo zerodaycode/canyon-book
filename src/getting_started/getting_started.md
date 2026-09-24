@@ -1,9 +1,7 @@
 # Getting started
 
-Before getting started with the code. Some small steps need to be taken care of. In section 1, the following topics will be discussed:
+We will use PostgreSQL for the first working example. The same model code can be used with MySQL or SQL Server; the Cargo feature and datasource configuration decide which driver Canyon uses.
 
- - Making sure that all dependencies are installed;
- - Understanding `Canyon`'s configuration file;
- - Setting up databases to use with `Canyon`;
+There are three things to prepare: a project with a SQL backend enabled, a `canyon.toml` datasource, and a table that matches the Rust model. None of these steps invokes migrations. Once they are in place, `Canyon::init().await?` opens the configured pools and the model can query the database.
 
-If everything is already set up and tested correctly. Feel free to skip to section 2 where entities are explained.
+The following chapters take those steps in order. If you already have a running database, start with [installation](./initial_setup.md) and use your own connection details in the [configuration](./the_configuration_file.md).

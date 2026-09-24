@@ -1,53 +1,20 @@
-# Setting up a Working Environment
+# Prepare a database
 
-To test the functionality of `Canyon-SQL`, it is necessary to have a working database with some data stored in it.
+Canyon maps existing tables; the ordinary CRUD path does not provision your schema. The PostgreSQL `teams` table in the [installation example](./initial_setup.md) has an identity key and a non-null name, matching the model in the next chapter. If your table uses different names, tell Canyon with `#[canyon_entity(table_name = "...", schema = "...")]`.
 
-One quick way to set up such an environment is by using Docker. Docker is an open-source project that automates the
-deployment of applications as portable, self-sufficient containers that can run almost anywhere.
+For local development of Canyon itself, the source repository includes a Docker Compose setup with PostgreSQL, MySQL, and SQL Server:
 
-For those who are not yet familiar with Docker, official documentation is available [here](https://www.docker.com/),
-along with installers for every supported platform.
-
-## Creating a DataBase container
-
-Assuming your `Docker` environment is ready, the next step is to create a container with a supported database
-installation.
-
-To accomplish this, we provide an example of a `docker-compose` file located in the [scripts folder](../../scripts) in
-the root of this repository. You can use this file to create a new container and populate it with data.
-
-The file contains information about a `PostgreSQL`, `SQLServer` and `MySql` containers to start.
-
-In the same folder, you will also find an sql folder containing some SQL scripts. These scripts will be automatically
-detected by the docker-compose file and used to fill the tables of the examples.
-
-> Please note that we assume you have already installed `docker-compose` and copied the scripts folder into your
-> project. Adjust the paths according to your preferences.
-
-
-Build and start containers by running:
-
-```bash
-docker-compose -f ./scripts/docker-compose.yml up
+```sh
+docker compose -f docker/docker-compose.yml up -d --wait
 ```
 
-Lastly, you will need to create a `canyon.toml` file as mentioned in the previous chapter. You can use the following
-snippet on it:
+The PostgreSQL and MySQL fixtures are loaded by their container startup scripts. SQL Server needs an additional, ignored initializer test:
 
-```toml
-[canyon_sql]
-datasources = [
-    { name = 'PostgresDS', auth = { postgresql = { basic = { username = "postgres", password = "postgres" } } }, properties.host = 'localhost', properties.db_name = 'triforce', properties.migrations = 'enabled' },
-    { name = 'SqlServerDS', auth = { sqlserver = { basic = { username = "sa", password = "SqlServer-10" } } }, properties.host = '192.168.0.250.1', properties.port = 3340, properties.db_name = 'triforce2', properties.migrations = 'disabled' },
-    { name = 'MysqlDS', auth = { mysql = { basic = { username = "root", password = "root" } } }, properties.host = '192.168.0.250.1', properties.port = 3340, properties.db_name = 'triforce2', properties.migrations = 'disabled' }
-]
+```sh
+cargo test -p tests --test canyon_integration_tests --all-features \
+  initialize_sql_server_docker_instance -- --ignored --test-threads=1
 ```
-> Note: In `SqlServer` the data will not be loaded automatically, user interaction is required.
-> Note: Please ensure that the inlined tables are correctly formatted without any line breaks.
-> Next time the code is compiled, Canyon will:
 
-- Connect to the databases;
-- Create the tables if needed;
-- Populate each table if needed;
+These commands belong to a checkout of the [Canyon-SQL source repository](https://github.com/zerodaycode/Canyon-SQL), not to an application that depends on the published crate. The test datasource settings live in `tests/canyon.toml` and use local-only credentials and TLS choices.
 
-Now it is time to start writing the code...
+Migrations remain [experimental](../the_migrations.md). Do not enable them just to make the examples in this book work: create your tables with a schema tool you trust, then let Canyon read and write the rows.

@@ -1,31 +1,15 @@
-# DELETE operations
+# Delete
 
-Delete operations consists in removing rows of data from the database.
-
-With `Canyon`, developers can delete a single record at a time using an instance method of the given `T` type that was properly set up as an entity.
-
-Once again, using the `League` entity:
+Delete uses the annotated primary key, just as update does:
 
 ```rust
-let mut lec: League = League::new(
-    134524353253, 
-    "LEC".to_string(),
-    "League Europe Champions".to_string(),
-    "EU West".to_string(),
-    image_url: "https://lec.eu".to_string()
-);
+use canyon_sql::crud::Delete;
+
+team.delete().await?;
 ```
 
-The existing entry can be deleted from the database by running:
+The generated method returns `CanyonResult<()>`. It does not return an affected-row count, so check with `find_by_pk` afterward if your application must prove that the row is gone. A missing primary-key annotation is an error, not permission to delete the whole table.
 
-```rust
-lec.delete();
-```
+`delete_with("reporting")` targets a named datasource or compatible connection. Database foreign-key constraints still apply: Canyon's relationship annotation generates lookup methods; it does not bypass or create those constraints.
 
-The `delete` method will run a query similar to `DELETE FROM table_name WHERE table_name.<pk_name> = value`, where `pk_name` and `value` comes from the `#[primary_key]` set on the type declaration for `League`. `Canyon` will delete the row from the database where the id matches the instance id.
-
-In summary, to delete a record from the database using `Canyon`, the record must exist and be mapped to an instance. If the record for that row doesn't exist, the query will still be executed on the database.
-
-> Note: Don't forget about using `_datasources` methods when not using the default `datasource`.
-
-> Note: If a `#[primary_key]` does not exist on the type declaration, the *delete* methods for it will not be generated.
+For a filtered delete rather than one identified by the model's primary key, use `Team::delete_query()?` and add a predicate before execution. Inspect the generated SQL when the scope matters.

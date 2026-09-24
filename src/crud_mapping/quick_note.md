@@ -1,38 +1,16 @@
-# The Canyon Runtime
+# Choosing a datasource
 
-Before getting started with `Canyon`, there is an essential requirement to consider.
-
-
-`Canyon-SQL` requires an asynchronous runtime to function, which means that the signature of functions or methods should be modified with the `async` modifier.
+Every operation without `_with` uses the first active datasource in `canyon.toml`. The `_with` form accepts a datasource name or another compatible `DbConnection`:
 
 ```rust
-// from
-fn a_synchronous_function(){
-    // ...
-}
+use canyon_sql::crud::Read;
 
-// to
-async fn an_asynchronous_function() {
-    // ...
-}
+let default_teams: Vec<Team> = Team::find_all().await?;
+let analytics_teams: Vec<Team> = Team::find_all_with("analytics").await?;
 ```
 
-To use the asynchronous runtime, `Canyon` re-exports the `tokio` crate. Which can be enabled by modifying the main function as follows:
+The same pattern applies to `find_by_pk_with`, `count_with`, `insert_with`, `update_with`, and `delete_with`. A misspelled name produces `ConnectionError::DatasourceNotFound` rather than quietly falling back to the default.
 
-```rust
-#[tokio::main]
-async fn main() { 
-    /* code in main */ 
-}
-```
+Query builders need one extra distinction. `Team::select_query_with(DatabaseType::MySQL)` chooses the SQL *dialect*; it does not select a connection. Build the query, then execute it with `launch_with("mysql_datasource")`. When using `select_query()` and `launch_default()` together, both target the default datasource.
 
-`Canyon` also comes with a prebuilt solution to this that reduces the presented above to only this:
-
-```rust
-#[canyon]
-fn main() { 
-    /* code in main */ 
-}
-```
-
-Either solution is acceptable. The second option is simpler and enables additional features that will be discussed later in the [migrations section](../the_migrations.md)
+If you already hold a compatible connection, passing it to a `_with` method keeps that operation on the same connection. This is useful in repository adapters and explicit transaction handling. It does not make two separate datasources part of one transaction.

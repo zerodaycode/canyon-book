@@ -1,102 +1,23 @@
-# SELECT operations
+# Read
 
-The most fundamental operation when querying a database is the `read` operation, which involves requesting a particular set of data stored in one or more tables.
-
-When any of the CRUD operations are processed, the data received as response from the database will be of a generic type referred to as `Row`. `Row` is unique for each *client library*, but each of them refer to a single "row" retrieved from the database.
-
-`Canyon`'s job is to then parse this retrieved response into `T` or `Vec<T>`, where `T` is your defined type. As long as the types are properly annotated, the users don't need to worry about parsing the data themselves.
-
-
-Here is the type that was described in the previous chapter:
+Reading is the least surprising way to meet the generated API. Bring `Read` into scope, then call an associated function on the entity:
 
 ```rust
-#[derive(CanyonCrud, CanyonMapper)]
-#[canyon_entity]
-pub struct League {
-    #[primary_key]
-    pub id: i32,
-    pub ext_id: i64,
-    pub slug: String,
-    pub name: String,
-    pub region: String,
-    pub image_url: String
-}
+use canyon_sql::crud::Read;
+
+let teams: Vec<Team> = Team::find_all().await?;
+let team: Option<Team> = Team::find_by_pk(&42_i64).await?;
+let total: i64 = Team::count().await?;
 ```
 
+`find_all()` reads every mapped row. `count()` returns the number of rows as `i64`. `find_by_pk()` uses the field annotated with `#[primary_key]`; its argument is borrowed because Canyon binds it as a query parameter. It returns `Ok(None)` if no row matches. A missing table, failed connection, or failed row conversion is an `Err` instead.
 
-Let's review what *SELECT* operations are automatically available now. With focus on those that are well known in the `CRUD` world.
-
-## `find_all`
-
-One of the most commonly used queries when working with databases. In summary, it is the same as saying:
-
-> "Please, database, give me all the data that you have for this table, including all of the columns!"
-
-In `Canyon`, this method is available as an associated function for your defined type `T`. The `type::find_all()` method can be translated to a SQL query `SELECT * FROM {table_name}`, which will return a collection of `Row` instances.
-
-The retrieved `Row` collection will then be automatically mapped into a `Vec<T>`, where `T` is the same type of the object where `type::find_all` was called.
+Each function has a `_with` counterpart for a named datasource or compatible connection:
 
 ```rust
-#[derive(CanyonCrud, CanyonMapper)]
-#[canyon_entity]
-pub struct League {
-    #[primary_key]
-    pub id: i32,
-    pub ext_id: i64,
-    pub slug: String,
-    pub name: String,
-    pub region: String,
-    pub image_url: String
-}
+let team = Team::find_by_pk_with(&42_i64, "reporting").await?;
 ```
 
-We can retrieve all rows of the `league` table with the following line:
+`Read` also exposes `select_query()` and `select_query_with(...)`. These produce a builder rather than executing immediately. Use them when you need predicates, joins, or ordering; the [query-builder chapter](../querybuilder.md) follows that path.
 
-```rust
-let leagues: Result<Vec<League>, _> = League::find_all().await;
-```
-
-
-## Unchecked alternatives
-
-There are two more operations associated with the `find_all()` function that provide unchecked alternatives.
-
-In `Canyon`, every database operation returns a `Result<T, E>`. However, during software development, debugging, or prototyping, it may be useful to access query results without additional complications. For this purpose, `Canyon` provides:
-
-
-- `T::find_all_unchecked()`
-- `T::find_all_unchecked_datasource()`
-
-Both functions return a `Vec<T>` directly, bypassing the `Result` type. However, if there is any error during the database connection, the program will panic. Therefore, these functions are only recommended for quickly profiling or experimentation.
-
-
-## Find by PK
-
-Another common pattern for reading data is to find a record by its primary key (`PK`). 
-
-Looking at the previous example `League` again:
-
-```rust
-#[derive(CanyonCrud, CanyonMapper)]
-#[canyon_entity]
-pub struct League {
-    #[primary_key]
-    pub id: i32,
-    pub ext_id: i64,
-    pub slug: String,
-    pub name: String,
-    pub region: String,
-    pub image_url: String
-}
-```
-
-The primary key in this case is `id`. Therefore, only one `League` row exists for every unique `id` value. The `auto-incrementing` parameter isn't set. So it **is enabled**. Check previous chapter for more information.
-
-To find a record by its primary key, the method `type::find_by_id` can be used:
-
-```rust
-// Searching for a row that has id=1
-let league: Result<Option<League>, _> = League::find_by_id(&1).await;
-```
-
-Note the reference on the function argument. The `find_by_id` associated function doesn't take ownership of the parameter.
+If your model does not declare a primary key, `find_all` and `count` can still be useful. Key-based reading cannot infer which field identifies a row and reports a typed error instead of guessing.

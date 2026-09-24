@@ -1,155 +1,49 @@
-# Relations: Foreign Keys
+# Relationships
 
-`Canyon` provides an easy-to-implement solution for enforcing rules over relations or associations in a database. This chapter will explore how to add SQL `CONSTRAINTS` to the classic relation in the SQL standard, the `FOREIGN KEY`.
+A foreign key has two sides: a child stores a value, and a parent row owns the referenced field. Canyon turns that relationship into lookup methods on the child entity. It does **not** create the database constraint; define that in your schema.
 
-## Index
-- [Relations: Foreign Keys](#relations-foreign-keys)
-  - [Index](#index)
-  - [Foreign Key](#foreign-key)
-  - [The `foreign_key` annotation and the `ForeignKeyable` derive macro](#the-foreign_key-annotation-and-the-foreignkeyable-derive-macro)
-  - [Foreign Key Queries](#foreign-key-queries)
-    - [Retrieve data for a `League` referenced by a `Tournament`](#retrieve-data-for-a-league-referenced-by-a-tournament)
-    - [Find out how many `Tournament`s are associated with a specific `League`](#find-out-how-many-tournaments-are-associated-with-a-specific-league)
-
-## Foreign Key
-[(back to top)](#relations-foreign-keys)
-
-The `FOREIGN KEY` constraint is used to prevent actions that would destroy links between tables. A `FOREIGN KEY` is a field or collection of fields in one table that refers to the `PRIMARY KEY` in another table. The table with the foreign key is called the child table, and the table with the `PRIMARY KEY` is called the referenced or parent table.
-
-To demonstrate how `Canyon` implements this relation, two entities will be used:
+Suppose `Player.team_id` refers to `Team.id`:
 
 ```rust
-#[derive(CanyonCrud, CanyonMapper, ForeignKeyable)]
-#[canyon_macros::canyon_entity]
-pub struct League {
+use canyon_sql::macros::{canyon_entity, CanyonMapper, Crud, Fields};
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = "teams")]
+pub struct Team {
     #[primary_key]
-    pub id: i32,
-    pub ext_id: i64,
-    pub slug: String,
+    pub id: i64,
     pub name: String,
-    pub region: String,
-    pub image_url: String
 }
-```
-*league.rs*
 
-
-```rust
-#[derive(CanyonCrud, CanyonMapper)]
-#[canyon_entity]
-pub struct Tournament {
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = "players")]
+pub struct Player {
     #[primary_key]
-    pub id: i32,
-    pub ext_id: i64,
-    pub slug: String,
-    pub start_date: NaiveDate,
-    pub end_date: NaiveDate,
-    #[foreign_key(table = "league", column = "id")]
-    pub league: i32
+    pub id: i64,
+    #[foreign_key(references = Team::id)]
+    pub team_id: i64,
+    pub name: String,
 }
 ```
-*tournament.rs*
 
-## The `foreign_key` annotation and the `ForeignKeyable` derive macro
-[(back to top)](#relations-foreign-keys)
-
-As you may have noticed, a new annotation has been introduced in the `Tournament` entity: 
+The child needs `Read` (or `Crud`, which includes it); the parent needs Canyon mapping metadata. The annotation points to a Rust entity and field, not to an arbitrary table string. From `team_id`, Canyon derives the relation name `team` and generates four inherent methods:
 
 ```rust
-#[foreign_key(table = "league", column = "id")]
+let parent: Option<Team> = player.find_team().await?;
+let children: Vec<Player> = Player::find_all_by_team(&team).await?;
+
+let parent_on_other_db = player.find_team_with("reporting").await?;
+let children_on_other_db =
+    Player::find_all_by_team_with(&team, "reporting").await?;
 ```
 
-This annotation generates a new parent-child relation between `League` and `Tournament`, where `League` is the parent or the referenced entity, where `League` is the parent or the referenced entity, and `Tournament` is the child entity. This is specified through the `table` argument. Which indicates the parent table, and the `column` argument, which indicates the referred field.
+No matching parent is `Ok(None)`; no matching children is `Ok(vec![])`. A failed query or mapping operation remains an error. The `_with` variants also accept a compatible connection.
 
-`foreign_key` annotations describe a parent-child relation between two tables. It requires two arguments:
-
- - `table` : The parent table. In the above example, it is "league";
- - `column` : The column or field that is the `id` of the parent table;
-
-The current table is `Tournament`. Therefore `Tournament` is the child and `League` is the parent. `Tournament` can not exist without a `League` to reference. But `League` can exist without any `Tournament` existing.
-
-> Note: The `table` and `column` arguments currently accept an `&str` to create the data necessary for generating the SQL for each operation. However, this behavior will change in upcoming releases, where the `table` argument will accept a valid Rust identifier, and the `column` argument will accept a `FieldIdentifier` discussed in previous chapters.
-
-For this relation to be implemented successfully, a new derive macro must be included along with the ones presented in past chapters. Entities that behave like parents must have the `ForeignKeyable` derive macro.
-
-Whenever there is a foreign key relation in the code, you must tell `Canyon` that this entity `T` at some point will be the parent for some other entity `T`. There is no need to specify the child because `Canyon` will be able to resolve that question through the first annotation.
-
-However, do not forget to annotate your parents with the `ForeignKeyable` macro, or `Canyon` will issue a warning later when trying to query the database given this relation.
-
-## Foreign Key Queries
-[(back to top)](#relations-foreign-keys)
-
-In `Canyon`, a `SQL CONSTRAINT` operation offers two advantages:
-
-Firstly, it ensures data integrity by preventing invalid data insertion and removing data that depends on other records. This feature is particularly useful when working with relational databases.
-
-Secondly, it enables querying based on the relation. For instance, given the `League` and `Tournament` types defined at the beginning of this chapter, a user may query:
-
-- Retrieve data for a `League` referenced by a `Tournament`.
-- Find out how many `Tournament`s are associated with a specific `League`.
-
-### Retrieve data for a `League` referenced by a `Tournament`
-[(back to top)](#relations-foreign-keys)
-
-To retrieve data for a `League` referenced by a `Tournament`. Manually, a query similar to this could be made:
-
-```sql
-SELECT * FROM league WHERE league.id = tournament.league
-```
-
-In the above example `tournament.league` is the id of the league stored on the tournament instance.
-
-With `Canyon`, a method for this will be generated called `search_parent_table_league`. It returns an option that will be `Some` if it finds the `League` instance.
+The referenced field need not be the parent's primary key, but it should identify the parent as your schema intends—normally through a unique constraint. A fully qualified path works too:
 
 ```rust
-// You can search the 'League' that is the parent of a concrete instance of 'Tournament'
-let parent_league: Option<League> = tournament_itce.search_league().await;
-
-println!(
-    "The related League queried through a method of tournament: {:?}", 
-    &parent_league
-);
+#[foreign_key(references = crate::models::Team::external_id)]
+pub team_external_id: i64,
 ```
 
-In a more complete example, suppose you retrieve some `Tournament` from the database and then ask `Canyon` to find its `League` parent:
-
-```rust
-let tournament: Option<Tournament> = Tournament::find_by_id(1).await;
-println!("Tournament: {:?}", &tournament);
-
-if let Some(trnmt) = tournament {
-    let result: Option<League> = trnmt.search_league().await;
-    println!("The related League as method if tournament is some: {:?}", &result);
-} else { println!("`tournament` variable contains a None value") }
-```
-*Note that the identifier for the autogenerated method is called 'search_league'*
-
-### Find out how many `Tournament`s are associated with a specific `League`
-[(back to top)](#relations-foreign-keys)
-
-On the type declarations for `Tournament` and `League`. It can be noticed that `Tournament` stores the id of a foreign `League`. It is possible to have several tournaments that reference the **same** `League`. This query is about retrieving these entries.
-
-This is usually known as "the reverse side of a Foreign Key". `Canyon` offers the possibility to find the children of a specific type or, in other words, the `Tournaments` associated with a particular `League`:
-
-```rust
-    /* Find all the tournaments that are pointing to the same `League` record. This is usually known as the reverse side of a foreign key. It is a many-to-one relation on this side, not a one-to-one */
-
-    // Find league with id 1
-    let some_league: League = League::find_by_pk(&1)
-        .await
-        .expect("Result variant of the query is err")
-        .expect("No result found for the given parameter");
-
-    // Retrieve all tournaments that reference to some_league
-    let child_tournaments: Vec<Tournament> = Tournament::search_league_childrens(&some_league)
-        .await
-        .expect("Result variant of the query is err");
-
-    assert!(!child_tournaments.is_empty());
-    child_tournaments
-        .iter()
-        .for_each(|t| assert_eq!(t.league, some_league.id));    
-```
-*Finds the records that are directly pointing to an existing League instance.*
-
-It is important to note that the associated function follows a naming convention of `search_` + `parent_type` + `childrens`. Furthermore, it receives a reference to an instance of `League`(`&lec`), necessitating the existence of a valid record of `League` prior to executing the function.
+Canyon takes the parent's physical table name and schema from its `#[canyon_entity(...)]` metadata. A type such as `TournamentDetails` maps to `tournament_details` by default; a custom physical name is equally valid. Keep the Rust relationship annotation and the actual database constraint consistent. The [relationship integration tests](https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/crud/foreign_key_operations.rs) cover both naming cases on PostgreSQL, MySQL, and SQL Server.

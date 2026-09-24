@@ -3,4 +3,4 @@ authors = ["Alex Vergara"]
 language = "en"
 multilingual = false
 src = "src"
-title = "The Canyon's Book"
+title = "The Canyon-SQL Book"
