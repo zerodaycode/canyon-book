@@ -1,6 +1,6 @@
 # Install Canyon
 
-Add Canyon to your application's `Cargo.toml` and enable at least one backend. Canyon has no default SQL backend, so a dependency without `postgres`, `mysql`, or `mssql` fails at compile time with an explicit diagnostic.
+Add Canyon to your application's `Cargo.toml` and enable a SQL backend. This example uses PostgreSQL:
 
 ```toml
 [dependencies]
@@ -8,13 +8,15 @@ canyon_sql = { version = "0.5.1", features = ["postgres"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
-To target another engine, replace `postgres` with `mysql` or `mssql`. A binary that talks to more than one kind of database can enable several features:
+The backend features are `postgres`, `mysql`, and `mssql`. Replace `postgres` with the one you need. A binary that talks to more than one kind of database can enable several:
 
 ```toml
 canyon_sql = { version = "0.5.1", features = ["postgres", "mysql", "mssql"] }
 ```
 
-You need a running database server and a table to query. For this chapter, imagine a PostgreSQL database named `app` with a `teams` table:
+> **At least one backend is required.** Canyon has no default SQL backend; omitting all three features produces a compile-time error.
+
+You also need a running server and a table to query. For this chapter, imagine a PostgreSQL database named `app` with a `teams` table:
 
 ```sql
 CREATE TABLE teams (
@@ -23,7 +25,7 @@ CREATE TABLE teams (
 );
 ```
 
-Canyon does not create this table in the ordinary application path. Create it with your usual schema tool before running the example.
+Create the table with your usual schema tool before running the example; Canyon does not create it in the ordinary application path.
 
 ## Start the runtime and Canyon
 
@@ -42,6 +44,6 @@ async fn main() -> CanyonResult<()> {
 
 `Canyon::init()` reads the configuration, opens the pools, and can be called again without replacing an initialized instance. Query methods require that initialization first.
 
-Canyon also offers `#[canyon_sql::main]` on `fn main()`. That macro creates its own Tokio runtime and initializes Canyon before the function body. It is convenient for a small program, but it panics if initialization fails; the explicit form above preserves the typed error. Do not put it on a function that is not named `main`.
+> **Shorter startup for small programs:** `#[canyon_sql::main]` on `fn main()` creates a Tokio runtime and initializes Canyon before the function body. It panics if initialization fails, whereas the explicit form above preserves the typed error. The attribute only works on a function named `main`.
 
 The next step is to tell Canyon [where the database lives](./the_configuration_file.md).

@@ -1,15 +1,23 @@
 # Introduction
 
-Most applications do not struggle with one SQL query. They struggle with the repetition around a hundred of them: opening connections, naming the same columns again, translating rows into Rust values, and keeping those pieces in step as the schema changes. Canyon-SQL takes that repetitive work and generates it from the model you write.
+Most applications do not struggle with one SQL query. They struggle with the repetition around a hundred of them: opening connections, naming columns again, translating rows into Rust values, and keeping everything in step as the schema changes.
 
-An entity in Canyon is an ordinary Rust struct annotated with its database identity. Derives add row mapping, CRUD operations, and typed field names. When the generated operations are too narrow, a query builder lets you compose SQL while keeping values separate from the statement. You can also use a connection directly for SQL that does not fit either path.
+Canyon-SQL takes that repetitive work and generates it from the model you write.
 
-Canyon is asynchronous and currently supports PostgreSQL, MySQL, and SQL Server. A project may enable more than one backend and configure several named datasources. The first active datasource is the default; an explicit connection or datasource name lets an operation use another one.
+An entity in Canyon is an ordinary Rust struct annotated with its database identity. From that model, Canyon gives you several ways to work:
 
-This book follows the route an application usually takes: connect, define a model, read and write data, then reach for relationships and more expressive queries. Later chapters cover typed errors, direct SQL, and repository adapters. The examples use the current API of Canyon-SQL 0.5.1 and return `CanyonResult` rather than hiding failures with `unwrap()`.
+- Derives for row mapping, CRUD operations, and typed field names.
+- A query builder for filters, joins, and other queries that need more shape.
+- Direct connections for SQL that does not fit either path.
 
-> Canyon's `migrations` feature is experimental and incomplete. It is not a production schema-management system. The [migrations chapter](./the_migrations.md) explains the present boundary; the rest of the book assumes tables already exist.
+Canyon is asynchronous and supports PostgreSQL, MySQL, and SQL Server. You can enable more than one backend and configure several named datasources. The first active datasource is the default; an explicit connection or datasource name lets an operation use another one.
 
-If you are new to Rust's asynchronous code, the [Async Book](https://rust-lang.github.io/async-book/) is useful background. You do not need to know how Canyon's procedural macros are implemented to use them, but it helps to remember that their generated code is still Rust: traits must be in scope, types must match, and a database error is not the same as an absent row.
+## Finding your way through the book
+
+Start by connecting to a database and defining a model. Then read and write rows, explore relationships, and build more expressive queries. The later chapters cover typed errors, direct SQL, and repository adapters. Examples use the Canyon-SQL 0.5.1 API and return `CanyonResult` so failures remain visible.
+
+> **About migrations:** Canyon's `migrations` feature is experimental and incomplete. It is not a production schema-management system. The [migrations chapter](./the_migrations.md) explains its current boundary; the rest of the book assumes tables already exist.
+
+> **New to async Rust?** The [Async Book](https://rust-lang.github.io/async-book/) is useful background. You need not know how Canyon's procedural macros are implemented, but their generated code is still Rust: traits must be in scope, types must match, and a database error is not an absent row.
 
 Canyon-SQL is [MIT licensed](https://github.com/zerodaycode/Canyon-SQL/blob/main/LICENSE). The [source repository](https://github.com/zerodaycode/Canyon-SQL) and [book repository](https://github.com/zerodaycode/canyon-book) welcome corrections, especially when an example drifts from a tested API.

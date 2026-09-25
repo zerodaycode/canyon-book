@@ -16,7 +16,12 @@ pub struct Team {
 }
 ```
 
-Each annotation has a different job. `#[canyon_entity]` identifies the physical table and registers runtime metadata. `CanyonMapper` converts driver rows to `Team`. `Crud` generates read, insert, update, and delete operations. `Fields` generates names and typed values for the query builder; it is not required for ordinary `find_all()` or `insert()` calls.
+Each annotation has a different job:
+
+- `#[canyon_entity]` identifies the physical table and registers runtime metadata.
+- `CanyonMapper` converts driver rows to `Team`.
+- `Crud` generates read, insert, update, and delete operations.
+- `Fields` generates names and typed values for the query builder. Ordinary `find_all()` or `insert()` calls do not need it.
 
 ## Table names and schemas
 
@@ -41,14 +46,22 @@ Use the non-incrementing form when your application supplies the key. Without a 
 
 ## What `Fields` generates
 
-For `Team`, the derive exposes `TeamTable`, `TeamField`, and `TeamFieldValue`. The first represents table metadata; the second names columns, for example `TeamField::name`; the third couples a column to a value of that field's Rust type, for example `TeamFieldValue::name("Blue".to_owned())`. These are distinct because a join or an order clause needs a column, while a predicate also needs a value.
+For `Team`, the derive exposes three types:
+
+- `TeamTable` represents table metadata.
+- `TeamField` names a column, for example `TeamField::name`. Joins and ordering need this form.
+- `TeamFieldValue` pairs a column with a value of its Rust type, for example `TeamFieldValue::name("Blue".to_owned())`. Predicates need both pieces.
 
 `Fields` is the supported API today, and several models may derive it in one Rust module. A future major Canyon version may move toward typed column descriptors instead of these enums. That is a direction under consideration, not a removal scheduled for this release. The [query-builder chapter](./querybuilder.md) shows how the enums work now.
 
 ## Mapping failures are real errors
 
-A database row can contain extra columns; the derived mapper only reads the fields declared on the struct. But a required column that is missing, an unexpected `NULL`, or a value that cannot be converted to its Rust type produces a `CanyonError::Mapping`. It should not silently become an empty result. Use `Option<T>` on a model field when the SQL column is nullable.
+A database row can contain extra columns; the derived mapper only reads the fields declared on the struct. But a missing required column, an unexpected `NULL`, or an incompatible value produces a `CanyonError::Mapping`. It does not silently become an empty result.
+
+> **Nullable column?** Use `Option<T>` on the model field when the SQL column can contain `NULL`.
 
 The next chapter uses `Team` to read and write rows. When code examples omit its definition, they refer to the model above.
 
-If a derived mapper cannot represent a specialized projection, `canyon_sql::core::RowMapper` is the lower-level contract. Its backend-specific deserialization methods return `CanyonResult` and let you supply your own mapping rules. Implementing it by hand is an advanced choice: it makes you responsible for column names, nullability, and conversion errors on every enabled backend. Start with `CanyonMapper` unless the row shape genuinely demands something else.
+If a derived mapper cannot represent a specialized projection, `canyon_sql::core::RowMapper` is the lower-level contract. Its backend-specific deserialization methods return `CanyonResult` and let you supply your own mapping rules.
+
+Implementing it by hand makes you responsible for column names, nullability, and conversion errors on every enabled backend. Start with `CanyonMapper` unless the row shape genuinely demands something else.
