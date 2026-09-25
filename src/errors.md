@@ -25,8 +25,14 @@ match Team::find_by_pk(&42_i64).await {
 }
 ```
 
-`find_all()` uses an empty vector for no rows. A relationship parent lookup returns `Ok(None)`, and a reverse child lookup returns an empty vector. The mapper does not turn missing columns, unexpected `NULL` values, or incompatible types into absence.
+The return type tells you what “nothing found” means:
 
-Handle a `QueryBuilder` error before executing anything. In particular, an empty `IN` list or a duplicated `SET` is rejected as a construction problem. This keeps invalid SQL from reaching a driver, but a valid builder cannot guarantee your schema or permissions are correct.
+- **A list lookup** — `find_all()` or `Player::find_all_by_team(&team)` — succeeds with an empty `Vec` when there are no matching rows. Looping over it simply does nothing.
+- **A single-row lookup** — `find_by_pk()` or `player.find_team()` — succeeds with `Ok(None)` when no row matches. Decide at the call site whether that is acceptable or should become an application-level “not found” error.
+- **A scalar lookup** such as `query_one_for()` expects a value. No row is reported as an error; there is no `Option` in its return type.
+
+None of these rules excuses a broken row. If a selected column is missing, unexpectedly `NULL`, or has an incompatible type, mapping returns `Err(CanyonError::Mapping(...))`. Check the error rather than treating it as an empty result.
+
+An empty `IN` list or a duplicated `SET` fails while building the query, before any SQL reaches the driver. A builder can reject those malformed shapes; it cannot check that your live schema has the selected columns or that the connection has permission to use them.
 
 When an application needs its own error type, convert `CanyonError` at the boundary where it has context—an HTTP handler, service, or repository. Preserve the original source for logs and diagnostics rather than replacing it with a generic string.

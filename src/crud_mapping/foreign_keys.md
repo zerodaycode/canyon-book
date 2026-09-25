@@ -37,7 +37,12 @@ let children_on_other_db =
     Player::find_all_by_team_with(&team, "reporting").await?;
 ```
 
-No matching parent is `Ok(None)`; no matching children is `Ok(vec![])`. A failed query or mapping operation remains an error. The `_with` variants also accept a compatible connection.
+The two directions have different return shapes:
+
+- `player.find_team()` looks for one parent: `Ok(None)` means the lookup found none.
+- `Player::find_all_by_team(&team)` looks for children: `Ok(vec![])` means there are none.
+
+A query or mapping failure is an error in either direction. The `_with` variants also accept a compatible connection.
 
 The referenced field need not be the parent's primary key, but it should identify the parent as your schema intends—normally through a unique constraint. A fully qualified path works too:
 

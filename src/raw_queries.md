@@ -14,11 +14,27 @@ let team: Option<Team> = connection
     .await?;
 ```
 
-`query::<_, Team>(sql, params)` maps many rows to a `Vec<Team>`. `query_one::<Team>` maps zero or one row to `Option<Team>`. `query_one_for::<i64>` reads one scalar value, and `execute` returns a `u64` affected-row count. These methods return `CanyonResult`, so driver errors and mapping errors remain visible.
+Choose the call by the shape you expect back:
 
-For a query whose shape is not yet represented by a model, `query_rows` returns `CanyonRows`, a wrapper over the active driver's rows. Its `len()`, `is_empty()`, and `get_row_at()` inspect the result. `first::<Team>()` maps the first row and returns `CanyonResult<Option<Team>>`, preserving the difference between an empty result and a failed conversion. Backend-specific row accessors exist for advanced cases and return a mapping error if used with the wrong backend.
+| Call | Result on success |
+| --- | --- |
+| `query::<_, Team>(sql, params)` | All mapped rows, as `Vec<Team>` |
+| `query_one::<Team>(sql, params)` | One mapped row or `None` |
+| `query_one_for::<i64>(sql, params)` | One scalar value |
+| `execute(sql, params)` | Number of affected rows, as `u64` |
 
-Advanced users who depend on `canyon_core` directly can use `canyon_core::row::RowExt` at the individual-row level; the root `canyon_sql` crate does not currently re-export this trait. Its `get_postgres`, `get_mysql`, and `get_mssql` methods read a required value; the corresponding `_opt` methods read a nullable value. They return `CanyonResult` rather than panicking when a column is absent, unexpectedly `NULL`, or incompatible with the requested Rust type. These are lower-level escape hatches, not a replacement for `CanyonMapper` on a normal entity.
+All four return `CanyonResult`, so driver and mapping failures remain visible.
+
+For a query whose shape is not yet represented by a model, `query_rows` returns `CanyonRows`, a wrapper over the active driver's rows. Use `len()`, `is_empty()`, or `get_row_at()` to inspect them. `first::<Team>()` maps the first row and returns `CanyonResult<Option<Team>>`: `None` means there was no first row; `Err` means mapping failed.
+
+Backend-specific row accessors are available for advanced cases. Calling one for the wrong backend returns a mapping error.
+
+Advanced users who depend on `canyon_core` directly can use `canyon_core::row::RowExt` at the individual-row level; the root `canyon_sql` crate does not currently re-export it.
+
+- `get_postgres`, `get_mysql`, and `get_mssql` read required values.
+- Their `_opt` counterparts read nullable values.
+
+All return `CanyonResult`. A missing column or incompatible type is an error; the required getters also reject `NULL`, while the `_opt` getters represent it as `None`. These are lower-level escape hatches, not a replacement for `CanyonMapper` on a normal entity.
 
 Values should be passed as parameters rather than interpolated into SQL. Backend syntax and identifier quoting remain your responsibility for handwritten statements. The parameterized query builder performs those steps for the SQL it generates.
 

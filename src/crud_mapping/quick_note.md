@@ -9,7 +9,7 @@ let default_teams: Vec<Team> = Team::find_all().await?;
 let analytics_teams: Vec<Team> = Team::find_all_with("analytics").await?;
 ```
 
-The same pattern applies to `find_by_pk_with`, `count_with`, `insert_with`, `update_with`, and `delete_with`. A misspelled name produces `ConnectionError::DatasourceNotFound` rather than quietly falling back to the default.
+You will find the same `_with` form on `find_by_pk`, `count`, `insert`, `update`, and `delete`. A misspelled name produces `ConnectionError::DatasourceNotFound`; Canyon does not quietly fall back to the default.
 
 Query builders need one extra distinction. `Team::select_query_with(DatabaseType::MySQL)` chooses the SQL *dialect*; it does not select a connection. Build the query, then execute it with `launch_with("mysql_datasource")`. When using `select_query()` and `launch_default()` together, both target the default datasource.
 

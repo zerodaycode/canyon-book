@@ -10,7 +10,13 @@ let team: Option<Team> = Team::find_by_pk(&42_i64).await?;
 let total: i64 = Team::count().await?;
 ```
 
-`find_all()` reads every mapped row. `count()` returns the number of rows as `i64`. `find_by_pk()` uses the field annotated with `#[primary_key]`; its argument is borrowed because Canyon binds it as a query parameter. It returns `Ok(None)` if no row matches. A missing table, failed connection, or failed row conversion is an `Err` instead.
+These methods answer different questions:
+
+- `find_all()` reads every mapped row; no matches gives you an empty `Vec<Team>`.
+- `count()` returns the row count as `i64`.
+- `find_by_pk()` binds the borrowed key from `#[primary_key]` and returns `Ok(None)` if it finds no row.
+
+A missing table, failed connection, or failed row conversion is an `Err`, not an empty result.
 
 Each function has a `_with` counterpart for a named datasource or compatible connection:
 

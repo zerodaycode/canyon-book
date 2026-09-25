@@ -25,7 +25,9 @@ let teams: Vec<Team> = Team::select_query()?
     .await?;
 ```
 
-`where_value` receives a generated `FieldValue` and collects its value as a bound parameter. Keep `name` alive until the query is built and executed. `and` and `or` add further conditions. `and_values_in` and `or_values_in` accept a `Field` and a non-empty slice of values; an empty list is a `QueryBuilderError::EmptyInClause`.
+`where_value` receives a generated `FieldValue` and collects its value as a bound parameter. Keep `name` alive until the query is built and executed.
+
+For more conditions, use `and` or `or`. The `and_values_in` and `or_values_in` methods take a `Field` and a non-empty slice of values; an empty slice produces `QueryBuilderError::EmptyInClause`.
 
 The lower-level `r#where(column, operator)` adds a placeholder **without** collecting a value. Prefer `where_value` for ordinary application code; with `r#where`, you must provide the matching parameter when executing the SQL yourself.
 
@@ -56,7 +58,9 @@ let query = Team::select_query()?
 println!("{}", query.sql());
 ```
 
-This example assumes the `Player` model from [Relationships](./crud_mapping/foreign_keys.md). A join can return more columns than `Team` declares; the mapper ignores extras, but it cannot invent required missing fields. When you need values from both tables, map the intended projection into an appropriate result type. Be explicit about selected columns when names overlap.
+This example assumes the `Player` model from [Relationships](./crud_mapping/foreign_keys.md). A join can return more columns than `Team` declares: the mapper ignores extras, but it cannot invent required missing fields.
+
+If you need values from both tables, map that projection into an appropriate result type. Select columns explicitly when their names overlap.
 
 ## Updates and deletes
 
@@ -85,10 +89,14 @@ let affected = connection.execute(query.sql(), query.params()).await?;
 
 `delete_query()?` uses the shared `QueryBuilderExt` predicates; add a `WHERE` condition before executing unless you truly intend to delete every row. `execute` returns the affected-row count. For single-row changes identified by a model's key, `update()` and `delete()` are simpler.
 
-There is also a lower-level `InsertQueryBuilder` for cases where a generated entity insert is not suitable. Construct it with a table and `DatabaseType`, then use `InsertQueryBuilderExt::with_columns`, `with_values`, and optionally `returning` before `build()`. The explicit column list and bound-value count must match. Ordinary entity inserts should use `insert()` or `insert_with()`; there is no generated `insert_query()` method on `Crud`.
+There is also a lower-level `InsertQueryBuilder` when a generated entity insert is not suitable. Construct it with a table and `DatabaseType`, then add columns with `InsertQueryBuilderExt::with_columns`, values with `with_values`, and optionally `returning` before `build()`.
+
+The column list and bound-value count must match. For an ordinary entity insert, use `insert()` or `insert_with()`; `Crud` does not generate an `insert_query()` method.
 
 ## Dialect and connection are separate choices
 
-`Team::select_query_with(DatabaseType::MySQL)?` chooses MySQL SQL syntax. It does not connect to MySQL. After `build()`, use `launch_with("mysql_datasource")` to execute on the matching datasource. The `Query` also exposes `sql()` and `params()` for inspection or direct execution. Do not send SQL generated for one dialect to another backend.
+`Team::select_query_with(DatabaseType::MySQL)?` chooses MySQL SQL syntax; it does **not** connect to MySQL. After `build()`, use `launch_with("mysql_datasource")` to execute on a matching datasource.
+
+The `Query` exposes `sql()` and `params()` for inspection or direct execution. Do not send SQL generated for one dialect to another backend.
 
 For operations outside these patterns, use [a connection directly](./raw_queries.md). The builder validates known mistakes, but it does not prove that every selected table or column exists in your live schema.

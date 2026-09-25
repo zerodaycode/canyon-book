@@ -57,7 +57,12 @@ async fn main() -> CanyonResult<()> {
 }
 ```
 
-The Rust relationship annotation gives Canyon enough metadata to generate the child lookup. The SQL `REFERENCES` clause is separate: it makes the database enforce integrity. If a team has no players, its lookup returns an empty vector. If the connection or mapping fails, `?` returns the typed error to `main`.
+Two different things describe the relationship here:
+
+- `#[foreign_key(references = Team::id)]` generates the Rust lookup methods.
+- `REFERENCES teams(id)` makes PostgreSQL enforce the relationship.
+
+A team with no players gets an empty vector. A connection or mapping failure reaches `main` through `?` instead.
 
 From here, a filtered read uses `Team::select_query()?` and the generated `TeamFieldValue` type; a write uses the `Insert`, `Update`, or `Delete` traits. If the service grows a repository boundary, the [adapter chapter](./repository_adapters.md) shows how to keep persistence operations off the model itself.
 

@@ -10,7 +10,9 @@ cargo test -p tests --test compile_tests --features postgres
 
 At least one SQL backend feature is required. A bare `cargo test --workspace` is expected to fail with Canyon's explicit compile-time backend diagnostic; it is not the command for testing all supported engines.
 
-The source integration tests commonly use `#[canyon_sql::macros::canyon_tokio_test]` on a synchronous `fn`. The macro creates a test, starts Canyon's Tokio runtime, initializes the configured datasources, and runs the body as async code. Initialization or a returned body error fails the test. It is useful for Canyon's own tests, but it still needs the relevant database fixtures to be available.
+The source integration tests commonly put `#[canyon_sql::macros::canyon_tokio_test]` on a synchronous `fn`. It turns the function into a test, starts Canyon's Tokio runtime, initializes the configured datasources, and runs the body as async code.
+
+Initialization or a returned body error fails the test. The macro handles setup, but it cannot replace the database fixtures those tests need.
 
 The integration tests use the Docker setup in `docker/docker-compose.yml`. PostgreSQL and MySQL load their test data at container startup. The SQL Server fixture needs its ignored initializer:
 
