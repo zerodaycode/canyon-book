@@ -2,7 +2,7 @@
 
 A model that derives `Crud` is convenient when the model itself owns database operations. Some applications instead separate domain data from the component that persists it. Canyon supports that shape without requiring a second copy of the entity fields.
 
-The mapped entity needs `CanyonMapper`. This example also uses `#[canyon_entity]` for its table name and primary-key annotation; the [entity chapter](./canyon_entities.md#when-do-you-need-canyon_entity) explains when the attribute is needed:
+`Team` is the mapped row type. `CanyonMapper` reads rows into it; `#[canyon_entity]` sets its physical table name and handles the primary-key annotation:
 
 ```rust
 #[derive(Debug, CanyonMapper)]
@@ -14,7 +14,7 @@ pub struct Team {
 }
 ```
 
-An adapter can derive only the operations it intends to expose. The `maps_to` annotation binds those generated operations to `Team`:
+`TeamWriter` is an adapter, not a second database entity. It derives only the operations it needs, and `maps_to` names the `Team` values those operations receive:
 
 ```rust
 use canyon_sql::macros::{
@@ -28,6 +28,10 @@ pub struct TeamWriter {
     marker: (),
 }
 ```
+
+That second `table_name` looks wrong because, conceptually, it is. `maps_to = Team` selects the Rust type, but the adapter derives still resolve the SQL table separately. Without the override on `TeamWriter`, they would infer `team`, not the actual table `teams`.
+
+> **Current limitation:** `TeamWriter` does not represent another database table. The repeated name works around a gap in the adapter macros; keep both names in sync until those macros use `Team`'s table metadata.
 
 With the matching traits in scope, it accepts a `Team` passed to the operation rather than persisting `self`:
 
