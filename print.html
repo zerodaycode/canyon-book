@@ -1,0 +1,864 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Canyon-SQL Book</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Install Canyon</a></li><li class="chapter-item expanded "><a href="getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> Configure datasources</a></li><li class="chapter-item expanded "><a href="getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> Prepare a database</a></li></ol></li><li class="chapter-item expanded "><a href="canyon_entities.html"><strong aria-hidden="true">2.</strong> Entities and mapping</a></li><li class="chapter-item expanded "><a href="crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> Working with data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Choosing a datasource</a></li><li class="chapter-item expanded "><a href="crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Read</a></li><li class="chapter-item expanded "><a href="crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="crud_mapping/foreign_keys.html"><strong aria-hidden="true">3.6.</strong> Relationships</a></li></ol></li><li class="chapter-item expanded "><a href="querybuilder.html"><strong aria-hidden="true">4.</strong> Build a query</a></li><li class="chapter-item expanded "><a href="raw_queries.html"><strong aria-hidden="true">5.</strong> Run SQL directly</a></li><li class="chapter-item expanded "><a href="errors.html"><strong aria-hidden="true">6.</strong> Handle errors</a></li><li class="chapter-item expanded "><a href="api_reference.html"><strong aria-hidden="true">7.</strong> API map</a></li><li class="chapter-item expanded "><a href="repository_adapters.html"><strong aria-hidden="true">8.</strong> Repository adapters</a></li><li class="chapter-item expanded "><a href="the_migrations.html"><strong aria-hidden="true">9.</strong> Migrations: experimental</a></li><li class="chapter-item expanded "><a href="testing.html"><strong aria-hidden="true">10.</strong> Test and contribute</a></li><li class="chapter-item expanded "><a href="real_world_example.html"><strong aria-hidden="true">11.</strong> A complete example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon-SQL Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Most applications do not struggle with one SQL query. They struggle with the repetition around a hundred of them: opening connections, naming columns again, translating rows into Rust values, and keeping everything in step as the schema changes.</p>
+<p>Canyon-SQL takes that repetitive work and generates it from the model you write.</p>
+<p>An entity in Canyon is an ordinary Rust struct annotated with its database identity. From that model, Canyon gives you several ways to work:</p>
+<ul>
+<li>Derives for row mapping, CRUD operations, and typed field names.</li>
+<li>A query builder for filters, joins, and other queries that need more shape.</li>
+<li>Direct connections for SQL that does not fit either path.</li>
+</ul>
+<p>Canyon is asynchronous and supports PostgreSQL, MySQL, and SQL Server. You can enable more than one backend and configure several named datasources. The first active datasource is the default; an explicit connection or datasource name lets an operation use another one.</p>
+<h2 id="finding-your-way-through-the-book"><a class="header" href="#finding-your-way-through-the-book">Finding your way through the book</a></h2>
+<p>Start by connecting to a database and defining a model. Then read and write rows, explore relationships, and build more expressive queries. The later chapters cover typed errors, direct SQL, and repository adapters. Examples use the Canyon-SQL 0.5.1 API and return <code>CanyonResult</code> so failures remain visible.</p>
+<blockquote>
+<p><strong>About migrations:</strong> Canyon's <code>migrations</code> feature is experimental and incomplete. It is not a production schema-management system. The <a href="./the_migrations.html">migrations chapter</a> explains its current boundary; the rest of the book assumes tables already exist.</p>
+</blockquote>
+<blockquote>
+<p><strong>New to async Rust?</strong> The <a href="https://rust-lang.github.io/async-book/">Async Book</a> is useful background. You need not know how Canyon's procedural macros are implemented, but their generated code is still Rust: traits must be in scope, types must match, and a database error is not an absent row.</p>
+</blockquote>
+<p>Canyon-SQL is <a href="https://github.com/zerodaycode/Canyon-SQL/blob/main/LICENSE">MIT licensed</a>. The <a href="https://github.com/zerodaycode/Canyon-SQL">source repository</a> and <a href="https://github.com/zerodaycode/canyon-book">book repository</a> welcome corrections, especially when an example drifts from a tested API.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
+<p>We will use PostgreSQL for the first working example. The same model code can be used with MySQL or SQL Server; the Cargo feature and datasource configuration decide which driver Canyon uses.</p>
+<p>To get a query running, you need:</p>
+<ol>
+<li>A project with a SQL backend <a href="getting_started/./initial_setup.html">enabled</a>.</li>
+<li>A datasource in <a href="getting_started/./the_configuration_file.html"><code>canyon.toml</code></a>.</li>
+<li>A <a href="getting_started/./configuring_the_database.html">table</a> that matches the Rust model.</li>
+</ol>
+<p>Once these are in place, <code>Canyon::init().await?</code> opens the configured pools and the model can query the database.</p>
+<blockquote>
+<p><strong>Already have a database?</strong> Use your own connection details and existing table. None of these steps requires Canyon's experimental migrations feature.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="install-canyon"><a class="header" href="#install-canyon">Install Canyon</a></h1>
+<p>Add Canyon to your application's <code>Cargo.toml</code> and enable a SQL backend. This example uses PostgreSQL:</p>
+<pre><code class="language-toml">[dependencies]
+canyon_sql = { version = &quot;0.5.1&quot;, features = [&quot;postgres&quot;] }
+tokio = { version = &quot;1&quot;, features = [&quot;macros&quot;, &quot;rt-multi-thread&quot;] }
+</code></pre>
+<p>The backend features are <code>postgres</code>, <code>mysql</code>, and <code>mssql</code>. Replace <code>postgres</code> with the one you need. A binary that talks to more than one kind of database can enable several:</p>
+<pre><code class="language-toml">canyon_sql = { version = &quot;0.5.1&quot;, features = [&quot;postgres&quot;, &quot;mysql&quot;, &quot;mssql&quot;] }
+</code></pre>
+<blockquote>
+<p><strong>At least one backend is required.</strong> Canyon has no default SQL backend; omitting all three features produces a compile-time error.</p>
+</blockquote>
+<p>You also need a running server and a table to query. For this chapter, imagine a PostgreSQL database named <code>app</code> with a <code>teams</code> table:</p>
+<pre><code class="language-sql">CREATE TABLE teams (
+    id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL
+);
+</code></pre>
+<p>Create the table with your usual schema tool before running the example; Canyon does not create it in the ordinary application path.</p>
+<h2 id="start-the-runtime-and-canyon"><a class="header" href="#start-the-runtime-and-canyon">Start the runtime and Canyon</a></h2>
+<p>The explicit startup form gives your application a chance to report a configuration or connection error:</p>
+<pre><pre class="playground"><code class="language-rust">use canyon_sql::{core::Canyon, CanyonResult};
+
+#[tokio::main]
+async fn main() -&gt; CanyonResult&lt;()&gt; {
+    Canyon::init().await?;
+    // Queries can run here.
+    Ok(())
+}
+</code></pre></pre>
+<p><code>Canyon::init()</code> reads the configuration, opens the pools, and can be called again without replacing an initialized instance. Query methods require that initialization first.</p>
+<blockquote>
+<p><strong>Shorter startup for small programs:</strong> <code>#[canyon_sql::main]</code> on <code>fn main()</code> creates a Tokio runtime and initializes Canyon before the function body. It panics if initialization fails, whereas the explicit form above preserves the typed error. The attribute only works on a function named <code>main</code>.</p>
+</blockquote>
+<p>The next step is to tell Canyon <a href="getting_started/./the_configuration_file.html">where the database lives</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configure-datasources"><a class="header" href="#configure-datasources">Configure datasources</a></h1>
+<p>A datasource is a named connection to one database. Canyon reads datasources from a TOML file whose name starts with <code>canyon</code> and ends with <code>.toml</code>.</p>
+<p>It searches the current working directory and its immediate descendants, to a maximum depth of two. Keep one matching file in that area; otherwise the first file found may not be the one you intended.</p>
+<h2 id="your-first-datasource"><a class="header" href="#your-first-datasource">Your first datasource</a></h2>
+<p>For the PostgreSQL example, put this in <code>canyon.toml</code> where you run the application:</p>
+<pre><code class="language-toml">[canyon_sql]
+
+[[canyon_sql.datasources]]
+name = &quot;main&quot;
+
+[canyon_sql.datasources.auth]
+postgresql = { basic = { username = &quot;postgres&quot;, password = &quot;postgres&quot; } }
+
+[canyon_sql.datasources.properties]
+host = &quot;localhost&quot;
+port = 5432
+db_name = &quot;app&quot;
+</code></pre>
+<p>The first active datasource becomes the default for calls such as <code>Team::find_all()</code>. Give every additional datasource a distinct <code>name</code> and use an operation's <code>_with</code> form to select it.</p>
+<blockquote>
+<p><strong>Backend features matter here too:</strong> A datasource for a backend that was not enabled at compile time is ignored. If none remain, there is no usable default connection.</p>
+</blockquote>
+<p>All three backends currently use <code>basic</code> username/password authentication. The keys and standard ports are:</p>
+<table><thead><tr><th>Backend</th><th>Authentication key</th><th align="right">Standard port</th></tr></thead><tbody>
+<tr><td>PostgreSQL</td><td><code>postgresql</code> (or <code>postgres</code>)</td><td align="right">5432</td></tr>
+<tr><td>MySQL</td><td><code>mysql</code></td><td align="right">3306</td></tr>
+<tr><td>SQL Server</td><td><code>sqlserver</code> (or <code>mssql</code>)</td><td align="right">1433</td></tr>
+</tbody></table>
+<p><code>host</code> and <code>db_name</code> are required; <code>port</code> is optional.</p>
+<h2 id="add-another-database"><a class="header" href="#add-another-database">Add another database</a></h2>
+<p>A second datasource follows the same shape. For example, a MySQL connection alongside <code>main</code> could be declared as:</p>
+<pre><code class="language-toml">[[canyon_sql.datasources]]
+name = &quot;analytics&quot;
+
+[canyon_sql.datasources.auth]
+mysql = { basic = { username = &quot;reporter&quot;, password = &quot;replace-me&quot; } }
+
+[canyon_sql.datasources.properties]
+host = &quot;localhost&quot;
+port = 3306
+db_name = &quot;analytics&quot;
+</code></pre>
+<p>For SQL Server, change the auth key to <code>sqlserver</code>, supply its credentials and database name, and choose a TLS policy appropriate to the server. Both examples require the matching Cargo backend feature to be enabled.</p>
+<h2 id="connection-pools"><a class="header" href="#connection-pools">Connection pools</a></h2>
+<p>You can tune each connection pool separately:</p>
+<pre><code class="language-toml">[canyon_sql.datasources.properties.pool]
+min_size = 2
+max_size = 10
+</code></pre>
+<p>These are also the defaults. <code>max_size</code> must be greater than zero and no smaller than <code>min_size</code>; Canyon returns a configuration error for invalid bounds.</p>
+<h2 id="sql-server-tls"><a class="header" href="#sql-server-tls">SQL Server TLS</a></h2>
+<p>Set <code>mssql_tls</code> under <code>[canyon_sql.datasources.properties]</code>:</p>
+<ul>
+<li><code>&quot;required&quot;</code> (the default) encrypts and validates the server certificate.</li>
+<li><code>&quot;trust_server_certificate&quot;</code> encrypts without validating the certificate.</li>
+<li><code>&quot;disabled&quot;</code> turns encryption off.</li>
+</ul>
+<blockquote>
+<p><strong>For local tests only:</strong> The repository's Docker fixture uses <code>&quot;disabled&quot;</code>. Outside a controlled test environment, prefer a valid certificate with <code>&quot;required&quot;</code>.</p>
+</blockquote>
+<h2 id="credentials-are-application-secrets"><a class="header" href="#credentials-are-application-secrets">Credentials are application secrets</a></h2>
+<blockquote>
+<p><strong>Keep credentials private:</strong> The values above are examples. A real <code>canyon.toml</code> contains credentials; do not publish it or commit production passwords. Arrange file permissions and deployment accordingly.</p>
+</blockquote>
+<p>If Canyon cannot find, read, or parse the file, <code>Canyon::init()</code> returns a typed configuration error. If it can read the file but cannot open a datasource, it returns a connection error. The <a href="getting_started/../errors.html">error chapter</a> shows how to distinguish them.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="prepare-a-database"><a class="header" href="#prepare-a-database">Prepare a database</a></h1>
+<p>Canyon maps existing tables; the ordinary CRUD path does not provision your schema. The PostgreSQL <code>teams</code> table in the <a href="getting_started/./initial_setup.html">installation example</a> has an identity key and a non-null name, matching the model in the next chapter.</p>
+<p>If your table uses different names, tell Canyon with <code>#[canyon_entity(table_name = &quot;...&quot;, schema = &quot;...&quot;)]</code>.</p>
+<h2 id="canyons-test-databases"><a class="header" href="#canyons-test-databases">Canyon's test databases</a></h2>
+<p>For local development of Canyon itself, the source repository includes a Docker Compose setup with PostgreSQL, MySQL, and SQL Server:</p>
+<pre><code class="language-sh">docker compose -f docker/docker-compose.yml up -d --wait
+</code></pre>
+<p>The PostgreSQL and MySQL fixtures are loaded by their container startup scripts. SQL Server needs an additional, ignored initializer test:</p>
+<pre><code class="language-sh">cargo test -p tests --test canyon_integration_tests --all-features \
+  initialize_sql_server_docker_instance -- --ignored --test-threads=1
+</code></pre>
+<p>These commands belong to a checkout of the <a href="https://github.com/zerodaycode/Canyon-SQL">Canyon-SQL source repository</a>, not to an application that depends on the published crate. The test datasource settings live in <code>tests/canyon.toml</code> and use local-only credentials and TLS choices.</p>
+<blockquote>
+<p><strong>Migrations remain <a href="getting_started/../the_migrations.html">experimental</a>.</strong> Do not enable them just to make the examples in this book work. Create your tables with a schema tool you trust, then let Canyon read and write the rows.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="entities-and-mapping"><a class="header" href="#entities-and-mapping">Entities and mapping</a></h1>
+<p>A Canyon entity is a Rust struct whose fields describe a database row. It is not a second schema language: the table must exist, and the Rust field names and types must agree with the columns you intend to read.</p>
+<p>For the <code>teams</code> table from the previous chapter:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::macros::{canyon_entity, CanyonMapper, Crud, Fields};
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+pub struct Team {
+    #[primary_key]
+    pub id: i64,
+    pub name: String,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Each annotation has a different job:</p>
+<ul>
+<li><code>#[canyon_entity]</code> supplies optional table/schema overrides and registers the struct for the experimental migrations machinery. It also processes field annotations such as <code>#[primary_key]</code> and <code>#[foreign_key]</code> in the current macro setup.</li>
+<li><code>CanyonMapper</code> converts driver rows to <code>Team</code>.</li>
+<li><code>Crud</code> generates read, insert, update, and delete operations.</li>
+<li><code>Fields</code> generates names and typed values for the query builder. Ordinary <code>find_all()</code> or <code>insert()</code> calls do not need it.</li>
+</ul>
+<h2 id="when-do-you-need-canyon_entity"><a class="header" href="#when-do-you-need-canyon_entity">When do you need <code>#[canyon_entity]</code>?</a></h2>
+<p>The attribute is <strong>not</strong> what makes every Canyon derive work. Without it, <code>CanyonMapper</code>, CRUD derives, and <code>Fields</code> can infer a table name from the Rust type. For a plain model with no field annotations and a conventional table name, that default is enough.</p>
+<p>Use <code>#[canyon_entity]</code> when:</p>
+<ul>
+<li>The physical table or schema differs from the inferred name: pass <code>table_name = &quot;...&quot;</code> or <code>schema = &quot;...&quot;</code>.</li>
+<li>You annotate fields with Canyon markers such as <code>#[primary_key]</code> or <code>#[foreign_key(...)]</code>. The current attribute macro processes these markers; keep it on models that use them.</li>
+</ul>
+<p>The attribute also registers an entity for the <strong>experimental</strong> migrations feature. That is an implementation detail today, not a reason to enable migrations for normal CRUD.</p>
+<p>The derives read table metadata from the struct's attributes or fall back to the inferred name. Ordinary query execution does not consult a runtime entity registry.</p>
+<h2 id="table-names-and-schemas"><a class="header" href="#table-names-and-schemas">Table names and schemas</a></h2>
+<p>Without an explicit name, Canyon derives a snake_case table name from the Rust type: <code>TournamentDetails</code> maps to <code>tournament_details</code>. Existing schemas do not always follow that rule. Use explicit metadata when they do not:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[canyon_entity(table_name = &quot;tournament_entries&quot;, schema = &quot;public&quot;)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>That metadata is used by generated CRUD and relationship operations. It is better to state a non-standard physical name once than to repeat a string in every query.</p>
+<h2 id="primary-keys"><a class="header" href="#primary-keys">Primary keys</a></h2>
+<p><code>#[primary_key]</code> identifies the field used by key-based reads, updates, and deletes. For a numeric key, it is treated as database-generated and auto-incrementing unless you say otherwise. After a successful <code>insert(&amp;mut self)</code>, Canyon writes the generated key back to the Rust instance.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[primary_key(autoincremental = false)]
+pub external_id: i64,
+<span class="boring">}
+</span></code></pre></pre>
+<p>Use the non-incrementing form when your application supplies the key. Without a primary-key annotation, methods that need a key cannot perform their normal operation and return a typed query-builder error. A mapper can still represent tables without one.</p>
+<h2 id="what-fields-generates"><a class="header" href="#what-fields-generates">What <code>Fields</code> generates</a></h2>
+<p>For <code>Team</code>, the derive exposes three types:</p>
+<ul>
+<li><code>TeamTable</code> represents table metadata.</li>
+<li><code>TeamField</code> names a column, for example <code>TeamField::name</code>. Joins and ordering need this form.</li>
+<li><code>TeamFieldValue</code> pairs a column with a value of its Rust type, for example <code>TeamFieldValue::name(&quot;Blue&quot;.to_owned())</code>. Predicates need both pieces.</li>
+</ul>
+<p><code>Fields</code> is the supported API today, and several models may derive it in one Rust module. A future major Canyon version may move toward typed column descriptors instead of these enums. That is a direction under consideration, not a removal scheduled for this release.</p>
+<p>The <a href="./querybuilder.html">query-builder chapter</a> shows how the enums work now.</p>
+<h2 id="mapping-failures-are-real-errors"><a class="header" href="#mapping-failures-are-real-errors">Mapping failures are real errors</a></h2>
+<p>A database row can contain extra columns; the derived mapper only reads the fields declared on the struct. But a missing required column, an unexpected <code>NULL</code>, or an incompatible value produces a <code>CanyonError::Mapping</code>. It does not silently become an empty result.</p>
+<blockquote>
+<p><strong>Nullable column?</strong> Use <code>Option&lt;T&gt;</code> on the model field when the SQL column can contain <code>NULL</code>.</p>
+</blockquote>
+<p>The next chapter uses <code>Team</code> to read and write rows. When code examples omit its definition, they refer to the model above.</p>
+<p>If a derived mapper cannot represent a specialized projection, <code>canyon_sql::core::RowMapper</code> is the lower-level contract. Its backend-specific deserialization methods return <code>CanyonResult</code> and let you supply your own mapping rules.</p>
+<p>Implementing it by hand makes you responsible for column names, nullability, and conversion errors on every enabled backend. Start with <code>CanyonMapper</code> unless the row shape genuinely demands something else.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="working-with-data"><a class="header" href="#working-with-data">Working with data</a></h1>
+<p>Once an entity and <code>CanyonMapper</code> are in place, Canyon can perform the common database operations without a handwritten SQL statement. The <code>Crud</code> derive is the convenient choice when you want the complete set:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+pub struct Team {
+    #[primary_key]
+    pub id: i64,
+    pub name: String,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>You can derive only the operations a model or adapter should expose:</p>
+<ul>
+<li><code>Read</code> for lookups.</li>
+<li><code>Insert</code> for new rows.</li>
+<li><code>Update</code> for changes.</li>
+<li><code>Delete</code> for removals.</li>
+</ul>
+<p>The matching trait from <code>canyon_sql::crud</code> must be in scope when you call its methods.</p>
+<p>All database calls are asynchronous and return <code>CanyonResult&lt;T&gt;</code>. An empty result is not a failed query: <code>find_all()</code> returns an empty vector, while <code>find_by_pk()</code> returns <code>Ok(None)</code>.</p>
+<blockquote>
+<p><strong>Absence is not failure:</strong> Errors remain errors, with the driver source preserved when there is one.</p>
+</blockquote>
+<p>The following chapters start with the simplest operation and move toward writes and relationships. The query builder comes afterward, where it is easier to see what it adds.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="choosing-a-datasource"><a class="header" href="#choosing-a-datasource">Choosing a datasource</a></h1>
+<p>Every operation without <code>_with</code> uses the first active datasource in <code>canyon.toml</code>. The <code>_with</code> form accepts a datasource name or another compatible <code>DbConnection</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::crud::Read;
+
+let default_teams: Vec&lt;Team&gt; = Team::find_all().await?;
+let analytics_teams: Vec&lt;Team&gt; = Team::find_all_with(&quot;analytics&quot;).await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>You will find the same <code>_with</code> form on <code>find_by_pk</code>, <code>count</code>, <code>insert</code>, <code>update</code>, and <code>delete</code>. A misspelled name produces <code>ConnectionError::DatasourceNotFound</code>; Canyon does not quietly fall back to the default.</p>
+<p>Query builders need one extra distinction. <code>Team::select_query_with(DatabaseType::MySQL)</code> chooses the SQL <em>dialect</em>; it does not select a connection. Build the query, then execute it with <code>launch_with(&quot;mysql_datasource&quot;)</code>. When using <code>select_query()</code> and <code>launch_default()</code> together, both target the default datasource.</p>
+<p>If you already hold a compatible connection, passing it to a <code>_with</code> method keeps that operation on the same connection. This is useful in repository adapters and explicit transaction handling. It does not make two separate datasources part of one transaction.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="read"><a class="header" href="#read">Read</a></h1>
+<p>Reading is the least surprising way to meet the generated API. Bring <code>Read</code> into scope, then call an associated function on the entity:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::crud::Read;
+
+let teams: Vec&lt;Team&gt; = Team::find_all().await?;
+let team: Option&lt;Team&gt; = Team::find_by_pk(&amp;42_i64).await?;
+let total: i64 = Team::count().await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>These methods answer different questions:</p>
+<ul>
+<li><code>find_all()</code> reads every mapped row; no matches gives you an empty <code>Vec&lt;Team&gt;</code>.</li>
+<li><code>count()</code> returns the row count as <code>i64</code>.</li>
+<li><code>find_by_pk()</code> binds the borrowed key from <code>#[primary_key]</code> and returns <code>Ok(None)</code> if it finds no row.</li>
+</ul>
+<p>A missing table, failed connection, or failed row conversion is an <code>Err</code>, not an empty result.</p>
+<p>Each function has a <code>_with</code> counterpart for a named datasource or compatible connection:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let team = Team::find_by_pk_with(&amp;42_i64, &quot;reporting&quot;).await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>Read</code> also exposes <code>select_query()</code> and <code>select_query_with(...)</code>. These produce a builder rather than executing immediately. Use them when you need predicates, joins, or ordering; the <a href="crud_mapping/../querybuilder.html">query-builder chapter</a> follows that path.</p>
+<p>If your model does not declare a primary key, <code>find_all</code> and <code>count</code> can still be useful. Key-based reading cannot infer which field identifies a row and reports a typed error instead of guessing.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="insert"><a class="header" href="#insert">Insert</a></h1>
+<p>An insert starts with a mutable entity. For an auto-generated numeric key, initialize the key with its default value and let the database supply the real one:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::crud::Insert;
+
+let mut team = Team {
+    id: 0,
+    name: &quot;Blue&quot;.to_owned(),
+};
+
+team.insert().await?;
+println!(&quot;new key: {}&quot;, team.id);
+<span class="boring">}
+</span></code></pre></pre>
+<p>The result is <code>CanyonResult&lt;()&gt;</code>. On success, Canyon assigns the generated primary key back to <code>team.id</code>. If <code>#[primary_key(autoincremental = false)]</code> is used, the key is included in the inserted values rather than fetched from the database.</p>
+<p>Use <code>team.insert_with(&quot;reporting&quot;).await?</code> to target a named datasource. It also accepts a compatible connection. The table, column types, and any database constraints must agree with the entity; Canyon does not create the table or suppress a constraint failure.</p>
+<p>There is no current bulk <code>insert_into</code> API on <code>Crud</code>. Older examples that use it predate the present interface. For multiple rows, insert them individually or use an explicit SQL statement through <code>DbConnection</code>, taking responsibility for transaction boundaries and backend syntax.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="update"><a class="header" href="#update">Update</a></h1>
+<p>An update uses the entity's primary key to identify the row. Change the Rust value, then persist it:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::crud::{Read, Update};
+
+let mut team = Team::find_by_pk(&amp;42_i64)
+    .await?
+    .expect(&quot;the team must exist&quot;);
+
+team.name = &quot;Blue Tigers&quot;.to_owned();
+let affected: u64 = team.update().await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>affected</code> is the number of rows reported by the database. A successful statement may affect zero rows, for instance if the key no longer exists. Check the count when your application requires exactly one update.</p>
+<p><code>update_with(&quot;reporting&quot;)</code> chooses a named datasource or compatible connection. If there is no <code>#[primary_key]</code>, Canyon cannot safely construct the key predicate and returns a typed error.</p>
+<p>For a conditional update over several rows, <code>Team::update_query()?</code> starts the query builder. The <a href="crud_mapping/../querybuilder.html">query-builder chapter</a> explains its <code>set_values</code> operation and why an unrestricted update deserves particular care.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="delete"><a class="header" href="#delete">Delete</a></h1>
+<p>Delete uses the annotated primary key, just as update does:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::crud::Delete;
+
+team.delete().await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The generated method returns <code>CanyonResult&lt;()&gt;</code>. It does not return an affected-row count, so check with <code>find_by_pk</code> afterward if your application must prove that the row is gone. A missing primary-key annotation is an error, not permission to delete the whole table.</p>
+<p><code>delete_with(&quot;reporting&quot;)</code> targets a named datasource or compatible connection. Database foreign-key constraints still apply: Canyon's relationship annotation generates lookup methods; it does not bypass or create those constraints.</p>
+<p>For a filtered delete rather than one identified by the model's primary key, use <code>Team::delete_query()?</code> and add a predicate before execution. Inspect the generated SQL when the scope matters.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="relationships"><a class="header" href="#relationships">Relationships</a></h1>
+<p>A foreign key has two sides: a child stores a value, and a parent row owns the referenced field. Canyon turns that relationship into lookup methods on the child entity. It does <strong>not</strong> create the database constraint; define that in your schema.</p>
+<p>Suppose <code>Player.team_id</code> refers to <code>Team.id</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::macros::{canyon_entity, CanyonMapper, Crud, Fields};
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+pub struct Team {
+    #[primary_key]
+    pub id: i64,
+    pub name: String,
+}
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;players&quot;)]
+pub struct Player {
+    #[primary_key]
+    pub id: i64,
+    #[foreign_key(references = Team::id)]
+    pub team_id: i64,
+    pub name: String,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The child needs <code>Read</code> (or <code>Crud</code>, which includes it); the parent needs Canyon mapping metadata. The annotation points to a Rust entity and field, not to an arbitrary table string. From <code>team_id</code>, Canyon derives the relation name <code>team</code> and generates four inherent methods:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let parent: Option&lt;Team&gt; = player.find_team().await?;
+let children: Vec&lt;Player&gt; = Player::find_all_by_team(&amp;team).await?;
+
+let parent_on_other_db = player.find_team_with(&quot;reporting&quot;).await?;
+let children_on_other_db =
+    Player::find_all_by_team_with(&amp;team, &quot;reporting&quot;).await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The two directions have different return shapes:</p>
+<ul>
+<li><code>player.find_team()</code> looks for one parent: <code>Ok(None)</code> means the lookup found none.</li>
+<li><code>Player::find_all_by_team(&amp;team)</code> looks for children: <code>Ok(vec![])</code> means there are none.</li>
+</ul>
+<p>A query or mapping failure is an error in either direction. The <code>_with</code> variants also accept a compatible connection.</p>
+<p>The referenced field need not be the parent's primary key, but it should identify the parent as your schema intends—normally through a unique constraint. A fully qualified path works too:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[foreign_key(references = crate::models::Team::external_id)]
+pub team_external_id: i64,
+<span class="boring">}
+</span></code></pre></pre>
+<p>Canyon takes the parent's physical table name and schema from its <code>#[canyon_entity(...)]</code> metadata. A type such as <code>TournamentDetails</code> maps to <code>tournament_details</code> by default; a custom physical name is equally valid. Keep the Rust relationship annotation and the actual database constraint consistent. The <a href="https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/crud/foreign_key_operations.rs">relationship integration tests</a> cover both naming cases on PostgreSQL, MySQL, and SQL Server.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="build-a-query"><a class="header" href="#build-a-query">Build a query</a></h1>
+<p>The generated CRUD methods are deliberately small. They cover common operations, but they do not know whether your next read needs a filter, a join, or a particular ordering. The query builder is the point where you describe that extra shape.</p>
+<p><code>Read</code> supplies <code>select_query()</code>; <code>Update</code> and <code>Delete</code> supply <code>update_query()</code> and <code>delete_query()</code>. These methods choose the default datasource's SQL dialect and return builders. They do not execute anything. <code>build()?</code> emits a <code>Query</code> containing both the SQL and its bound parameters.</p>
+<h2 id="a-filtered-read"><a class="header" href="#a-filtered-read">A filtered read</a></h2>
+<p>Given the <code>Team</code> model from <a href="./canyon_entities.html">Entities and mapping</a>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::{
+    crud::Read,
+    query::{
+        operators::Operator,
+        querybuilder::QueryBuilderExt,
+    },
+};
+
+let name = TeamFieldValue::name(&quot;Blue&quot;.to_owned());
+let teams: Vec&lt;Team&gt; = Team::select_query()?
+    .where_value(&amp;name, Operator::Eq)
+    .build()?
+    .launch_default()
+    .await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>where_value</code> receives a generated <code>FieldValue</code> and collects its value as a bound parameter. Keep <code>name</code> alive until the query is built and executed.</p>
+<p>For more conditions, use <code>and</code> or <code>or</code>. The <code>and_values_in</code> and <code>or_values_in</code> methods take a <code>Field</code> and a non-empty slice of values; an empty slice produces <code>QueryBuilderError::EmptyInClause</code>.</p>
+<p>The lower-level <code>r#where(column, operator)</code> adds a placeholder <strong>without</strong> collecting a value. Prefer <code>where_value</code> for ordinary application code; with <code>r#where</code>, you must provide the matching parameter when executing the SQL yourself.</p>
+<p>The <code>Operator</code> enum includes equality, inequality, greater/less-than comparisons, <code>IN</code>, and <code>LIKE</code> / <code>NOT LIKE</code>. For a contains-style pattern, use <code>Operator::Like(LikeKind::Full)</code>; <code>Left</code> and <code>Right</code> select the other wildcard placements. Canyon renders backend-specific placeholders and quoting when it builds the query.</p>
+<h2 id="what-fields-contributes"><a class="header" href="#what-fields-contributes">What <code>Fields</code> contributes</a></h2>
+<p>For <code>Team</code>, <code>Fields</code> generates three public enums:</p>
+<ul>
+<li><code>TeamTable</code>: table metadata such as <code>TeamTable::DbName</code>.</li>
+<li><code>TeamField</code>: a column name, such as <code>TeamField::name</code>, for ordering or a join.</li>
+<li><code>TeamFieldValue</code>: the same column with a value of its Rust field type, such as <code>TeamFieldValue::name(&quot;Blue&quot;.to_owned())</code>, for a predicate.</li>
+</ul>
+<p>They remain the current query-builder API. We may replace this generated shape with typed column descriptors in a future major version, but there is no deprecation in 0.5.1. Multiple models can derive <code>Fields</code> in the same Rust module.</p>
+<h2 id="joins-and-projection"><a class="header" href="#joins-and-projection">Joins and projection</a></h2>
+<p><code>SelectQueryBuilderExt</code> adds <code>inner_join</code>, <code>left_join</code>, <code>right_join</code>, <code>full_join</code>, <code>with_columns</code>, <code>with_distinct</code>, <code>count</code>, and <code>order_by</code>. A join identifies its table and the two columns of the equality:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::query::querybuilder::{QueryBuilderExt, SelectQueryBuilderExt};
+
+let query = Team::select_query()?
+    .inner_join(PlayerTable::DbName, TeamField::id, PlayerField::team_id)
+    .order_by(TeamField::id, false)
+    .build()?;
+
+println!(&quot;{}&quot;, query.sql());
+<span class="boring">}
+</span></code></pre></pre>
+<p>This example assumes the <code>Player</code> model from <a href="./crud_mapping/foreign_keys.html">Relationships</a>. A join can return more columns than <code>Team</code> declares: the mapper ignores extras, but it cannot invent required missing fields.</p>
+<p>If you need values from both tables, map that projection into an appropriate result type. Select columns explicitly when their names overlap.</p>
+<h2 id="updates-and-deletes"><a class="header" href="#updates-and-deletes">Updates and deletes</a></h2>
+<p>A conditional update must say what changes. Prefer <code>set_values</code>, which records each target column and its bound value together:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::{
+    connection::DbConnection,
+    core::Canyon,
+    crud::Update,
+    query::{operators::Operator, querybuilder::{QueryBuilderExt, UpdateQueryBuilderExt}},
+};
+
+let changes = [(TeamField::name, &quot;Blue Tigers&quot;)];
+let target = TeamFieldValue::id(42_i64);
+let query = Team::update_query()?
+    .set_values(&amp;changes)?
+    .where_value(&amp;target, Operator::Eq)
+    .build()?;
+
+let connection = Canyon::instance()?.get_default_connection()?;
+let affected = connection.execute(query.sql(), query.params()).await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>set</code> is a lower-level alternative that lists columns but does <strong>not</strong> collect matching values. Use it only when you supply parameters yourself. Canyon rejects an empty <code>SET</code> and a second <code>SET</code> on the same builder.</p>
+<p><code>delete_query()?</code> uses the shared <code>QueryBuilderExt</code> predicates; add a <code>WHERE</code> condition before executing unless you truly intend to delete every row. <code>execute</code> returns the affected-row count. For single-row changes identified by a model's key, <code>update()</code> and <code>delete()</code> are simpler.</p>
+<p>There is also a lower-level <code>InsertQueryBuilder</code> when a generated entity insert is not suitable. Construct it with a table and <code>DatabaseType</code>, then add columns with <code>InsertQueryBuilderExt::with_columns</code>, values with <code>with_values</code>, and optionally <code>returning</code> before <code>build()</code>.</p>
+<p>The column list and bound-value count must match. For an ordinary entity insert, use <code>insert()</code> or <code>insert_with()</code>; <code>Crud</code> does not generate an <code>insert_query()</code> method.</p>
+<h2 id="dialect-and-connection-are-separate-choices"><a class="header" href="#dialect-and-connection-are-separate-choices">Dialect and connection are separate choices</a></h2>
+<p><code>Team::select_query_with(DatabaseType::MySQL)?</code> chooses MySQL SQL syntax; it does <strong>not</strong> connect to MySQL. After <code>build()</code>, use <code>launch_with(&quot;mysql_datasource&quot;)</code> to execute on a matching datasource.</p>
+<p>The <code>Query</code> exposes <code>sql()</code> and <code>params()</code> for inspection or direct execution. Do not send SQL generated for one dialect to another backend.</p>
+<p>For operations outside these patterns, use <a href="./raw_queries.html">a connection directly</a>. The builder validates known mistakes, but it does not prove that every selected table or column exists in your live schema.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="run-sql-directly"><a class="header" href="#run-sql-directly">Run SQL directly</a></h1>
+<p>Generated operations and the query builder are not a promise to hide SQL. A report, maintenance task, or database-specific feature may be clearer as an explicit statement. Canyon exposes the configured connection through <code>Canyon::instance()</code> and the <code>DbConnection</code> trait.</p>
+<p>The following SQL uses PostgreSQL's <code>$1</code> placeholder. Adapt placeholder syntax when using another backend:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::{connection::DbConnection, core::Canyon};
+
+let connection = Canyon::instance()?.get_connection(&quot;main&quot;)?;
+let id = 42_i64;
+let team: Option&lt;Team&gt; = connection
+    .query_one::&lt;Team&gt;(&quot;SELECT id, name FROM teams WHERE id = $1&quot;, &amp;[&amp;id])
+    .await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Choose the call by the shape you expect back:</p>
+<table><thead><tr><th>Call</th><th>Result on success</th></tr></thead><tbody>
+<tr><td><code>query::&lt;_, Team&gt;(sql, params)</code></td><td>All mapped rows, as <code>Vec&lt;Team&gt;</code></td></tr>
+<tr><td><code>query_one::&lt;Team&gt;(sql, params)</code></td><td>One mapped row or <code>None</code></td></tr>
+<tr><td><code>query_one_for::&lt;i64&gt;(sql, params)</code></td><td>One scalar value</td></tr>
+<tr><td><code>execute(sql, params)</code></td><td>Number of affected rows, as <code>u64</code></td></tr>
+</tbody></table>
+<p>All four return <code>CanyonResult</code>, so driver and mapping failures remain visible.</p>
+<p>For a query whose shape is not yet represented by a model, <code>query_rows</code> returns <code>CanyonRows</code>, a wrapper over the active driver's rows. Use <code>len()</code>, <code>is_empty()</code>, or <code>get_row_at()</code> to inspect them. <code>first::&lt;Team&gt;()</code> maps the first row and returns <code>CanyonResult&lt;Option&lt;Team&gt;&gt;</code>: <code>None</code> means there was no first row; <code>Err</code> means mapping failed.</p>
+<p>Backend-specific row accessors are available for advanced cases. Calling one for the wrong backend returns a mapping error.</p>
+<p>Advanced users who depend on <code>canyon_core</code> directly can use <code>canyon_core::row::RowExt</code> at the individual-row level; the root <code>canyon_sql</code> crate does not currently re-export it.</p>
+<ul>
+<li><code>get_postgres</code>, <code>get_mysql</code>, and <code>get_mssql</code> read required values.</li>
+<li>Their <code>_opt</code> counterparts read nullable values.</li>
+</ul>
+<p>All return <code>CanyonResult</code>. A missing column or incompatible type is an error; the required getters also reject <code>NULL</code>, while the <code>_opt</code> getters represent it as <code>None</code>. These are lower-level escape hatches, not a replacement for <code>CanyonMapper</code> on a normal entity.</p>
+<p>Values should be passed as parameters rather than interpolated into SQL. Backend syntax and identifier quoting remain your responsibility for handwritten statements. The parameterized query builder performs those steps for the SQL it generates.</p>
+<p><code>Transaction</code> is a low-level proxy over connection operations; it does not, by itself, begin or commit a database transaction. If you need an atomic multi-statement transaction, use a compatible backend connection and its transaction facilities deliberately.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="handle-errors"><a class="header" href="#handle-errors">Handle errors</a></h1>
+<p>Every public operation that can fail returns <code>CanyonResult&lt;T&gt;</code>, an alias for <code>Result&lt;T, CanyonError&gt;</code>. The outer enum tells you where a failure occurred:</p>
+<table><thead><tr><th>Family</th><th>Typical cause</th></tr></thead><tbody>
+<tr><td><code>Configuration</code></td><td>Missing or invalid <code>canyon.toml</code>, incompatible authentication, invalid pool bounds</td></tr>
+<tr><td><code>Connection</code></td><td>Uninitialized Canyon, unknown datasource, busy or failed connection</td></tr>
+<tr><td><code>Query</code></td><td>The database rejected a statement or a driver could not convert a query value</td></tr>
+<tr><td><code>QueryBuilder</code></td><td>An invalid query shape, such as empty <code>IN</code> or <code>SET</code></td></tr>
+<tr><td><code>Mapping</code></td><td>A required column is absent, <code>NULL</code> where a value is required, or a type conversion failed</td></tr>
+</tbody></table>
+<p>The families are <code>#[non_exhaustive]</code>, so match with a fallback arm. Driver errors remain available through the standard <code>std::error::Error::source()</code> chain; Canyon does not collapse them into an unstructured <code>Other</code> variant.</p>
+<p>An absent row is different from an error:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::{CanyonError, crud::Read};
+
+match Team::find_by_pk(&amp;42_i64).await {
+    Ok(Some(team)) =&gt; println!(&quot;Found {}&quot;, team.name),
+    Ok(None) =&gt; println!(&quot;No team has that key&quot;),
+    Err(CanyonError::Connection(error)) =&gt; eprintln!(&quot;Connection: {error}&quot;),
+    Err(error) =&gt; eprintln!(&quot;Query failed: {error}&quot;),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>The return type tells you what “nothing found” means:</p>
+<ul>
+<li><strong>A list lookup</strong> — <code>find_all()</code> or <code>Player::find_all_by_team(&amp;team)</code> — succeeds with an empty <code>Vec</code> when there are no matching rows. Looping over it simply does nothing.</li>
+<li><strong>A single-row lookup</strong> — <code>find_by_pk()</code> or <code>player.find_team()</code> — succeeds with <code>Ok(None)</code> when no row matches. Decide at the call site whether that is acceptable or should become an application-level “not found” error.</li>
+<li><strong>A scalar lookup</strong> such as <code>query_one_for()</code> expects a value. No row is reported as an error; there is no <code>Option</code> in its return type.</li>
+</ul>
+<p>None of these rules excuses a broken row. If a selected column is missing, unexpectedly <code>NULL</code>, or has an incompatible type, mapping returns <code>Err(CanyonError::Mapping(...))</code>. Check the error rather than treating it as an empty result.</p>
+<p>An empty <code>IN</code> list or a duplicated <code>SET</code> fails while building the query, before any SQL reaches the driver. A builder can reject those malformed shapes; it cannot check that your live schema has the selected columns or that the connection has permission to use them.</p>
+<p>When an application needs its own error type, convert <code>CanyonError</code> at the boundary where it has context—an HTTP handler, service, or repository. Preserve the original source for logs and diagnostics rather than replacing it with a generic string.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="api-map"><a class="header" href="#api-map">API map</a></h1>
+<p>The examples in this book begin with the high-level derives. When you need to find a particular type, this map shows where Canyon exposes it from the root <code>canyon_sql</code> crate. Feature-gated exports only exist when their backend or experimental feature is enabled.</p>
+<table><thead><tr><th>Path</th><th>What it contains</th></tr></thead><tbody>
+<tr><td><code>canyon_sql::{CanyonResult, CanyonError}</code></td><td>The common result alias and top-level typed error</td></tr>
+<tr><td><code>canyon_sql::macros</code></td><td><code>canyon_entity</code>, <code>Fields</code>, <code>CanyonMapper</code>, <code>Crud</code>, the individual operation derives, runtime-adapter derives, <code>main</code>, and <code>canyon_tokio_test</code></td></tr>
+<tr><td><code>canyon_sql::core</code></td><td><code>Canyon</code> initialization and datasource access, <code>RowMapper</code>, <code>CanyonRows</code>, <code>Transaction</code>, and error types</td></tr>
+<tr><td><code>canyon_sql::crud</code></td><td><code>Read</code>, <code>Insert</code>, <code>Update</code>, <code>Delete</code>, <code>Crud</code>, plus <code>EntityInsert</code>, <code>EntityUpdate</code>, <code>EntityDelete</code>, and <code>EntityCrud</code></td></tr>
+<tr><td><code>canyon_sql::connection</code></td><td><code>DbConnection</code>, <code>DatabaseType</code>, and <code>DatabaseConnector</code></td></tr>
+<tr><td><code>canyon_sql::query</code></td><td><code>Query</code>, <code>QueryParameter</code>, <code>ColumnRef</code>, operators, and query-builder traits and types</td></tr>
+<tr><td><code>canyon_sql::date_time</code></td><td>Selected <code>chrono</code> date and time types for mapped fields</td></tr>
+<tr><td><code>canyon_sql::db_clients</code></td><td>Enabled low-level PostgreSQL, MySQL, or SQL Server driver re-exports</td></tr>
+<tr><td><code>canyon_sql::runtime</code></td><td>Tokio and related runtime re-exports used by Canyon</td></tr>
+<tr><td><code>canyon_sql::migrations</code></td><td>Experimental migration modules, only with the <code>migrations</code> feature</td></tr>
+</tbody></table>
+<p>The derive macro named <code>Crud</code> and the trait named <code>Crud</code> live in different namespaces. Import the derive from <code>macros</code> and the trait from <code>crud</code>. The same distinction applies to <code>EntityInsert</code>, <code>EntityUpdate</code>, and <code>EntityDelete</code>.</p>
+<p>If a generated method appears to be missing, check whether its trait is in scope.</p>
+<p><code>CanyonMapper</code> maps rows; <code>Fields</code> supplies query identifiers. <code>#[canyon_entity]</code> is needed for explicit table/schema metadata and for models using Canyon's field annotations, but not for every derive with default naming. See <a href="./canyon_entities.html#when-do-you-need-canyon_entity">Entities and mapping</a>.</p>
+<p>On a repository adapter, <code>#[canyon_crud(maps_to = Team)]</code> tells an operation derive which mapped entity it acts on.</p>
+<p>For the exact signatures, consult the public Rust API in the <a href="https://github.com/zerodaycode/Canyon-SQL">Canyon-SQL source</a> or the published crate documentation. This book concentrates on how the pieces fit together and on the behavior that matters at call sites.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="repository-adapters"><a class="header" href="#repository-adapters">Repository adapters</a></h1>
+<p>A model that derives <code>Crud</code> is convenient when the model itself owns database operations. Some applications instead separate domain data from the component that persists it. Canyon supports that shape without requiring a second copy of the entity fields.</p>
+<p><code>Team</code> is the mapped row type. <code>CanyonMapper</code> reads rows into it; <code>#[canyon_entity]</code> sets its physical table name and handles the primary-key annotation:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, CanyonMapper)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+pub struct Team {
+    #[primary_key]
+    pub id: i64,
+    pub name: String,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p><code>TeamWriter</code> is an adapter, not a second database entity. It derives only the operations it needs, and <code>maps_to</code> names the <code>Team</code> values those operations receive:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::macros::{
+    canyon_entity, EntityDelete, EntityInsert, EntityUpdate,
+};
+
+#[derive(EntityInsert, EntityUpdate, EntityDelete)]
+#[canyon_crud(maps_to = Team)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+pub struct TeamWriter {
+    marker: (),
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>That second <code>table_name</code> looks wrong because, conceptually, it is. <code>maps_to = Team</code> selects the Rust type, but the adapter derives still resolve the SQL table separately. Without the override on <code>TeamWriter</code>, they would infer <code>team</code>, not the actual table <code>teams</code>.</p>
+<blockquote>
+<p><strong>Current limitation:</strong> <code>TeamWriter</code> does not represent another database table. The repeated name works around a gap in the adapter macros; keep both names in sync until those macros use <code>Team</code>'s table metadata.</p>
+</blockquote>
+<p>With the matching traits in scope, it accepts a <code>Team</code> passed to the operation rather than persisting <code>self</code>:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::crud::{EntityDelete as _, EntityInsert as _, EntityUpdate as _};
+
+TeamWriter::insert_entity(&amp;mut team).await?;
+let affected: u64 = TeamWriter::update_entity(&amp;team).await?;
+TeamWriter::delete_entity(&amp;team).await?;
+<span class="boring">}
+</span></code></pre></pre>
+<p>The adapter has a few useful choices:</p>
+<ul>
+<li>Use a <code>_with</code> version to pass a named datasource or compatible connection.</li>
+<li>Use <code>EntityCrud</code> when insert, update, and delete are available for the same mapped entity; it is the composite runtime contract.</li>
+<li>Derive <code>Read</code> separately on the adapter for <code>find_all</code>, <code>find_by_pk</code>, <code>count</code>, and a select builder that returns the mapped type.</li>
+</ul>
+<p>This feature is useful for a repository layer, but it does not create a new database transaction or hide the connection. The <a href="https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/crud/hex_arch_example.rs">source integration example</a> shows a service and adapter wired together; the <a href="https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/ui/src/bin/selective_entity_operations.rs">compile fixture</a> shows independently derived operations.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="migrations-experimental"><a class="header" href="#migrations-experimental">Migrations: experimental</a></h1>
+<p>Canyon contains a <code>migrations</code> Cargo feature, but it is <strong>incomplete and experimental</strong>. It is not enabled by default and is not recommended for production schema management. This book intentionally does not present a migration workflow as if it were ready.</p>
+<p>For now, create and evolve your tables with an established tool or SQL scripts, then use Canyon for the application queries. The ordinary <code>Crud</code>, query-builder, and mapping APIs do not require the <code>migrations</code> feature.</p>
+<p>Enabling <code>migrations</code> alone does not satisfy Canyon's backend requirement: a build still needs at least one of <code>postgres</code>, <code>mysql</code>, or <code>mssql</code>. Some older book pages and examples described compile-time table creation and data loading. They refer to an earlier design and should not be followed for the current release.</p>
+<p>The planned direction is to bring migration errors into the same typed <code>CanyonError</code> API and redesign the feature before documenting a supported workflow. Until then, treat any migration code in the repository as experimental implementation, not a contract for applications.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="test-and-contribute"><a class="header" href="#test-and-contribute">Test and contribute</a></h1>
+<p>Canyon's unit and compile tests catch API errors without starting a database. From a checkout of the <a href="https://github.com/zerodaycode/Canyon-SQL">source repository</a>:</p>
+<pre><code class="language-sh">cargo fmt --all -- --check
+cargo test --workspace --lib --all-features
+cargo test -p tests --test compile_tests --features postgres
+</code></pre>
+<p>At least one SQL backend feature is required. A bare <code>cargo test --workspace</code> is expected to fail with Canyon's explicit compile-time backend diagnostic; it is not the command for testing all supported engines.</p>
+<p>The source integration tests commonly put <code>#[canyon_sql::macros::canyon_tokio_test]</code> on a synchronous <code>fn</code>. It turns the function into a test, starts Canyon's Tokio runtime, initializes the configured datasources, and runs the body as async code.</p>
+<p>Initialization or a returned body error fails the test. The macro handles setup, but it cannot replace the database fixtures those tests need.</p>
+<p>The integration tests use the Docker setup in <code>docker/docker-compose.yml</code>. PostgreSQL and MySQL load their test data at container startup. The SQL Server fixture needs its ignored initializer:</p>
+<pre><code class="language-sh">docker compose -f docker/docker-compose.yml up -d --wait
+cargo test -p tests --test canyon_integration_tests --all-features \
+  initialize_sql_server_docker_instance -- --ignored --test-threads=1
+cargo test --workspace --all-features --no-fail-fast -- --test-threads=1
+</code></pre>
+<p>The <code>--test-threads=1</code> choice makes the stateful integration suite easier to reason about. The relationship tests also prepare their own idempotent fixture so persisted Docker volumes do not depend on an entrypoint script running again. You may compile the integration binary without connecting to any database:</p>
+<pre><code class="language-sh">cargo test -p tests --test canyon_integration_tests --all-features --no-run
+</code></pre>
+<p>When contributing, add a regression test at the layer of the failure. Generated Rust syntax belongs in the compile fixtures under <code>tests/ui</code>; SQL behavior belongs in backend integration tests. See <a href="https://github.com/zerodaycode/Canyon-SQL/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for the repository workflow.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="a-complete-example"><a class="header" href="#a-complete-example">A complete example</a></h1>
+<p>Consider a small service that reads teams and their players. Its schema already exists:</p>
+<pre><code class="language-sql">CREATE TABLE teams (
+    id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE players (
+    id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    team_id BIGINT NOT NULL REFERENCES teams(id),
+    name TEXT NOT NULL
+);
+</code></pre>
+<p>The SQL above is PostgreSQL. For another backend, use its identity and foreign-key syntax. Configure a <code>postgresql</code> datasource as shown in <a href="./getting_started/the_configuration_file.html">Configure datasources</a>, then define the two models:</p>
+<pre><pre class="playground"><code class="language-rust">use canyon_sql::{
+    core::Canyon,
+    crud::Read,
+    macros::{canyon_entity, CanyonMapper, Crud, Fields},
+    CanyonResult,
+};
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+struct Team {
+    #[primary_key]
+    id: i64,
+    name: String,
+}
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;players&quot;)]
+struct Player {
+    #[primary_key]
+    id: i64,
+    #[foreign_key(references = Team::id)]
+    team_id: i64,
+    name: String,
+}
+
+#[tokio::main]
+async fn main() -&gt; CanyonResult&lt;()&gt; {
+    Canyon::init().await?;
+
+    let teams = Team::find_all().await?;
+    for team in teams {
+        let players = Player::find_all_by_team(&amp;team).await?;
+        println!(&quot;{} has {} players&quot;, team.name, players.len());
+    }
+
+    Ok(())
+}
+</code></pre></pre>
+<p>Two different things describe the relationship here:</p>
+<ul>
+<li><code>#[foreign_key(references = Team::id)]</code> generates the Rust lookup methods.</li>
+<li><code>REFERENCES teams(id)</code> makes PostgreSQL enforce the relationship.</li>
+</ul>
+<p>A team with no players gets an empty vector. A connection or mapping failure reaches <code>main</code> through <code>?</code> instead.</p>
+<p>From here, a filtered read uses <code>Team::select_query()?</code> and the generated <code>TeamFieldValue</code> type; a write uses the <code>Insert</code>, <code>Update</code>, or <code>Delete</code> traits. If the service grows a repository boundary, the <a href="./repository_adapters.html">adapter chapter</a> shows how to keep persistence operations off the model itself.</p>
+<p>This example is intentionally modest. Canyon removes repeated database plumbing, but it does not decide your schema, permissions, transaction boundaries, or the meaning of a missing row for your application.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>

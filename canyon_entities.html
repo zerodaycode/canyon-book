@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Entities and mapping - The Canyon-SQL Book</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="getting_started/getting_started.html"><strong aria-hidden="true">1.</strong> Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/initial_setup.html"><strong aria-hidden="true">1.1.</strong> Install Canyon</a></li><li class="chapter-item expanded "><a href="getting_started/the_configuration_file.html"><strong aria-hidden="true">1.2.</strong> Configure datasources</a></li><li class="chapter-item expanded "><a href="getting_started/configuring_the_database.html"><strong aria-hidden="true">1.3.</strong> Prepare a database</a></li></ol></li><li class="chapter-item expanded "><a href="canyon_entities.html" class="active"><strong aria-hidden="true">2.</strong> Entities and mapping</a></li><li class="chapter-item expanded "><a href="crud_mapping/intro.html"><strong aria-hidden="true">3.</strong> Working with data</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="crud_mapping/quick_note.html"><strong aria-hidden="true">3.1.</strong> Choosing a datasource</a></li><li class="chapter-item expanded "><a href="crud_mapping/select.html"><strong aria-hidden="true">3.2.</strong> Read</a></li><li class="chapter-item expanded "><a href="crud_mapping/insert.html"><strong aria-hidden="true">3.3.</strong> Insert</a></li><li class="chapter-item expanded "><a href="crud_mapping/update.html"><strong aria-hidden="true">3.4.</strong> Update</a></li><li class="chapter-item expanded "><a href="crud_mapping/delete.html"><strong aria-hidden="true">3.5.</strong> Delete</a></li><li class="chapter-item expanded "><a href="crud_mapping/foreign_keys.html"><strong aria-hidden="true">3.6.</strong> Relationships</a></li></ol></li><li class="chapter-item expanded "><a href="querybuilder.html"><strong aria-hidden="true">4.</strong> Build a query</a></li><li class="chapter-item expanded "><a href="raw_queries.html"><strong aria-hidden="true">5.</strong> Run SQL directly</a></li><li class="chapter-item expanded "><a href="errors.html"><strong aria-hidden="true">6.</strong> Handle errors</a></li><li class="chapter-item expanded "><a href="api_reference.html"><strong aria-hidden="true">7.</strong> API map</a></li><li class="chapter-item expanded "><a href="repository_adapters.html"><strong aria-hidden="true">8.</strong> Repository adapters</a></li><li class="chapter-item expanded "><a href="the_migrations.html"><strong aria-hidden="true">9.</strong> Migrations: experimental</a></li><li class="chapter-item expanded "><a href="testing.html"><strong aria-hidden="true">10.</strong> Test and contribute</a></li><li class="chapter-item expanded "><a href="real_world_example.html"><strong aria-hidden="true">11.</strong> A complete example</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Canyon-SQL Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="entities-and-mapping"><a class="header" href="#entities-and-mapping">Entities and mapping</a></h1>
+<p>A Canyon entity is a Rust struct whose fields describe a database row. It is not a second schema language: the table must exist, and the Rust field names and types must agree with the columns you intend to read.</p>
+<p>For the <code>teams</code> table from the previous chapter:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use canyon_sql::macros::{canyon_entity, CanyonMapper, Crud, Fields};
+
+#[derive(Debug, Fields, Crud, CanyonMapper)]
+#[canyon_entity(table_name = &quot;teams&quot;)]
+pub struct Team {
+    #[primary_key]
+    pub id: i64,
+    pub name: String,
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Each annotation has a different job:</p>
+<ul>
+<li><code>#[canyon_entity]</code> supplies optional table/schema overrides and registers the struct for the experimental migrations machinery. It also processes field annotations such as <code>#[primary_key]</code> and <code>#[foreign_key]</code> in the current macro setup.</li>
+<li><code>CanyonMapper</code> converts driver rows to <code>Team</code>.</li>
+<li><code>Crud</code> generates read, insert, update, and delete operations.</li>
+<li><code>Fields</code> generates names and typed values for the query builder. Ordinary <code>find_all()</code> or <code>insert()</code> calls do not need it.</li>
+</ul>
+<h2 id="when-do-you-need-canyon_entity"><a class="header" href="#when-do-you-need-canyon_entity">When do you need <code>#[canyon_entity]</code>?</a></h2>
+<p>The attribute is <strong>not</strong> what makes every Canyon derive work. Without it, <code>CanyonMapper</code>, CRUD derives, and <code>Fields</code> can infer a table name from the Rust type. For a plain model with no field annotations and a conventional table name, that default is enough.</p>
+<p>Use <code>#[canyon_entity]</code> when:</p>
+<ul>
+<li>The physical table or schema differs from the inferred name: pass <code>table_name = &quot;...&quot;</code> or <code>schema = &quot;...&quot;</code>.</li>
+<li>You annotate fields with Canyon markers such as <code>#[primary_key]</code> or <code>#[foreign_key(...)]</code>. The current attribute macro processes these markers; keep it on models that use them.</li>
+</ul>
+<p>The attribute also registers an entity for the <strong>experimental</strong> migrations feature. That is an implementation detail today, not a reason to enable migrations for normal CRUD.</p>
+<p>The derives read table metadata from the struct's attributes or fall back to the inferred name. Ordinary query execution does not consult a runtime entity registry.</p>
+<h2 id="table-names-and-schemas"><a class="header" href="#table-names-and-schemas">Table names and schemas</a></h2>
+<p>Without an explicit name, Canyon derives a snake_case table name from the Rust type: <code>TournamentDetails</code> maps to <code>tournament_details</code>. Existing schemas do not always follow that rule. Use explicit metadata when they do not:</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[canyon_entity(table_name = &quot;tournament_entries&quot;, schema = &quot;public&quot;)]
+<span class="boring">}
+</span></code></pre></pre>
+<p>That metadata is used by generated CRUD and relationship operations. It is better to state a non-standard physical name once than to repeat a string in every query.</p>
+<h2 id="primary-keys"><a class="header" href="#primary-keys">Primary keys</a></h2>
+<p><code>#[primary_key]</code> identifies the field used by key-based reads, updates, and deletes. For a numeric key, it is treated as database-generated and auto-incrementing unless you say otherwise. After a successful <code>insert(&amp;mut self)</code>, Canyon writes the generated key back to the Rust instance.</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[primary_key(autoincremental = false)]
+pub external_id: i64,
+<span class="boring">}
+</span></code></pre></pre>
+<p>Use the non-incrementing form when your application supplies the key. Without a primary-key annotation, methods that need a key cannot perform their normal operation and return a typed query-builder error. A mapper can still represent tables without one.</p>
+<h2 id="what-fields-generates"><a class="header" href="#what-fields-generates">What <code>Fields</code> generates</a></h2>
+<p>For <code>Team</code>, the derive exposes three types:</p>
+<ul>
+<li><code>TeamTable</code> represents table metadata.</li>
+<li><code>TeamField</code> names a column, for example <code>TeamField::name</code>. Joins and ordering need this form.</li>
+<li><code>TeamFieldValue</code> pairs a column with a value of its Rust type, for example <code>TeamFieldValue::name(&quot;Blue&quot;.to_owned())</code>. Predicates need both pieces.</li>
+</ul>
+<p><code>Fields</code> is the supported API today, and several models may derive it in one Rust module. A future major Canyon version may move toward typed column descriptors instead of these enums. That is a direction under consideration, not a removal scheduled for this release.</p>
+<p>The <a href="./querybuilder.html">query-builder chapter</a> shows how the enums work now.</p>
+<h2 id="mapping-failures-are-real-errors"><a class="header" href="#mapping-failures-are-real-errors">Mapping failures are real errors</a></h2>
+<p>A database row can contain extra columns; the derived mapper only reads the fields declared on the struct. But a missing required column, an unexpected <code>NULL</code>, or an incompatible value produces a <code>CanyonError::Mapping</code>. It does not silently become an empty result.</p>
+<blockquote>
+<p><strong>Nullable column?</strong> Use <code>Option&lt;T&gt;</code> on the model field when the SQL column can contain <code>NULL</code>.</p>
+</blockquote>
+<p>The next chapter uses <code>Team</code> to read and write rows. When code examples omit its definition, they refer to the model above.</p>
+<p>If a derived mapper cannot represent a specialized projection, <code>canyon_sql::core::RowMapper</code> is the lower-level contract. Its backend-specific deserialization methods return <code>CanyonResult</code> and let you supply your own mapping rules.</p>
+<p>Implementing it by hand makes you responsible for column names, nullability, and conversion errors on every enabled backend. Start with <code>CanyonMapper</code> unless the row shape genuinely demands something else.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="getting_started/configuring_the_database.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="crud_mapping/intro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="getting_started/configuring_the_database.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="crud_mapping/intro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
