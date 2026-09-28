@@ -25,16 +25,25 @@ Choose the call by the shape you expect back:
 
 All four return `CanyonResult`, so driver and mapping failures remain visible.
 
+## Binding values
+
+The parameter slice accepts references to values implementing `QueryParameter`. Canyon currently implements it for common numeric types (`i16`, `i32`, `i64`, `u32`, `f32`, `f64`), `bool`, strings, and several `chrono` date and time types. Nullable forms are supported for selected types, but there is **no blanket implementation for every `Option<T>`**. If a type does not implement `QueryParameter`, the compiler will reject it before the query runs.
+
+Keep the values alive until the async call completes; do not assemble SQL by interpolating them into the statement. For MySQL, Canyon normalizes `DateTime<Utc>` and `DateTime<FixedOffset>` parameters to UTC before binding them.
+
+## Rows without a model
+
 For a query whose shape is not yet represented by a model, `query_rows` returns `CanyonRows`, a wrapper over the active driver's rows. Use `len()`, `is_empty()`, or `get_row_at()` to inspect them. `first::<Team>()` maps the first row and returns `CanyonResult<Option<Team>>`: `None` means there was no first row; `Err` means mapping failed.
 
-Backend-specific row accessors are available for advanced cases. Calling one for the wrong backend returns a mapping error.
+Backend-specific accessors are available when you need the driver's rows: `get_postgres_rows()`, `get_tiberius_rows()`, and `get_mysql_rows()` (each behind its Cargo feature). Calling one for the wrong backend returns a mapping error.
 
 Advanced users who depend on `canyon_core` directly can use `canyon_core::row::RowExt` at the individual-row level; the root `canyon_sql` crate does not currently re-export it.
 
 - `get_postgres`, `get_mysql`, and `get_mssql` read required values.
 - Their `_opt` counterparts read nullable values.
+- `columns()` returns each column's name and backend-specific `ColumnType`, useful when inspecting an unfamiliar result shape.
 
-All return `CanyonResult`. A missing column or incompatible type is an error; the required getters also reject `NULL`, while the `_opt` getters represent it as `None`. These are lower-level escape hatches, not a replacement for `CanyonMapper` on a normal entity.
+The value getters return `CanyonResult`: a missing column or incompatible type is an error; required getters also reject `NULL`, while `_opt` getters represent it as `None`. These are lower-level escape hatches, not a replacement for `CanyonMapper` on a normal entity.
 
 Values should be passed as parameters rather than interpolated into SQL. Backend syntax and identifier quoting remain your responsibility for handwritten statements. The parameterized query builder performs those steps for the SQL it generates.
 

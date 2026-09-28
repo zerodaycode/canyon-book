@@ -62,6 +62,18 @@ This example assumes the `Player` model from [Relationships](./crud_mapping/fore
 
 If you need values from both tables, map that projection into an appropriate result type. Select columns explicitly when their names overlap.
 
+For a smaller projection, or to remove duplicate rows, use the select-specific methods:
+
+```rust
+let query = Team::select_query()?
+    .with_columns(vec![TeamField::name])
+    .with_distinct()
+    .order_by(TeamField::name, false)
+    .build()?;
+```
+
+This query selects only `name`. It cannot be launched into `Team`, whose mapper also requires `id`; map the projected shape through `launch_with(...)`, or inspect it with `query_rows(...)`. `count()` is another projection option. For an unfiltered count, `Team::count().await?` is simpler and returns `i64` on every backend.
+
 ## Updates and deletes
 
 A conditional update must say what changes. Prefer `set_values`, which records each target column and its bound value together:
@@ -98,5 +110,7 @@ The column list and bound-value count must match. For an ordinary entity insert,
 `Team::select_query_with(DatabaseType::MySQL)?` chooses MySQL SQL syntax; it does **not** connect to MySQL. After `build()`, use `launch_with("mysql_datasource")` to execute on a matching datasource.
 
 The `Query` exposes `sql()` and `params()` for inspection or direct execution. Do not send SQL generated for one dialect to another backend.
+
+`launch_default::<Team>()` and `launch_with::<_, Team>(...)` map a query to rows. When the projection is one scalar value, `launch_one_for_default::<Team, T>()` or `launch_one_for_with::<Team, T, _>(connection)` uses `T` as the result type. The scalar's Rust type must match what the selected backend returns; for example, a raw SQL Server `COUNT(*)` is read as `i32`, while generated `Team::count()` converts that result to `i64` for you.
 
 For operations outside these patterns, use [a connection directly](./raw_queries.md). The builder validates known mistakes, but it does not prove that every selected table or column exists in your live schema.

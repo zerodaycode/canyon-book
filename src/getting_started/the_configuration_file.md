@@ -56,6 +56,19 @@ db_name = "analytics"
 
 For SQL Server, change the auth key to `sqlserver`, supply its credentials and database name, and choose a TLS policy appropriate to the server. Both examples require the matching Cargo backend feature to be enabled.
 
+After `Canyon::init().await?`, you can inspect the datasources that survived feature filtering:
+
+```rust
+use canyon_sql::core::Canyon;
+
+let canyon = Canyon::instance()?;
+for datasource in canyon.datasources() {
+    println!("{}: {:?}", datasource.name, datasource.get_db_type());
+}
+```
+
+`get_connection("analytics")` selects one by name; `get_default_connection()` selects the first active one. Both return an error rather than inventing a connection when none is available.
+
 ## Connection pools
 
 You can tune each connection pool separately:
