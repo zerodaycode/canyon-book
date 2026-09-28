@@ -44,7 +44,7 @@ Without an explicit name, Canyon derives a snake_case table name from the Rust t
 #[canyon_entity(table_name = "tournament_entries", schema = "public")]
 ```
 
-That metadata is used by generated CRUD and relationship operations. It is better to state a non-standard physical name once than to repeat a string in every query.
+That metadata is used by generated CRUD and relationship operations on the model. Runtime adapter derives do not yet reuse the mapped model's custom table name; see [Repository adapters](./repository_adapters.md#custom-table-names-and-reads).
 
 ## Primary keys
 

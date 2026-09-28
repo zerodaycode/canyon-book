@@ -64,6 +64,6 @@ Two different things describe the relationship here:
 
 A team with no players gets an empty vector. A connection or mapping failure reaches `main` through `?` instead.
 
-From here, a filtered read uses `Team::select_query()?` and the generated `TeamFieldValue` type; a write uses the `Insert`, `Update`, or `Delete` traits. If the service grows a repository boundary, the [adapter chapter](./repository_adapters.md) shows how to keep persistence operations off the model itself.
+From here, a filtered read uses `Team::select_query()?` and the generated `TeamFieldValue` type; a write uses the `Insert`, `Update`, or `Delete` traits. If the service grows a repository boundary, the [adapter chapter](./repository_adapters.md) explains the adapter derives and their current limitation with custom table names such as `teams`.
 
 This example is intentionally modest. Canyon removes repeated database plumbing, but it does not decide your schema, permissions, transaction boundaries, or the meaning of a missing row for your application.
