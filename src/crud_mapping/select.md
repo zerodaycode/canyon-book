@@ -1,6 +1,6 @@
 # Read
 
-Reading is the least surprising way to meet the generated API. Bring `Read` into scope, then call an associated function on the entity:
+Import `Read`, then call its methods on `Team`:
 
 ```rust
 use canyon_sql::crud::Read;
@@ -10,13 +10,13 @@ let team: Option<Team> = Team::find_by_pk(&42_i64).await?;
 let total: i64 = Team::count().await?;
 ```
 
-These methods answer different questions:
+Notice the three result shapes:
 
 - `find_all()` reads every mapped row; no matches gives you an empty `Vec<Team>`.
 - `count()` returns the row count as `i64`.
-- `find_by_pk()` binds the borrowed key from `#[primary_key]` and returns `Ok(None)` if it finds no row.
+- `find_by_pk()` uses the field marked `#[primary_key]` and returns `Ok(None)` if no row has that key.
 
-A missing table, failed connection, or failed row conversion is an `Err`, not an empty result.
+> **No row versus failed query:** A missing table, failed connection, or failed row conversion is an `Err`, not an empty collection or `None`.
 
 Each function has a `_with` counterpart for a named datasource or compatible connection:
 
@@ -24,6 +24,6 @@ Each function has a `_with` counterpart for a named datasource or compatible con
 let team = Team::find_by_pk_with(&42_i64, "reporting").await?;
 ```
 
-`Read` also exposes `select_query()` and `select_query_with(...)`. These produce a builder rather than executing immediately. Use them when you need predicates, joins, or ordering; the [query-builder chapter](../querybuilder.md) follows that path.
+Need a filter or an ordering? `select_query()` and `select_query_with(...)` start a builder instead of executing immediately. We'll use one in [Build a query](../querybuilder.md).
 
-If your model does not declare a primary key, `find_all` and `count` can still be useful. Key-based reading cannot infer which field identifies a row and reports a typed error instead of guessing.
+Without `#[primary_key]`, `find_all` and `count` can still work. `find_by_pk` cannot guess which field is the key; it returns a typed error.

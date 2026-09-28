@@ -1,8 +1,8 @@
 # Repository adapters
 
-You can keep database operations on a separate type instead of deriving `Crud` on the row model. That type is a repository adapter: it receives an entity to insert, update, or delete, but it is **not** another Canyon entity.
+Sometimes a `Team` should hold team data and nothing else. You can put database operations on a separate type without copying the fields into it. Canyon calls this a repository adapter.
 
-Assume this example has a table named `team`, following Canyon's default name for `Team`. The row model is the only type annotated with `#[canyon_entity]`:
+Let's use a table named `team`, Canyon's default name for the Rust type `Team`. Only the row model is a Canyon entity:
 
 ```rust
 use canyon_sql::macros::{canyon_entity, CanyonMapper};
@@ -16,9 +16,9 @@ pub struct Team {
 }
 ```
 
-`CanyonMapper` maps database rows into `Team`. The entity attribute processes the `#[primary_key]` field marker and registers this row type for Canyon's experimental migrations machinery. The primary-key marker itself identifies the key used by generated operations.
+`CanyonMapper` reads rows into `Team`. The `#[primary_key]` marker tells generated operations which field identifies a row; `#[canyon_entity]` processes that marker on the model.
 
-The adapter does not need `#[canyon_entity]`. Its derives provide operations, while `maps_to` specifies the entity supplied to them:
+Now define a type for writes. It has no database fields of its own:
 
 ```rust
 use canyon_sql::macros::{EntityDelete, EntityInsert, EntityUpdate};
@@ -30,7 +30,7 @@ pub struct TeamWriter {
 }
 ```
 
-With the corresponding traits in scope, these operations take a `Team`; they do not persist the `TeamWriter` value:
+`maps_to = Team` says which type the operations receive. It does **not** turn `TeamWriter` into another entity. With the operation traits in scope, you can write:
 
 ```rust
 use canyon_sql::crud::{EntityDelete as _, EntityInsert as _, EntityUpdate as _};
@@ -40,15 +40,15 @@ let affected: u64 = TeamWriter::update_entity(&team).await?;
 TeamWriter::delete_entity(&team).await?;
 ```
 
-There are two important boundaries to this API:
+There is no need to construct a `TeamWriter` here. The generated methods take a `Team` as an argument. You can derive just one or two operations if that is all the adapter should expose. Deriving all three also gives it the composite `EntityCrud` trait.
 
-- Each operation also has a `_with` form for a named datasource or compatible connection. The adapter does not create a transaction or hide connection management.
-- Deriving all three operations also gives the adapter the composite `EntityCrud` trait. Derive only the operations your repository needs.
+As with model methods, each operation has a `_with` form for a named datasource or compatible connection. The adapter does not start a transaction for you.
 
-## Custom table names and reads
+## Before using an adapter with another model
 
-The earlier `Team` example uses a table named `teams`. A generated adapter for that model is **not** equivalent to the one above: today its operation derives infer `team` from the mapped Rust type, rather than reading the `teams` metadata on `Team`. Adding `#[canyon_entity(table_name = "teams")]` to `TeamWriter` makes the SQL target `teams`, but also registers the adapter as an entity. That is a workaround in the current macros, not a sound way to model a repository, so this chapter does not present it as the recommended API. Generated adapters need a fix to reuse the mapped entity's table metadata before custom names work cleanly.
+The example above works with the conventional table name `team`. Check these two cases before copying the pattern:
 
-There is a separate limitation with `Read`: `find_all` currently builds its selected columns from the fields of the type deriving `Read`. A marker-only adapter would therefore select `marker`, not the fields of `Team`. Do not derive `Read` on that shape expecting a working `find_all`; implement that repository read explicitly, or derive `Read` on the row model when keeping reads there fits your design.
+1. **Your table has a custom name.** Earlier in this book, `Team` maps to `teams`. Today's adapter derives still generate SQL for `team`; they do not pick up `Team`'s `table_name`. Write those repository operations explicitly for now.
+2. **You want to derive `Read` on a fieldless adapter.** Its generated `find_all` selects the adapter's fields, not `Team`'s. A `marker: ()` field would become a selected column. Keep `Read` on the model or implement the repository read yourself.
 
-The [repository integration example](https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/crud/hex_arch_example.rs) illustrates the service/repository split. It still contains the custom-table-name workaround described above and implements its repository `find_all` explicitly; treat it as an example of the boundary, not a model of the final annotation API.
+> **Don't annotate the adapter as an entity.** Adding `#[canyon_entity(table_name = "teams")]` to `TeamWriter` happens to point its SQL at the right table, but it also registers the adapter as an entity. That is a macro limitation to fix, not a pattern to copy.

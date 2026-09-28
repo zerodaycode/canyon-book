@@ -1,6 +1,6 @@
 # Insert
 
-An insert starts with a mutable entity. For an auto-generated numeric key, initialize the key with its default value and let the database supply the real one:
+Give the new `Team` a name and leave its auto-generated key at the default value:
 
 ```rust
 use canyon_sql::crud::Insert;
@@ -14,8 +14,8 @@ team.insert().await?;
 println!("new key: {}", team.id);
 ```
 
-The result is `CanyonResult<()>`. On success, Canyon assigns the generated primary key back to `team.id`. If `#[primary_key(autoincremental = false)]` is used, the key is included in the inserted values rather than fetched from the database.
+The result is `CanyonResult<()>`. On success, Canyon writes the generated key into `team.id`. If you mark the key `#[primary_key(autoincremental = false)]`, provide its value yourself; Canyon inserts it instead of fetching one.
 
-Use `team.insert_with("reporting").await?` to target a named datasource. It also accepts a compatible connection. The table, column types, and any database constraints must agree with the entity; Canyon does not create the table or suppress a constraint failure.
+Use `team.insert_with("reporting").await?` to target a named datasource, or pass a compatible connection. Database constraints still apply: a duplicate key or missing required column will fail the insert.
 
-There is no current bulk `insert_into` API on `Crud`. Older examples that use it predate the present interface. For multiple rows, insert them individually or use an explicit SQL statement through `DbConnection`, taking responsibility for transaction boundaries and backend syntax.
+> **Older examples:** `Crud` does not provide the former `insert_into` API. For multiple rows, insert them individually or write SQL through `DbConnection`. If the rows must succeed or fail together, manage the transaction explicitly.

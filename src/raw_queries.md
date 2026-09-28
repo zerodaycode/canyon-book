@@ -1,8 +1,6 @@
 # Run SQL directly
 
-Generated operations and the query builder are not a promise to hide SQL. A report, maintenance task, or database-specific feature may be clearer as an explicit statement. Canyon exposes the configured connection through `Canyon::instance()` and the `DbConnection` trait.
-
-The following SQL uses PostgreSQL's `$1` placeholder. Adapt placeholder syntax when using another backend:
+You do not have to fit every query into a derive or a builder. A report or database-specific operation may be clearer as SQL. Get a configured connection through `Canyon::instance()` and use `DbConnection`. This example uses PostgreSQL's `$1` placeholder:
 
 ```rust
 use canyon_sql::{connection::DbConnection, core::Canyon};
@@ -14,7 +12,7 @@ let team: Option<Team> = connection
     .await?;
 ```
 
-Choose the call by the shape you expect back:
+There are four common ways to execute a statement:
 
 | Call | Result on success |
 | --- | --- |
@@ -23,28 +21,38 @@ Choose the call by the shape you expect back:
 | `query_one_for::<i64>(sql, params)` | One scalar value |
 | `execute(sql, params)` | Number of affected rows, as `u64` |
 
-All four return `CanyonResult`, so driver and mapping failures remain visible.
+All four return `CanyonResult`. With no matching rows, `query` returns an empty vector and `query_one` returns `None`. A query failure returns `Err`.
 
 ## Binding values
 
-The parameter slice accepts references to values implementing `QueryParameter`. Canyon currently implements it for common numeric types (`i16`, `i32`, `i64`, `u32`, `f32`, `f64`), `bool`, strings, and several `chrono` date and time types. Nullable forms are supported for selected types, but there is **no blanket implementation for every `Option<T>`**. If a type does not implement `QueryParameter`, the compiler will reject it before the query runs.
+The parameter slice holds references to values implementing `QueryParameter`. Supported values include:
 
-Keep the values alive until the async call completes; do not assemble SQL by interpolating them into the statement. For MySQL, Canyon normalizes `DateTime<Utc>` and `DateTime<FixedOffset>` parameters to UTC before binding them.
+- Numeric types such as `i16`, `i32`, `i64`, `u32`, `f32`, and `f64`.
+- `bool`, strings, and several `chrono` date and time types.
+- Nullable forms of selected types.
+
+There is **no blanket implementation for every `Option<T>`**. An unsupported type fails to compile.
+
+Keep parameter values alive through the async call. Bind values as shown above; do not interpolate them into the SQL string. On MySQL, Canyon normalizes `DateTime<Utc>` and `DateTime<FixedOffset>` values to UTC before binding them.
 
 ## Rows without a model
 
-For a query whose shape is not yet represented by a model, `query_rows` returns `CanyonRows`, a wrapper over the active driver's rows. Use `len()`, `is_empty()`, or `get_row_at()` to inspect them. `first::<Team>()` maps the first row and returns `CanyonResult<Option<Team>>`: `None` means there was no first row; `Err` means mapping failed.
+If a query does not yet have a model, `query_rows` returns `CanyonRows`. Start with `len()`, `is_empty()`, or `get_row_at()`. When the first row *does* match a model, `first::<Team>()` maps it and returns `CanyonResult<Option<Team>>`:
 
-Backend-specific accessors are available when you need the driver's rows: `get_postgres_rows()`, `get_tiberius_rows()`, and `get_mysql_rows()` (each behind its Cargo feature). Calling one for the wrong backend returns a mapping error.
+- `Ok(Some(team))`: a row was mapped.
+- `Ok(None)`: there was no first row.
+- `Err(...)`: reading or mapping failed.
 
-Advanced users who depend on `canyon_core` directly can use `canyon_core::row::RowExt` at the individual-row level; the root `canyon_sql` crate does not currently re-export it.
+To work with driver rows directly, use `get_postgres_rows()`, `get_tiberius_rows()`, or `get_mysql_rows()`, behind their respective Cargo features. Asking for the wrong backend returns a mapping error.
+
+If you depend on `canyon_core` directly, `canyon_core::row::RowExt` provides individual-row access. The root `canyon_sql` crate does not re-export it.
 
 - `get_postgres`, `get_mysql`, and `get_mssql` read required values.
 - Their `_opt` counterparts read nullable values.
 - `columns()` returns each column's name and backend-specific `ColumnType`, useful when inspecting an unfamiliar result shape.
 
-The value getters return `CanyonResult`: a missing column or incompatible type is an error; required getters also reject `NULL`, while `_opt` getters represent it as `None`. These are lower-level escape hatches, not a replacement for `CanyonMapper` on a normal entity.
+These getters return `CanyonResult`. Missing columns and incompatible types are errors. Required getters also reject `NULL`; the `_opt` getters represent it as `None`. Use a `CanyonMapper` model for an ordinary row.
 
-Values should be passed as parameters rather than interpolated into SQL. Backend syntax and identifier quoting remain your responsibility for handwritten statements. The parameterized query builder performs those steps for the SQL it generates.
+> **Handwritten SQL is your SQL:** You choose backend syntax and quote identifiers correctly. The query builder handles those details only for statements it generates.
 
-`Transaction` is a low-level proxy over connection operations; it does not, by itself, begin or commit a database transaction. If you need an atomic multi-statement transaction, use a compatible backend connection and its transaction facilities deliberately.
+`Transaction` is a low-level proxy over connection operations. It does not begin or commit a database transaction by itself. For atomic multi-statement work, use a compatible backend connection and manage its transaction explicitly.

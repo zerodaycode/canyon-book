@@ -1,8 +1,8 @@
 # Configure datasources
 
-A datasource is a named connection to one database. Canyon reads datasources from a TOML file whose name starts with `canyon` and ends with `.toml`.
+A datasource gives a name to a database connection. Put its settings in a TOML file whose name starts with `canyon` and ends with `.toml`.
 
-It searches the current working directory and its immediate descendants, to a maximum depth of two. Keep one matching file in that area; otherwise the first file found may not be the one you intended.
+Canyon searches the current working directory and its immediate descendants, up to depth two. Keep one matching file in that area so you know which configuration it will find.
 
 ## Your first datasource
 
@@ -23,7 +23,7 @@ port = 5432
 db_name = "app"
 ```
 
-The first active datasource becomes the default for calls such as `Team::find_all()`. Give every additional datasource a distinct `name` and use an operation's `_with` form to select it.
+The first active datasource becomes the default for calls such as `Team::find_all()`. Give each additional datasource a different `name`; an operation's `_with` form selects one by name.
 
 > **Backend features matter here too:** A datasource for a backend that was not enabled at compile time is ignored. If none remain, there is no usable default connection.
 
@@ -54,9 +54,9 @@ port = 3306
 db_name = "analytics"
 ```
 
-For SQL Server, change the auth key to `sqlserver`, supply its credentials and database name, and choose a TLS policy appropriate to the server. Both examples require the matching Cargo backend feature to be enabled.
+For SQL Server, use `sqlserver` as the auth key, supply its credentials and database name, and choose a TLS policy. Both examples require the matching Cargo feature.
 
-After `Canyon::init().await?`, you can inspect the datasources that survived feature filtering:
+After initialization, you can see which datasources are active:
 
 ```rust
 use canyon_sql::core::Canyon;
@@ -67,7 +67,7 @@ for datasource in canyon.datasources() {
 }
 ```
 
-`get_connection("analytics")` selects one by name; `get_default_connection()` selects the first active one. Both return an error rather than inventing a connection when none is available.
+Use `get_connection("analytics")` to select by name or `get_default_connection()` for the first active datasource. An unknown name returns an error.
 
 ## Connection pools
 
@@ -79,7 +79,7 @@ min_size = 2
 max_size = 10
 ```
 
-These are also the defaults. `max_size` must be greater than zero and no smaller than `min_size`; Canyon returns a configuration error for invalid bounds.
+The example shows the defaults. `max_size` must be positive and at least `min_size`; invalid bounds produce a configuration error.
 
 ## SQL Server TLS
 
@@ -89,10 +89,15 @@ Set `mssql_tls` under `[canyon_sql.datasources.properties]`:
 - `"trust_server_certificate"` encrypts without validating the certificate.
 - `"disabled"` turns encryption off.
 
-> **For local tests only:** The repository's Docker fixture uses `"disabled"`. Outside a controlled test environment, prefer a valid certificate with `"required"`.
+> **Only for local tests:** The repository's Docker fixture uses `"disabled"`. For a server outside a controlled test environment, use a valid certificate and `"required"`.
 
 ## Credentials are application secrets
 
 > **Keep credentials private:** The values above are examples. A real `canyon.toml` contains credentials; do not publish it or commit production passwords. Arrange file permissions and deployment accordingly.
 
-If Canyon cannot find, read, or parse the file, `Canyon::init()` returns a typed configuration error. If it can read the file but cannot open a datasource, it returns a connection error. The [error chapter](../errors.md) shows how to distinguish them.
+If startup fails, the error tells you where to look:
+
+- `Configuration` means Canyon could not find, read, or parse the file, or rejected one of its settings.
+- `Connection` means it read the configuration but could not open a datasource.
+
+We'll handle those errors in [Handle errors](../errors.md).

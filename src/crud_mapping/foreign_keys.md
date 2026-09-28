@@ -1,6 +1,6 @@
 # Relationships
 
-A foreign key has two sides: a child stores a value, and a parent row owns the referenced field. Canyon turns that relationship into lookup methods on the child entity. It does **not** create the database constraint; define that in your schema.
+A player belongs to a team: the `players` table holds `team_id`, which points at a team. Canyon can generate lookups in both directions from that relationship. The database still needs its own foreign-key constraint if you want it enforced.
 
 Suppose `Player.team_id` refers to `Team.id`:
 
@@ -26,7 +26,7 @@ pub struct Player {
 }
 ```
 
-The child needs `Read` (or `Crud`, which includes it); the parent needs Canyon mapping metadata. The annotation points to a Rust entity and field, not to an arbitrary table string. From `team_id`, Canyon derives the relation name `team` and generates four inherent methods:
+The `references` path names a Rust type and field, not a SQL table string. `Player` needs `Read` (included in `Crud`), and `Team` needs mapping metadata. Canyon derives the name `team` from `team_id` and gives `Player` four methods:
 
 ```rust
 let parent: Option<Team> = player.find_team().await?;
@@ -37,18 +37,18 @@ let children_on_other_db =
     Player::find_all_by_team_with(&team, "reporting").await?;
 ```
 
-The two directions have different return shapes:
+The return type follows the direction of the lookup:
 
 - `player.find_team()` looks for one parent: `Ok(None)` means the lookup found none.
 - `Player::find_all_by_team(&team)` looks for children: `Ok(vec![])` means there are none.
 
 A query or mapping failure is an error in either direction. The `_with` variants also accept a compatible connection.
 
-The referenced field need not be the parent's primary key, but it should identify the parent as your schema intends—normally through a unique constraint. A fully qualified path works too:
+The referenced field can be something other than the parent's primary key. In that case, make sure your schema identifies a parent unambiguously—usually with a unique constraint. A fully qualified Rust path also works:
 
 ```rust
 #[foreign_key(references = crate::models::Team::external_id)]
 pub team_external_id: i64,
 ```
 
-Canyon takes the parent's physical table name and schema from its `#[canyon_entity(...)]` metadata. A type such as `TournamentDetails` maps to `tournament_details` by default; a custom physical name is equally valid. Keep the Rust relationship annotation and the actual database constraint consistent. The [relationship integration tests](https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/crud/foreign_key_operations.rs) cover both naming cases on PostgreSQL, MySQL, and SQL Server.
+Canyon reads the parent's physical table name and schema from its entity metadata. `TournamentDetails` maps to `tournament_details` by default, but an explicit `table_name` works too. Keep that metadata, the Rust relationship, and the database constraint in agreement. The [relationship tests](https://github.com/zerodaycode/Canyon-SQL/blob/main/tests/crud/foreign_key_operations.rs) exercise default and custom names on all three backends.

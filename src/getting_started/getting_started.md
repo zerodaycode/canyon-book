@@ -1,6 +1,6 @@
 # Getting started
 
-We will use PostgreSQL for the first working example. The same model code can be used with MySQL or SQL Server; the Cargo feature and datasource configuration decide which driver Canyon uses.
+We'll use PostgreSQL to get the first query running. MySQL and SQL Server follow the same path: enable the matching Cargo feature and configure a datasource for that backend.
 
 To get a query running, you need:
 
@@ -8,6 +8,6 @@ To get a query running, you need:
 2. A datasource in [`canyon.toml`](./the_configuration_file.md).
 3. A [table](./configuring_the_database.md) that matches the Rust model.
 
-Once these are in place, `Canyon::init().await?` opens the configured pools and the model can query the database.
+Once those three pieces are in place, call `Canyon::init().await?` to open the connection pools. Then `Team::find_all().await?` can read your table.
 
-> **Already have a database?** Use your own connection details and existing table. None of these steps requires Canyon's experimental migrations feature.
+> **Already have a database?** Use its connection details and an existing table. You do not need Canyon's experimental migrations feature.

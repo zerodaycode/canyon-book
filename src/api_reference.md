@@ -1,6 +1,6 @@
 # API map
 
-The examples in this book begin with the high-level derives. When you need to find a particular type, this map shows where Canyon exposes it from the root `canyon_sql` crate. Feature-gated exports only exist when their backend or experimental feature is enabled.
+When an example names a type but not its import, use this map. It lists the main exports of the root `canyon_sql` crate. A feature-gated item exists only when you enable its backend or experimental feature.
 
 | Path | What it contains |
 | --- | --- |
@@ -15,12 +15,10 @@ The examples in this book begin with the high-level derives. When you need to fi
 | `canyon_sql::runtime` | Tokio and related runtime re-exports used by Canyon |
 | `canyon_sql::migrations` | Experimental migration modules, only with the `migrations` feature |
 
-The derive macro named `Crud` and the trait named `Crud` live in different namespaces. Import the derive from `macros` and the trait from `crud`. The same distinction applies to `EntityInsert`, `EntityUpdate`, and `EntityDelete`.
+The derive macro `Crud` and the trait `Crud` have the same name but different jobs: import the derive from `macros`, and import the trait from `crud` to call its methods. The same applies to `EntityInsert`, `EntityUpdate`, and `EntityDelete`.
 
-If a generated method appears to be missing, check whether its trait is in scope.
+`CanyonMapper` maps rows; `Fields` supplies query identifiers. A model needs `#[canyon_entity]` for explicit table/schema metadata or Canyon field markers, not merely because it has a derive. [Entities and mapping](./canyon_entities.md#when-do-you-need-canyon_entity) works through that choice.
 
-`CanyonMapper` maps rows; `Fields` supplies query identifiers. `#[canyon_entity]` is needed for explicit table/schema metadata and for models using Canyon's field annotations, but not for every derive with default naming. See [Entities and mapping](./canyon_entities.md#when-do-you-need-canyon_entity).
+On a repository adapter, `#[canyon_crud(maps_to = Team)]` names the mapped entity. It does not make the adapter an entity or copy `Team`'s custom table name; see [Repository adapters](./repository_adapters.md).
 
-On a repository adapter, `#[canyon_crud(maps_to = Team)]` tells an operation derive which mapped entity it acts on.
-
-For the exact signatures, consult the public Rust API in the [Canyon-SQL source](https://github.com/zerodaycode/Canyon-SQL) or the published crate documentation. This book concentrates on how the pieces fit together and on the behavior that matters at call sites.
+For exact signatures, use the public Rust API in the [Canyon-SQL source](https://github.com/zerodaycode/Canyon-SQL) or the published crate documentation.

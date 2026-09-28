@@ -1,6 +1,6 @@
 # A complete example
 
-Consider a small service that reads teams and their players. Its schema already exists:
+Let's put the pieces together. We have teams, each with zero or more players, and two tables that already exist:
 
 ```sql
 CREATE TABLE teams (
@@ -15,7 +15,7 @@ CREATE TABLE players (
 );
 ```
 
-The SQL above is PostgreSQL. For another backend, use its identity and foreign-key syntax. Configure a `postgresql` datasource as shown in [Configure datasources](./getting_started/the_configuration_file.md), then define the two models:
+This is PostgreSQL SQL; another backend needs its own identity and foreign-key syntax. Configure a `postgresql` datasource as in [Configure datasources](./getting_started/the_configuration_file.md), then write the models and the read:
 
 ```rust
 use canyon_sql::{
@@ -57,13 +57,17 @@ async fn main() -> CanyonResult<()> {
 }
 ```
 
-Two different things describe the relationship here:
+Follow the loop in `main`: Canyon reads every team, then reads that team's players. Two declarations make this possible:
 
 - `#[foreign_key(references = Team::id)]` generates the Rust lookup methods.
 - `REFERENCES teams(id)` makes PostgreSQL enforce the relationship.
 
-A team with no players gets an empty vector. A connection or mapping failure reaches `main` through `?` instead.
+A team with no players prints `0`. If either query or row mapping fails, `?` returns that error from `main`; the loop does not quietly skip the team.
 
-From here, a filtered read uses `Team::select_query()?` and the generated `TeamFieldValue` type; a write uses the `Insert`, `Update`, or `Delete` traits. If the service grows a repository boundary, the [adapter chapter](./repository_adapters.md) explains the adapter derives and their current limitation with custom table names such as `teams`.
+You can grow this example in several directions:
 
-This example is intentionally modest. Canyon removes repeated database plumbing, but it does not decide your schema, permissions, transaction boundaries, or the meaning of a missing row for your application.
+- Filter teams with `Team::select_query()?` and `TeamFieldValue`.
+- Add writes with the `Insert`, `Update`, or `Delete` traits.
+- Put writes behind a [repository adapter](./repository_adapters.md). Read that chapter's table-name limitation first: this example uses `teams`, not the default `team`.
+
+The schema, permissions, transaction boundaries, and meaning of a missing row remain application decisions. Canyon handles the repeated database plumbing around them.

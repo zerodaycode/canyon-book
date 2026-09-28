@@ -13,8 +13,8 @@ team.name = "Blue Tigers".to_owned();
 let affected: u64 = team.update().await?;
 ```
 
-`affected` is the number of rows reported by the database. A successful statement may affect zero rows, for instance if the key no longer exists. Check the count when your application requires exactly one update.
+`affected` is the database's affected-row count. It can be zero even though the statement succeeded—for example, if another operation removed that team after you read it. If your application expects exactly one row, check the count.
 
 `update_with("reporting")` chooses a named datasource or compatible connection. If there is no `#[primary_key]`, Canyon cannot safely construct the key predicate and returns a typed error.
 
-For a conditional update over several rows, `Team::update_query()?` starts the query builder. The [query-builder chapter](../querybuilder.md) explains its `set_values` operation and why an unrestricted update deserves particular care.
+To update rows by some condition other than the model's primary key, start with `Team::update_query()?`. The [query-builder chapter](../querybuilder.md) shows how to set values and add the predicate. Always check that predicate before running a multi-row update.

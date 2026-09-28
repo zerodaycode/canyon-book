@@ -17,11 +17,11 @@
   - [Delete](./crud_mapping/delete.md)
   - [Relationships](./crud_mapping/foreign_keys.md)
 
+- [A complete example](./real_world_example.md)
 - [Build a query](./querybuilder.md)
 - [Run SQL directly](./raw_queries.md)
 - [Handle errors](./errors.md)
-- [API map](./api_reference.md)
 - [Repository adapters](./repository_adapters.md)
 - [Migrations: experimental](./the_migrations.md)
 - [Test and contribute](./testing.md)
-- [A complete example](./real_world_example.md)
+- [API map](./api_reference.md)

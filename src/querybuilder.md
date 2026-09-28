@@ -1,8 +1,12 @@
 # Build a query
 
-The generated CRUD methods are deliberately small. They cover common operations, but they do not know whether your next read needs a filter, a join, or a particular ordering. The query builder is the point where you describe that extra shape.
+`find_all()` is useful until you want only the blue teams, or teams ordered by name. Then you need to describe the query before running it. That is the query builder's job.
 
-`Read` supplies `select_query()`; `Update` and `Delete` supply `update_query()` and `delete_query()`. These methods choose the default datasource's SQL dialect and return builders. They do not execute anything. `build()?` emits a `Query` containing both the SQL and its bound parameters.
+The steps are:
+
+1. Start with `select_query()`, `update_query()`, or `delete_query()`. These choose the default datasource's SQL dialect, but execute nothing.
+2. Add predicates, joins, ordering, or values.
+3. Call `build()?` to get a `Query` containing SQL and bound parameters. Then launch it or pass it to a connection.
 
 ## A filtered read
 
@@ -25,11 +29,11 @@ let teams: Vec<Team> = Team::select_query()?
     .await?;
 ```
 
-`where_value` receives a generated `FieldValue` and collects its value as a bound parameter. Keep `name` alive until the query is built and executed.
+`where_value` takes the field and value together. It collects `"Blue"` as a bound parameter; no string interpolation is needed. Keep `name` alive through the async call.
 
 For more conditions, use `and` or `or`. The `and_values_in` and `or_values_in` methods take a `Field` and a non-empty slice of values; an empty slice produces `QueryBuilderError::EmptyInClause`.
 
-The lower-level `r#where(column, operator)` adds a placeholder **without** collecting a value. Prefer `where_value` for ordinary application code; with `r#where`, you must provide the matching parameter when executing the SQL yourself.
+> **Mind the parameters:** The lower-level `r#where(column, operator)` adds a placeholder but does **not** collect a value. Use `where_value` unless you intend to supply the matching parameter yourself at execution time.
 
 The `Operator` enum includes equality, inequality, greater/less-than comparisons, `IN`, and `LIKE` / `NOT LIKE`. For a contains-style pattern, use `Operator::Like(LikeKind::Full)`; `Left` and `Right` select the other wildcard placements. Canyon renders backend-specific placeholders and quoting when it builds the query.
 
@@ -41,7 +45,7 @@ For `Team`, `Fields` generates three public enums:
 - `TeamField`: a column name, such as `TeamField::name`, for ordering or a join.
 - `TeamFieldValue`: the same column with a value of its Rust field type, such as `TeamFieldValue::name("Blue".to_owned())`, for a predicate.
 
-They remain the current query-builder API. We may replace this generated shape with typed column descriptors in a future major version, but there is no deprecation in 0.5.1. Multiple models can derive `Fields` in the same Rust module.
+These enums are the supported API in 0.5.1. A future major version may use typed column descriptors instead, but `Fields` is not deprecated. Multiple models can derive it in the same Rust module.
 
 ## Joins and projection
 
@@ -58,9 +62,9 @@ let query = Team::select_query()?
 println!("{}", query.sql());
 ```
 
-This example assumes the `Player` model from [Relationships](./crud_mapping/foreign_keys.md). A join can return more columns than `Team` declares: the mapper ignores extras, but it cannot invent required missing fields.
+This uses the `Player` model from [Relationships](./crud_mapping/foreign_keys.md). The query may return more columns than `Team` declares; the mapper ignores extras. It still requires every field in `Team`.
 
-If you need values from both tables, map that projection into an appropriate result type. Select columns explicitly when their names overlap.
+If you need values from both tables, define a result type for that projection. Select overlapping column names explicitly so the mapper can tell them apart.
 
 For a smaller projection, or to remove duplicate rows, use the select-specific methods:
 
@@ -72,7 +76,9 @@ let query = Team::select_query()?
     .build()?;
 ```
 
-This query selects only `name`. It cannot be launched into `Team`, whose mapper also requires `id`; map the projected shape through `launch_with(...)`, or inspect it with `query_rows(...)`. `count()` is another projection option. For an unfiltered count, `Team::count().await?` is simpler and returns `i64` on every backend.
+This query selects only `name`, so it cannot produce a `Team`: the mapper also needs `id`. Use a result type with the projected shape, or inspect the rows with `query_rows(...)`.
+
+For a count without filters, `Team::count().await?` is simpler and returns `i64` on every backend.
 
 ## Updates and deletes
 
@@ -97,20 +103,25 @@ let connection = Canyon::instance()?.get_default_connection()?;
 let affected = connection.execute(query.sql(), query.params()).await?;
 ```
 
-`set` is a lower-level alternative that lists columns but does **not** collect matching values. Use it only when you supply parameters yourself. Canyon rejects an empty `SET` and a second `SET` on the same builder.
+The lower-level `set` lists columns but does **not** collect their values. Use it only when you will supply parameters yourself. Canyon rejects an empty `SET` and a second `SET` on the same builder.
 
-`delete_query()?` uses the shared `QueryBuilderExt` predicates; add a `WHERE` condition before executing unless you truly intend to delete every row. `execute` returns the affected-row count. For single-row changes identified by a model's key, `update()` and `delete()` are simpler.
+> **Check the scope of a write:** Add a predicate to `delete_query()?` unless you mean to delete every row. The same care applies to a multi-row update. `execute` returns the affected-row count; `update()` and `delete()` are simpler when you have one model and its key.
 
-There is also a lower-level `InsertQueryBuilder` when a generated entity insert is not suitable. Construct it with a table and `DatabaseType`, then add columns with `InsertQueryBuilderExt::with_columns`, values with `with_values`, and optionally `returning` before `build()`.
-
-The column list and bound-value count must match. For an ordinary entity insert, use `insert()` or `insert_with()`; `Crud` does not generate an `insert_query()` method.
+For an insert that does not fit `insert()`, construct `InsertQueryBuilder` with a table and `DatabaseType`. Add columns with `InsertQueryBuilderExt::with_columns`, values with `with_values`, and optionally `returning` before `build()`. The number of columns and bound values must match. `Crud` does not generate an `insert_query()` method.
 
 ## Dialect and connection are separate choices
 
-`Team::select_query_with(DatabaseType::MySQL)?` chooses MySQL SQL syntax; it does **not** connect to MySQL. After `build()`, use `launch_with("mysql_datasource")` to execute on a matching datasource.
+`Team::select_query_with(DatabaseType::MySQL)?` chooses MySQL SQL syntax. It does **not** connect to MySQL. After `build()`, use `launch_with("mysql_datasource")` on a matching datasource.
 
 The `Query` exposes `sql()` and `params()` for inspection or direct execution. Do not send SQL generated for one dialect to another backend.
 
-`launch_default::<Team>()` and `launch_with::<_, Team>(...)` map a query to rows. When the projection is one scalar value, `launch_one_for_default::<Team, T>()` or `launch_one_for_with::<Team, T, _>(connection)` uses `T` as the result type. The scalar's Rust type must match what the selected backend returns; for example, a raw SQL Server `COUNT(*)` is read as `i32`, while generated `Team::count()` converts that result to `i64` for you.
+Choose the launch method by the result you expect:
 
-For operations outside these patterns, use [a connection directly](./raw_queries.md). The builder validates known mistakes, but it does not prove that every selected table or column exists in your live schema.
+| Result | Method |
+| --- | --- |
+| Rows mapped to `Team` | `launch_default::<Team>()` or `launch_with::<_, Team>(...)` |
+| One scalar of type `T` | `launch_one_for_default::<Team, T>()` or `launch_one_for_with::<Team, T, _>(...)` |
+
+The scalar type must match the backend's value. A raw SQL Server `COUNT(*)`, for example, is read as `i32`; generated `Team::count()` converts that count to `i64` for you.
+
+If the builder gets in the way, [use a connection directly](./raw_queries.md). Builder validation catches certain malformed shapes, not a table or column that is missing from your live database.
